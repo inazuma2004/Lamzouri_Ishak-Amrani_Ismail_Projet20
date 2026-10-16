@@ -1,0 +1,38 @@
+# Environnements virtuels
+.venv/
+venv/
+env/
+ENV/
+
+# Bytecode Python & Caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Modèles volumineux & Binaires sérialisés (Joblib / Pickle)
+# Seul models/metrics.json doit être versionné
+*.joblib
+*.pkl
+models/*.joblib
+models/*.pkl
+
+# Données volumineuses (CSVs bruts ou nettoyés volumineux)
+data/*.csv
+!data/.gitkeep
+
+# Fichiers temporaires & IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Archives & artefacts temporaires
+*.zip
+*.tar.gz
+scratch/
+scratch_*

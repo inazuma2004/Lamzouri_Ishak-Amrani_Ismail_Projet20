@@ -1,0 +1,24 @@
+Voici un script complet, calibré pour durer environ 1 minute 45 secondes, parfaitement structuré selon la grille de cadrage de M. Larhlimi. Il utilise un ton dynamique, professionnel et convaincant pour votre vidéo.
+
+Script de la vidéo (À lire avec dynamisme)
+
+[00:00 - 00:15] Introduction et Sujet
+"Bonjour à tous. Dans le cadre de notre projet d'application intelligente, notre objectif est de développer un agent autonome de résolution d'incidents IT. Pour concevoir ce système, nous avons sélectionné le jeu de données IT Service Ticket Classification disponible sur Kaggle. Aujourd'hui, je vais vous présenter notre démarche de cadrage et justifier scientifiquement notre choix d'approche technologique."
+[00:15 - 00:45] Le Cadrage : Pourquoi éliminer les Règles Métier et le RAG pur ?
+"En suivant scrupuleusement la grille de décision du cours, nous nous sommes posé les questions clés dans l'ordre :
+1. La logique de diagnostic est-elle connue et stable ? Non. Les pannes informatiques et leurs descriptions textuelles rédigées par les utilisateurs varient constamment. L'approche par Règles Métier est donc exclue.
+2. Peut-on utiliser le RAG seul dès le départ ? Non plus. Le RAG est idéal pour extraire des procédures depuis des documents internes. Cependant, avant de pouvoir chercher une solution documentée, l'agent doit impérativement comprendre et trier le problème entrant (s'agit-il d'un bug réseau, matériel, ou d'un problème d'accès ?)."
+[00:45 - 01:20] Cœur de l'argumentation : L'approche Machine Learning Classique
+"C'est pourquoi, à ce stade du cycle de vie, notre problème principal est un problème de Machine Learning Classique, et plus précisément de classification supervisée de texte.
+Notre dataset répond parfaitement aux quatre critères de cadrage de la grille :
+• Critère (a) - Données étiquetées : Nous disposons de milliers de tickets historiques déjà classés par catégories informatiques.
+• Critère (c) - Coût et Latence : En utilisant une approche robuste comme TfidfVectorizer combinée à une LogisticRegression, notre modèle s'entraîne sur un simple ordinateur portable et prédit en quelques millisecondes pour un coût d'infrastructure nul.
+• Critère (d) - Conséquence d'une erreur : L'impact d'un mauvais routage est faible et sera compensé dans l'interface en fixant un seuil d'incertitude pour alerter un agent humain."
+[01:20 - 01:45] Conclusion et Évolution (L'ouverture sur la suite du cours)
+"En conclusion, notre architecture logicielle va matérialiser ce choix : les premières semaines construiront cette brique de ML classique pour router les incidents. En semaine 9 et 10, nous ferons évoluer cette application vers un système hybride performant. Le modèle ML qualifiera le ticket, puis notre composant RAG interrogera les runbooks pour fournir la solution technique de manière totalement autonome. Notre dataset Kaggle est le socle idéal pour valider notre pipeline de bout en bout. Merci pour votre attention !"
+
+💡 Conseils pour réussir votre enregistrement :
+
+• Le visuel : Affichez la structure de votre dataset ou la diapositive de la grille de décision (Règles \(\rightarrow \) ML \(\rightarrow \) RAG) derrière vous à l'écran pendant que vous parlez.
+• Le rythme : Ne parlez pas trop vite. Marquez de légères pauses (1 seconde) entre chaque grand critère (a, c, d) pour montrer que vous maîtrisez les notions de MLOps.
+Souhaitez-vous que nous ajustions le script pour y inclure les noms exacts de votre binôme ou des détails techniques spécifiques sur les algorithmes (comme le modèle linéaire ou les n-grammes) ?
