@@ -1,25 +1,34 @@
-# 🎬 Vidéo de Présentation et de Cadrage du Projet
+# 🎬 Vidéos de Présentation et de Cadrage du Projet
 
 > **Projet :** Agent Autonome de Résolution d'Incidents IT  
-> **Auteur de la présentation vidéo :** Ishak Lamzouri ([@inazuma2004](https://github.com/inazuma2004))  
-> **Binôme :** Ismail Amrani ([@Amaranix](https://github.com/Amaranix))  
+> **Équipe (Binôme) :**  
+> - Ishak Lamzouri ([@inazuma2004](https://github.com/inazuma2004))  
+> - Ismail Amrani ([@Amaranix](https://github.com/Amaranix))  
 > **Module :** Développement et déploiement d’applications intelligentes (Année 2026-2027)  
 > **Enseignant :** M. A. Larhlimi  
 
 ---
 
-## 📹 Fichier Vidéo
+## 📹 Fichiers Vidéos des Membres du Binôme
 
-Le fichier vidéo complet de la soutenance/présentation de cadrage est disponible dans ce dossier :
+Ce dossier regroupe les enregistrements de cadrage et de présentation du binôme :
+
+### 1. Présentation de cadrage – Ismail Amrani
+- **Fichier local :** [`presentation_cadrage_Amrani_Ismail.mp4`](presentation_cadrage_Amrani_Ismail.mp4) (Taille : ~29.3 Mo)
+- **Format :** MP4
+- **Thématique & Cadrage :** Explication détaillée du dataset retenu (*IT Service Ticket Classification Dataset*), analyse du problème métier, élimination des approches par règles statiques au profit du Machine Learning supervisé et projection vers l'architecture agentique & RAG.
+
+### 2. Présentation de cadrage – Ishak Lamzouri
 - **Fichier local :** [`presentation_cadrage_Lamzouri_Ishak.mp4`](presentation_cadrage_Lamzouri_Ishak.mp4) (Taille : ~19.1 Mo)
 - **Format :** MP4 H.264
 - **Durée :** ~1 min 45 s
+- **Thématique & Cadrage :** Justification scientifique du choix technologique selon l'arbre de décision du cours et les 4 critères de cadrage (données étiquetées, coût/latence, conséquence d'erreur).
 
 ---
 
-## 📝 Script et Argumentation Développée
+## 📝 Script et Argumentation Développée (Cadre Méthodologique)
 
-Le discours prononcé dans la vidéo suit rigoureusement l'arbre de décision scientifique du cours :
+Le discours prononcé suit rigoureusement l'arbre de décision scientifique du cours :
 
 ### [00:00 - 00:15] Introduction et Sujet
 > *"Bonjour à tous. Dans le cadre de notre projet d'application intelligente, notre objectif est de développer un agent autonome de résolution d'incidents IT. Pour concevoir ce système, nous avons sélectionné le jeu de données IT Service Ticket Classification disponible sur Kaggle. Aujourd'hui, je vais vous présenter notre démarche de cadrage et justifier scientifiquement notre choix d'approche technologique."*

@@ -26,11 +26,12 @@ Conformément à la grille de cadrage méthodologique du cours, notre architectu
 
 ---
 
-## 🎬 Vidéo de Soutenance & Cadrage Initial
+## 🎬 Vidéos de Soutenance & Cadrage Initial
 
-Dans le cadre du premier livrable (Cadrage et Choix d'Approche) :
-* 📹 **Vidéo de présentation réalisée par Ishak Lamzouri :** [`docs/media/presentation_cadrage_Lamzouri_Ishak.mp4`](docs/media/presentation_cadrage_Lamzouri_Ishak.mp4)
-* 📜 **Script minuté et argumentation scientifique :** [`docs/media/README.md`](docs/media/README.md)
+Dans le cadre du premier livrable (Cadrage et Choix d'Approche), les deux vidéos de présentation du binôme sont disponibles dans [`docs/media/`](docs/media/) :
+* 📹 **Vidéo d'Ismail Amrani :** [`docs/media/presentation_cadrage_Amrani_Ismail.mp4`](docs/media/presentation_cadrage_Amrani_Ismail.mp4)
+* 📹 **Vidéo d'Ishak Lamzouri :** [`docs/media/presentation_cadrage_Lamzouri_Ishak.mp4`](docs/media/presentation_cadrage_Lamzouri_Ishak.mp4)
+* 📜 **Scripts minutés et argumentations scientifiques :** [`docs/media/README.md`](docs/media/README.md)
 * 📄 **Rapport de cadrage complet :** [`docs/cadrage/rapport_conception_initiale.md`](docs/cadrage/rapport_conception_initiale.md)
 
 ---
