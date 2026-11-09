@@ -14,7 +14,7 @@ def test_cli_version():
     runner = CliRunner()
     result = runner.invoke(main, ["--version"])
     assert result.exit_code == 0
-    assert "incidents-app 0.6.0" in result.output
+    assert "incidents-app 1.0.0" in result.output
 
 
 def test_cli_predict_sans_modele(monkeypatch, tmp_path):

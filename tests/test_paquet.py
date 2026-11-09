@@ -16,7 +16,7 @@ _spec = importlib.util.find_spec("incidents_app")
 if not (_spec and "site-packages" in (_spec.origin or "")) and not os.environ.get("VERIFICATION_LIVRABLE"):
     pytest.skip("paquet non installé : python scripts/verifier_livrable.py", allow_module_level=True)
 
-import incidents_app  # noqa: E402
+import incidents_app
 
 # La commande est installée à côté de l'interpréteur qui lance les tests (bin/ sous Linux, Scripts sous Windows).
 # On ne compte pas sur le PATH : il dépend de l'activation de l'environnement.
