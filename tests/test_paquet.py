@@ -43,7 +43,7 @@ def test_texte_vide_refuse():
 
 def test_commande_installee():
     assert COMMANDE, "commande incidents introuvable à côté de l'interpréteur"
-    sortie = subprocess.run([COMMANDE, "--json", "cannot login vpn password expired"],
+    sortie = subprocess.run([COMMANDE, "predict", "cannot login vpn password expired"],
                             capture_output=True, text=True, check=True).stdout
     assert json.loads(sortie)["label"] == "Access"
 

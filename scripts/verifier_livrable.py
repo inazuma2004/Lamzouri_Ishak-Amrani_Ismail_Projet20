@@ -90,7 +90,7 @@ def main() -> int:
         bilan = (r.stdout.strip().splitlines() or ["(aucune sortie)"])[-1]
         noter(r.returncode == 0 and "skipped" not in bilan, "tests lancés sur le paquet installé", bilan)
         commande = binaires / ("incidents.exe" if sys.platform == "win32" else "incidents")
-        r = lancer([str(commande), "--json", AVIS], dossier)
+        r = lancer([str(commande), "predict", AVIS], dossier)
         erreur = (r.stderr.strip().splitlines() or [""])[-1]
         noter(r.returncode == 0 and '"label"' in r.stdout, "commande installée", r.stdout.strip() or erreur)
     return terminer()
