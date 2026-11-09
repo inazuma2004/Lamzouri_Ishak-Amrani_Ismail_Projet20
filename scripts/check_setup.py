@@ -1,1 +1,0 @@
-print('Architecture conforme et tests d\'intégration prêts.')

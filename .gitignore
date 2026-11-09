@@ -55,11 +55,36 @@ build/
 
 # Archives & artefacts temporaires
 *.zip
+!modele-rapport-latex.zip
 *.tar.gz
 *.rar
 *.7z
 scratch/
 scratch_*
+
+# Code applicatif avancé (temporairement conservé en local / branche feature/dev-avance)
+app/
+ui/
+src/
+incidents_app/
+tests/
+scripts/
+models/
+data/runbooks/
+Dockerfile
+docker-compose.yml
+.dockerignore
+.env.example
+pyproject.toml
+requirements.txt
+CHANGELOG.md
+CONTEXTE_PROJET.md
+docs/architecture_agent.md
+docs/decisions/
+docs/journal_tp1_tp6.md
+docs/CONTRIBUTING.md
+docs/suivi_semaines/
+.github/
 
 # Documents et archives non sollicités
 *.pdf
