@@ -43,7 +43,7 @@ incidentsIT/
 ├── Makefile                      # Raccourcis setup/test/check
 ├── README.md                     # Documentation utilisateur + Docker
 ├── CONTEXTE_PROJET.md            # Ce document (état, roadmap, métriques)
-├── Briefing_Projet_Agent_IT.md   # Cahier des charges du prof Larhlimi
+├── Lamzouri-Amrani_Projet20.md   # Fiche de cadrage officielle du binôme
 ├── incidents_app/                # Paquet installable (source de vérité : predict.py, rag.py, agent.py, cli.py)
 ├── app/                          # API FastAPI (main.py, model.py, schemas.py)
 ├── ui/                           # Interface Streamlit (app.py, client.py)

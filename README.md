@@ -90,7 +90,7 @@ Lamzouri_Ishak-Amrani_Ismail/
 ├── Dockerfile                  # Semaine 6 : image de production (uvicorn app.main:app)
 ├── docker-compose.yml          # Semaine 6 : déploiement local (api + ui)
 ├── .dockerignore               # Artefacts exclus du build Docker
-├── Briefing_Projet_Agent_IT.md # Briefing de cadrage de l'équipe
+├── Lamzouri-Amrani_Projet20.md # Fiche de cadrage officielle du projet 20
 ├── requirements.txt            # Dépendances Python du projet
 ├── .gitignore                  # Exclusion stricte des artefacts lourds (.venv, .joblib, data/*.csv)
 └── README.md                   # Présentation générale du projet
