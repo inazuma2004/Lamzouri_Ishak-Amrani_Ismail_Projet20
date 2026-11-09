@@ -26,10 +26,20 @@ class ModeleIntrouvable(FileNotFoundError):
 
 
 def chemin_modele() -> Path:
-    """Renvoie le chemin du modèle selon la variable d'environnement ou le dépôt."""
+    """Renvoie le chemin du modèle selon la variable d'environnement ou le dépôt.
+
+    Dans une roue installée, le modèle est embarqué dans le paquet
+    (incidents_app/models/incidents.joblib). Depuis les sources du dépôt,
+    il se trouve à la racine (models/incidents.joblib).
+    """
     env = os.environ.get(ENV_MODELE)
     if env:
         return Path(env)
+    # 1. Modèle embarqué dans le paquet (roue installée)
+    paquet_modele = Path(__file__).resolve().parent / "models" / "incidents.joblib"
+    if paquet_modele.exists():
+        return paquet_modele
+    # 2. Modèle à la racine du dépôt (utilisation depuis les sources)
     racine = Path(__file__).resolve().parents[1]
     return racine / "models" / "incidents.joblib"
 

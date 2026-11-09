@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "incidents-app"
-version = "0.6.0"
-description = "Agent autonome de classification de tickets d'incidents IT"
+version = "1.0.0"
+description = "Agent autonome de classification et de résolution de tickets d'incidents IT"
 requires-python = ">=3.11"
 authors = [
     {name = "Lamzouri Ishak", email = "lamzouriishak@gmail.com"},
@@ -21,6 +21,7 @@ dependencies = [
     "httpx>=0.27",
     "streamlit>=1.35",
     "pydantic>=2.0",
+    "python-dotenv>=1.2.2",
     "sentence-transformers>=3.0",
     "chromadb>=0.5",
 ]
@@ -28,9 +29,13 @@ dependencies = [
 [project.scripts]
 incidents = "incidents_app.cli:main"
 
-# La roue contient le paquet, l'API et l'interface. Ni tests, ni donnees, ni modele.
+# La roue contient le paquet, l'API, l'interface et le modèle embarqué.
+# Ni tests, ni donnees brutes, ni base vectorielle.
 [tool.setuptools.packages.find]
 include = ["incidents_app*", "app*", "ui*"]
+
+[tool.setuptools.package-data]
+incidents_app = ["models/*.joblib"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

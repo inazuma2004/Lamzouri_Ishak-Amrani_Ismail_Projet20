@@ -13,12 +13,15 @@ __pycache__/
 htmlcov/
 
 # Modèles volumineux & Binaires sérialisés (Joblib / Pickle)
-# Seul models/metrics.json doit être versionné
+# Seul models/metrics.json (à la racine) doit être versionné
 models/*
 !models/.gitkeep
 !models/metrics.json
 *.joblib
 *.pkl
+# Modèle embarqué dans le paquet (TP4) : présent dans la roue, exclu de Git
+incidents_app/models/*.joblib
+!incidents_app/models/.gitkeep
 
 # Données volumineuses (CSVs bruts ou nettoyés volumineux)
 data/*
@@ -68,3 +71,6 @@ scratch_*
 
 # Secrets
 .env
+
+# Rapport de vérification TP4 (non commité : rejoint la release GitHub avec dist/)
+docs/livrable-tp4.txt
