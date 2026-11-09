@@ -108,7 +108,7 @@ def predire_lot(session: httpx.Client, textes: list[str]) -> list[Reponse]:
 
 def resumer(reponses: list[Reponse]) -> dict[str, int]:
     """Nombre de tickets par catégorie/statut ; les refus et erreurs sont comptés à part."""
-    compte = Counter()
+    compte: Counter[str] = Counter()
     for r in reponses:
         if r.ok:
             compte[f"{r.label} ({r.statut})"] += 1
