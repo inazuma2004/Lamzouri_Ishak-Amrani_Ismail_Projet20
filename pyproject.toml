@@ -21,19 +21,31 @@ dependencies = [
     "httpx>=0.27",
     "streamlit>=1.35",
     "pydantic>=2.0",
+    "sentence-transformers>=3.0",
+    "chromadb>=0.5",
 ]
 
 [project.scripts]
-incidents = "src.cli:main"
+incidents = "incidents_app.cli:main"
 
 # La roue contient le paquet, l'API et l'interface. Ni tests, ni donnees, ni modele.
 [tool.setuptools.packages.find]
-include = ["src*", "app*", "ui*"]
+include = ["incidents_app*", "app*", "ui*"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
 asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
 addopts = "-q"
 
 [tool.ruff]
 line-length = 100
+
+[tool.mypy]
+python_version = "3.11"
+check_untyped_defs = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["joblib", "joblib.*", "sklearn", "sklearn.*", "pandas", "pandas.*", "uvicorn", "uvicorn.*", "click", "click.*", "chromadb", "chromadb.*", "sentence_transformers", "sentence_transformers.*"]
+ignore_missing_imports = true

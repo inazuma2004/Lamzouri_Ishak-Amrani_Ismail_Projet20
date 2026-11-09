@@ -21,7 +21,7 @@ def predict(texte: str):
     """Affiche la categorie et le score pour un ticket."""
     try:
         modele = charger_modele()
-    except ModeleIntrouvable as erreur:
+    except ModeleIntrouvable:
         click.echo(f"Erreur : modele introuvable. Definissez {ENV_MODELE} ou lancez python src/train.py", err=True)
         sys.exit(1)
     resultat = predire(texte, modele)

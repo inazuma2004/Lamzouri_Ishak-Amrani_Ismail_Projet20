@@ -4,9 +4,9 @@ Exécution : pytest tests/test_jeu_or.py -v
 Les tickets ambigus sont déclarés xfail(strict=False) pour documenter
 honnêtement les limites du modèle, conformément aux exigences du cours.
 """
-import pytest
-
 from pathlib import Path
+
+import pytest
 
 MODEL_PATH = Path(__file__).resolve().parents[1] / "models" / "incidents.joblib"
 pytestmark = pytest.mark.skipif(

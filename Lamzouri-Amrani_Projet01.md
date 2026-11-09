@@ -1,5 +1,7 @@
 # Fiche de cadrage du projet
 
+> **⚠️ Document obsolète — ne pas remettre.** Cette fiche est une ancienne version portant le numéro 01 et décrivant un LLM local (Ollama). La fiche officielle du binôme pour le **projet 20** est [`Lamzouri-Amrani_Projet20.md`](Lamzouri-Amrani_Projet20.md), avec un RAG extractif sans LLM génératif.
+
 **Cours** : Développement et déploiement d'applications intelligentes
 **Projet d'agent IA en binôme**
 

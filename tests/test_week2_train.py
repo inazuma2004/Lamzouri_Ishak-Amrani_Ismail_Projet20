@@ -44,8 +44,18 @@ def test_train_and_predict_from_dataframe(tmp_path: Path):
         assert key in payload
 
     out = predict("cannot connect vpn", modele_path=modele_path)
-    assert out["label"] in {"Access", "Storage", "Purchase"}
+    # Le seuil d'abstention (0.60) peut renvoyer INDETERMINE si le modèle n'est pas confiant
+    # sur ce petit jeu d'entraînement : c'est un comportement attendu et cohérent.
+    assert out["label"] in {"Access", "Storage", "Purchase", "INDETERMINE"}
     assert 0.0 <= out["score"] <= 1.0
+    assert out["status"] in {"VALIDE", "A_VERIFIER"}
+    # Cohérence : label INDETERMINE <=> status A_VERIFIER, sinon VALIDE
+    if out["label"] == "INDETERMINE":
+        assert out["status"] == "A_VERIFIER"
+        assert out["score"] < 0.60
+    else:
+        assert out["status"] == "VALIDE"
+        assert out["score"] >= 0.60
 
     # Texte vide doit être refusé
     with pytest.raises(ValueError):

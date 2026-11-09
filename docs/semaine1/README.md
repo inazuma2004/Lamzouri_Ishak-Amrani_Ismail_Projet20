@@ -1,0 +1,63 @@
+# Dossier de lancement (semaine 1) — Agent Autonome d'Incidents IT
+
+**Date de cadrage :** 09 Novembre 2026  
+**Module :** Développement et déploiement d’applications intelligentes  
+**Enseignant :** M. A. Larhlimi  
+**Dépôt GitHub officiel :** [https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20)  
+**Branche principale :** `main`
+
+---
+
+## 👥 Notre répartition (Équipe de 2 étudiants)
+
+| Livrable | Rédacteur | Relecteur | Fichier dans le dépôt |
+| --- | --- | --- | --- |
+| **1. Descriptif du projet** | Ishak Lamzouri ([@inazuma2004](https://github.com/inazuma2004)) | Ismail Amrani ([@Amaranix](https://github.com/Amaranix)) | `docs/semaine1/1-descriptif.md` |
+| **2. Dataset** | Ismail Amrani ([@Amaranix](https://github.com/Amaranix)) | Ishak Lamzouri ([@inazuma2004](https://github.com/inazuma2004)) | `docs/semaine1/2-dataset.md` + `data/sample/` |
+| **3. Maquette globale** | Ishak Lamzouri ([@inazuma2004](https://github.com/inazuma2004)) | Ismail Amrani ([@Amaranix](https://github.com/Amaranix)) | `docs/semaine1/3-maquette.md` + `docs/semaine1/img/` |
+| **4. Pipeline des tâches** | Ismail Amrani ([@Amaranix](https://github.com/Amaranix)) | Ishak Lamzouri ([@inazuma2004](https://github.com/inazuma2004)) | `docs/semaine1/4-pipeline.md` |
+
+---
+
+## 📁 Organisation des Fichiers
+
+```text
+docs/semaine1/
+├── README.md                          <- Synthèse et répartition (ce fichier)
+├── 1-descriptif.md                    <- Livrable 1 : Descriptif détaillé du projet
+├── 2-dataset.md                       <- Livrable 2 : Description, analyse et qualité du dataset
+├── 3-maquette.md                      <- Livrable 3 : Architecture système et maquettes d'écrans
+├── 4-pipeline.md                      <- Livrable 4 : Découpage WBS, jalons et Gantt
+├── img/                               <- Wireframes PNG des 3 écrans (générés par script)
+│   ├── ecran1_qualification.png
+│   ├── ecran2_incertitude.png
+│   └── ecran3_batch.png
+└── Dossier_de_lancement_semaine1.md   <- Version consolidée intégrale du dossier officiel
+data/sample/
+├── tickets_sample.csv                 <- Échantillon représentatif réel (120 lignes, 8 classes)
+└── README.md                          <- Documentation de l'échantillon
+```
+
+---
+
+## 🎯 Statut d'avancement de l'équipe
+
+- **Semaine 1 (Cadrage & Dataset) :** ✅ 100% complétée et conforme aux exigences.
+- **Dépôt Git & Hygiène :** `.gitignore`, `ruff`, `mypy`, et tests `pytest` configurés.
+- **Échantillon de données :** Présent dans `data/sample/tickets_sample.csv` (25 Ko, 120 tickets équilibrés).
+- **Maquette :** 3 wireframes PNG dans `docs/semaine1/img/` (qualification, incertitude, batch CSV).
+- **Prototypage & Suites :** Prototype fonctionnel déjà opérationnel (API FastAPI + Modèle ML + Interface Streamlit + RAG extractif).
+- **Défense du RAG :** [`docs/decisions/justification_rag.md`](../decisions/justification_rag.md) — critères (b) et (c), coûts mesurés, limites.
+
+---
+
+## ✅ Checklist de remise (Coordinateur)
+
+- [x] `docs/semaine1/README.md` avec la répartition rédacteurs et relecteurs.
+- [x] Les quatre livrables rédigés, revus et fusionnés sur la branche principale.
+- [x] Échantillon de données présent dans `data/sample/tickets_sample.csv`.
+- [x] Schéma d'architecture Mermaid et parcours utilisateur visibles sur GitHub.
+- [x] Wireframes PNG des 3 écrans dans `docs/semaine1/img/`.
+- [x] Issues GitHub créées et pipeline chronologique défini.
+- [x] Dossier complet consolidé disponible dans `docs/semaine1/Dossier_de_lancement_semaine1.md`.
+

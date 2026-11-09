@@ -1,5 +1,7 @@
 # Fiche de cadrage du projet
 
+> **Note :** ce fichier est le **modèle vierge** fourni par l'enseignant. La version remplie et à rendre pour le binôme est [`Lamzouri-Amrani_Projet20.md`](Lamzouri-Amrani_Projet20.md).
+
 **Cours** : Développement et déploiement d'applications intelligentes
 **Projet d'agent IA en binôme**
 

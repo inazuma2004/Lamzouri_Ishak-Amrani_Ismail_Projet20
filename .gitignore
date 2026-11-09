@@ -1,4 +1,4 @@
-# Environnements virtuels
+# Environnement Python
 .venv/
 venv/
 env/
@@ -14,16 +14,30 @@ htmlcov/
 
 # Modèles volumineux & Binaires sérialisés (Joblib / Pickle)
 # Seul models/metrics.json doit être versionné
+models/*
+!models/.gitkeep
+!models/metrics.json
 *.joblib
 *.pkl
-models/*.joblib
-models/*.pkl
 
 # Données volumineuses (CSVs bruts ou nettoyés volumineux)
-data/*.csv
+data/*
 !data/.gitkeep
+!data/sample/
+!data/sample/**
+!data/sample_reviews.csv
+# Runbooks IT (versionnés : base de connaissances RAG)
+!data/runbooks/
+!data/runbooks/**/*.md
+# Base vectorielle Chroma (générée, exclue de Git)
+chroma_db/
 
-# Fichiers temporaires & IDE
+# Tests & qualité
+.hypothesis/
+.mypy_cache/
+.ruff_cache/
+
+# Éditeurs et système
 .vscode/
 .idea/
 *.swp
@@ -31,8 +45,26 @@ data/*.csv
 .DS_Store
 Thumbs.db
 
+# Build & packaging
+dist/
+build/
+*.egg-info/
+
 # Archives & artefacts temporaires
 *.zip
 *.tar.gz
+*.rar
+*.7z
 scratch/
 scratch_*
+
+# Documents et archives non sollicités
+*.pdf
+
+# Images temporaires à la racine du dépôt (les captures dans docs/captures/ restent autorisées)
+/*.png
+/*.jpg
+/*.jpeg
+
+# Secrets
+.env

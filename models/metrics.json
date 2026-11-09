@@ -1,6 +1,6 @@
 {
   "source": "dataframe",
-  "date": "2026-10-28",
+  "date": "2026-11-04",
   "n_train": 38269,
   "n_test": 9568,
   "f1_macro": 0.8568,

@@ -1,7 +1,7 @@
 # 🚀 Traçabilité du Projet Final & Feuille de Route (Prochaine Conversation)
 
 > **Projet :** Agent Autonome de Résolution d'Incidents IT (IT Helpdesk)  
-> **Dépôt Git :** [https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail)  
+> **Dépôt Git :** [https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20)  
 > **Branche :** `main`  
 > **Auteurs :** Ishak Lamzouri ([@inazuma2004](https://github.com/inazuma2004)) & Ismail Amrani ([@Amaranix](https://github.com/Amaranix))
 
@@ -10,7 +10,8 @@
 ## 📌 1. Ce qui a été fait (Livrables Initiaux)
 
 1. **Cadrage méthodologique complet :**
-   - Justification de l'approche hybride : Machine Learning supervisé (classification/routage rapide) + Agent RAG (recherche contextuelle de runbooks et résolution autonome).
+   - Justification de l'approche hybride : Machine Learning supervisé (classification/routag
+   e rapide) + Agent RAG (recherche contextuelle de runbooks et résolution autonome).
    - Validation des critères du cours : Données étiquetées disponibles ($N = 47\,837$), vérifiabilité par $F_1$-score macro, coût d'inférence < 5ms sur CPU, mitigeage d'erreur via seuil d'incertitude.
    - Rapport initial disponible dans `docs/cadrage/rapport_conception_initiale.md`.
 

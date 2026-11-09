@@ -1,11 +1,11 @@
 """Tests d'intégration de l'API (S3/S4) — le modèle doit être entraîné au préalable."""
 import os
+from pathlib import Path
+
 import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
-
-from pathlib import Path
 
 MODEL_PATH = Path(__file__).resolve().parents[1] / "models" / "incidents.joblib"
 pytestmark = pytest.mark.skipif(

@@ -1,7 +1,6 @@
 """API REST pour la classification automatique d'incidents IT.
 """
 import logging
-import os
 from contextlib import asynccontextmanager
 
 from dotenv import load_dotenv
@@ -20,7 +19,7 @@ from app.schemas import (
     ResolveRequest,
     ResolveResponse,
 )
-from app.securite import exiger, identifier
+from app.securite import exiger
 from incidents_app.agent import IncidentAgent
 from incidents_app.rag import MiniRAG
 

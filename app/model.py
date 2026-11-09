@@ -3,9 +3,7 @@
 Aucune manipulation de sys.path : l'API importe le paquet comme n'importe quelle dependance.
 """
 
-from src.predict import ModeleIntrouvable, charger_modele, predire
-
-SEUIL_ABSTENTION = 0.60
+from incidents_app.predict import charger_modele, predire
 
 
 class IncidentClassifier:
