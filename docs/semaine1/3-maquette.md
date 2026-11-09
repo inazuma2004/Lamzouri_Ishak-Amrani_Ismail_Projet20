@@ -12,35 +12,35 @@
 
 ```mermaid
 flowchart TD
-    subgraph Client ["Interface & Clients"]
+    subgraph Client ["Interface et Clients"]
         U["Utilisateur / Technicien L1"]
-        UI["Interface Web (Streamlit)"]
-        CLI["CLI Python (incidents)"]
-        U -->|Texte d'incident ou fichier CSV| UI
+        UI["Interface Web Streamlit"]
+        CLI["CLI Python incidents"]
+        U -->|Texte d incident ou fichier CSV| UI
         U -->|Ligne de commande| CLI
     end
 
-    subgraph Backend ["Service API (FastAPI)"]
-        API["FastAPI App (/predict & /resolve)"]
-        VAL["Validation Pydantic (TicketIn, PredictionOut)"]
+    subgraph Backend ["Service API FastAPI"]
+        API["FastAPI App /predict et /resolve"]
+        VAL["Validation Pydantic"]
         API --- VAL
     end
 
-    subgraph Intelligence ["Moteurs d'IA"]
-        ML["Modèle ML (Scikit-Learn TF-IDF + LogisticRegression)"]
-        AGENT["Agent de Résolution Autonome"]
-        RAG["Mini-RAG (ChromaDB + sentence-transformers)"]
-        RUNBOOKS[("Runbooks Markdown (data/runbooks/*.md)")]
+    subgraph Intelligence ["Moteurs IA"]
+        ML["Modele ML Scikit-Learn TF-IDF + LogisticRegression"]
+        AGENT["Agent de Resolution Autonome"]
+        RAG["Mini-RAG ChromaDB + sentence-transformers"]
+        RUNBOOKS[("Runbooks Markdown data/runbooks")]
         
         AGENT -->|1. Classifier| ML
-        AGENT -->|2. Rechercher procédure si score >= 0.60| RAG
+        AGENT -->|2. Rechercher procedure si score >= 0.60| RAG
         RAG --- RUNBOOKS
     end
 
-    UI -->|Requête HTTP REST| API
+    UI -->|Requete HTTP REST| API
     CLI -->|Appel direct| AGENT
-    API -->|Délégation| AGENT
-    API -->|Réponse JSON (Catégorie, Confiance, Procédure, Statut)| UI
+    API -->|Delegation| AGENT
+    API -->|Reponse JSON Categorie, Confiance, Procedure, Statut| UI
 ```
 
 ---

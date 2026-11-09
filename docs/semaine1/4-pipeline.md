@@ -43,25 +43,25 @@ gantt
     dateFormat  YYYY-MM-DD
     title Pipeline du projet IT Service Desk Intelligent (4 semaines)
     
-    section Semaine 1 : Cadrage & ML
-    T1 Socle Git & Environnement (Ishak)     :t1, 2026-11-09, 2d
-    T2 Dataset & Sample (Ismail)             :t2, after t1, 1d
-    T3 Entraînement ML Scikit (Ismail)       :t3, after t2, 2d
-    T4 Seuil Incertitude & Abstention (Ishak):t4, after t3, 1d
+    section Semaine 1 : Cadrage et ML
+    T1 Socle Git et Environnement (Ishak)     :t1, 2026-11-09, 2d
+    T2 Dataset et Sample (Ismail)             :t2, after t1, 1d
+    T3 Entrainement ML Scikit (Ismail)        :t3, after t2, 2d
+    T4 Seuil Incertitude et Abstention (Ishak):t4, after t3, 1d
     
-    section Semaine 2 : API & Interface
-    T5 API FastAPI & Pydantic (Ismail)       :t5, 2026-11-16, 2d
-    T6 Interface Web Streamlit (Ishak)       :t6, after t5, 2d
+    section Semaine 2 : API et Interface
+    T5 API FastAPI et Pydantic (Ismail)       :t5, 2026-11-16, 2d
+    T6 Interface Web Streamlit (Ishak)        :t6, after t5, 2d
     
-    section Semaine 3 : Agent & RAG
-    T7 ChromaDB & Indexation Runbooks (Ismail):t7, 2026-11-23, 2d
-    T8 Agent Autonome ML+RAG (Ishak)         :t8, after t7, 2d
-    T9 CLI Python & Packaging (Ismail)       :t9, after t8, 1d
-    T10 Docker & Docker-Compose (Ishak)      :t10, after t9, 1d
+    section Semaine 3 : Agent et RAG
+    T7 ChromaDB et Runbooks (Ismail)          :t7, 2026-11-23, 2d
+    T8 Agent Autonome ML et RAG (Ishak)       :t8, after t7, 2d
+    T9 CLI Python et Packaging (Ismail)       :t9, after t8, 1d
+    T10 Docker et Docker-Compose (Ishak)      :t10, after t9, 1d
     
-    section Semaine 4 : Tests & CI
-    T11 Tests Jeu d'Or & Limites (Ismail)   :t11, 2026-11-30, 2d
-    T12 CI GitHub Actions & Gel Code (Ishak) :t12, after t11, 2d
+    section Semaine 4 : Tests et CI
+    T11 Tests Jeu d Or et Limites (Ismail)    :t11, 2026-11-30, 2d
+    T12 CI GitHub Actions et Gel Code (Ishak) :t12, after t11, 2d
 ```
 
 ---

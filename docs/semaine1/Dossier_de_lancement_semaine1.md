@@ -147,35 +147,35 @@ En cas de problème sur la source principale :
 
 ```mermaid
 flowchart TD
-    subgraph Client ["Interface & Clients"]
+    subgraph Client ["Interface et Clients"]
         U["Utilisateur / Technicien L1"]
-        UI["Interface Web (Streamlit)"]
-        CLI["CLI Python (incidents)"]
-        U -->|Texte d'incident ou fichier CSV| UI
+        UI["Interface Web Streamlit"]
+        CLI["CLI Python incidents"]
+        U -->|Texte d incident ou fichier CSV| UI
         U -->|Ligne de commande| CLI
     end
 
-    subgraph Backend ["Service API (FastAPI)"]
-        API["FastAPI App (/predict & /resolve)"]
-        VAL["Validation Pydantic (TicketIn, PredictionOut)"]
+    subgraph Backend ["Service API FastAPI"]
+        API["FastAPI App /predict et /resolve"]
+        VAL["Validation Pydantic"]
         API --- VAL
     end
 
-    subgraph Intelligence ["Moteurs d'IA"]
-        ML["Modèle ML (Scikit-Learn TF-IDF + LogisticRegression)"]
-        AGENT["Agent de Résolution Autonome"]
-        RAG["Mini-RAG (ChromaDB + sentence-transformers)"]
-        RUNBOOKS[("Runbooks Markdown (data/runbooks/*.md)")]
+    subgraph Intelligence ["Moteurs IA"]
+        ML["Modele ML Scikit-Learn TF-IDF + LogisticRegression"]
+        AGENT["Agent de Resolution Autonome"]
+        RAG["Mini-RAG ChromaDB + sentence-transformers"]
+        RUNBOOKS[("Runbooks Markdown data/runbooks")]
         
         AGENT -->|1. Classifier| ML
-        AGENT -->|2. Rechercher procédure si score >= 0.60| RAG
+        AGENT -->|2. Rechercher procedure si score >= 0.60| RAG
         RAG --- RUNBOOKS
     end
 
-    UI -->|Requête HTTP REST| API
+    UI -->|Requete HTTP REST| API
     CLI -->|Appel direct| AGENT
-    API -->|Délégation| AGENT
-    API -->|Réponse JSON (Catégorie, Confiance, Procédure, Statut)| UI
+    API -->|Delegation| AGENT
+    API -->|Reponse JSON Categorie, Confiance, Procedure, Statut| UI
 ```
 
 ### 3.2 Légende du schéma
@@ -253,25 +253,25 @@ gantt
     dateFormat  YYYY-MM-DD
     title Pipeline du projet IT Helpdesk Intelligent
     
-    section Semaine 1 : Cadrage & ML
-    T1 Dépôt et environnement (Ishak)     :t1, 2026-11-09, 2d
-    T2 Dataset et échantillon (Ismail)     :t2, after t1, 1d
-    T3 Entraînement ML Scikit (Ismail)     :t3, after t2, 2d
-    T4 Seuil Incertitude (Ishak)           :t4, after t3, 1d
+    section Semaine 1 : Cadrage et ML
+    T1 Depot et environnement (Ishak)     :t1, 2026-11-09, 2d
+    T2 Dataset et echantillon (Ismail)    :t2, after t1, 1d
+    T3 Entrainement ML Scikit (Ismail)    :t3, after t2, 2d
+    T4 Seuil Incertitude (Ishak)          :t4, after t3, 1d
     
-    section Semaine 2 : API & UI
-    T5 API FastAPI (Ismail)                :t5, 2026-11-16, 2d
-    T6 Interface Streamlit (Ishak)         :t6, after t5, 2d
+    section Semaine 2 : API et UI
+    T5 API FastAPI (Ismail)               :t5, 2026-11-16, 2d
+    T6 Interface Streamlit (Ishak)        :t6, after t5, 2d
     
-    section Semaine 3 : Agent & RAG
-    T7 ChromaDB & Runbooks (Ismail)        :t7, 2026-11-23, 2d
-    T8 Agent Autonome (Ishak)              :t8, after t7, 2d
-    T9 CLI Python (Ismail)                 :t9, after t8, 1d
-    T10 Docker Compose (Ishak)             :t10, after t9, 1d
+    section Semaine 3 : Agent et RAG
+    T7 ChromaDB et Runbooks (Ismail)      :t7, 2026-11-23, 2d
+    T8 Agent Autonome (Ishak)             :t8, after t7, 2d
+    T9 CLI Python (Ismail)                :t9, after t8, 1d
+    T10 Docker Compose (Ishak)            :t10, after t9, 1d
     
-    section Semaine 4 : Tests & CI
-    T11 Tests Jeu d'Or & Limites (Ismail)  :t11, 2026-11-30, 2d
-    T12 CI GitHub Actions & Gel Code (Ishak):t12, after t11, 2d
+    section Semaine 4 : Tests et CI
+    T11 Tests Jeu d Or et Limites (Ismail):t11, 2026-11-30, 2d
+    T12 CI GitHub Actions et Gel (Ishak)  :t12, after t11, 2d
 ```
 
 ### 4.4 Chemin critique et charge
