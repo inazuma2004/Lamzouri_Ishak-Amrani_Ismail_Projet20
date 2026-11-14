@@ -45,10 +45,10 @@ Classifier automatiquement les tickets d'incidents informatiques avec un score d
 ### 1.3 Utilisateurs cibles et scénario d'usage principal
 - **Utilisateurs cibles :** Techniciens de support IT niveau 1 (gain de temps) et collaborateurs d'entreprise déclarant un incident.
 - **Scénario d'usage principal :**
-  1. L'utilisateur saisit sa demande en texte libre (ex. : *"Impossible d'accéder au lecteur réseau partagé après changement de mot de passe"*).
-  2. L'agent analyse le texte en quelques millisecondes et prédit la catégorie `Storage` avec 89% de confiance.
-  3. Le score étant supérieur au seuil de 60%, l'agent valide la catégorie (`VALIDE`) et extrait la procédure de reconnexion réseau du runbook correspondant.
-  4. L'utilisateur reçoit la solution immédiatement ; si le score avait été inférieur à 60%, le ticket aurait été marqué `A_VERIFIER` et transmis à un opérateur humain.
+  1. L'utilisateur saisit sa demande en texte libre, en anglais comme les tickets d'entraînement (ex. : *"Cannot connect to the VPN since this morning, my password expired"*).
+  2. L'équipe d'agents analyse le texte en moins de 100 ms : catégorie `Access` (confiance 88 %), priorité `P2` (utilisateur bloqué).
+  3. Le score étant supérieur au seuil de 60 %, l'agent Documentaliste extrait la section « Access.md > Connexion VPN impossible » des runbooks.
+  4. L'utilisateur reçoit la procédure avec sa source et l'équipe d'escalade, après contrôle par l'agent Vérificateur ; si le score avait été inférieur à 60 %, ou le ticket rédigé dans une autre langue, il aurait été marqué `A_VERIFIER` et transmis à un opérateur humain.
 
 ### 1.4 Fonctionnalités du MVP (Équipe de 2 étudiants)
 
@@ -56,16 +56,16 @@ Classifier automatiquement les tickets d'incidents informatiques avec un score d
 | --- | --- | --- | --- |
 | **F1** | Classification automatique supervisée en 8 catégories | Prédiction instantanée de la catégorie avec score de confiance calculé en probabilités. | Indispensable |
 | **F2** | Gestion de l'incertitude et abstention automatique | Statut `VALIDE` si confiance >= 60%, ou statut `A_VERIFIER` avec avertissement explicite. | Indispensable |
-| **F3** | API REST FastAPI et Interface Web Streamlit | Endpoints d'inférence `/predict` et interface interactive avec saisie unitaire et lot CSV. | Indispensable |
-| **F4** | Moteur Mini-RAG local branché sur runbooks | Suggestions d'étapes de dépannage issues des runbooks officiels avec citation de la source. | Souhaitable |
+| **F3** | API REST FastAPI et Interface Web Streamlit | Routes `/predict`, `/resolve`, `/search`... et interface interactive : saisie unitaire, lot CSV, base de connaissances, supervision. | Indispensable |
+| **F4** | Moteur Mini-RAG local branché sur runbooks | Étapes de dépannage issues des runbooks, avec la section citée (« document > section »). | Indispensable (livré S9-10) |
 
 ### 1.5 Services et composants techniques
 
 | Service ou composant | Rôle dans le projet | Technologie choisie | Pourquoi ce choix |
 | --- | --- | --- | --- |
 | **Modèle ML** | Classification supervisée de texte | Scikit-learn (`TfidfVectorizer` + `LogisticRegression`) | Moins de 10 ms par prédiction, très faible empreinte mémoire, tourne sans GPU sur ordinateur portable. |
-| **Recherche ou mémoire** | Base vectorielle de runbooks techniques | ChromaDB locale + `sentence-transformers` | Recherche sémantique locale gratuite, sans coût récurrent d'API et sans dépendance externe. |
-| **Outils appelés par l'agent** | CLI d'administration et scripts batch | CLI Python (`incidents`) | Utilisation directe en terminal et intégration simple dans des scripts d'exploitation. |
+| **Recherche ou mémoire** | Base vectorielle de runbooks (8 runbooks, 27 sections) et mémoire de l'équipe d'agents | ChromaDB locale + `sentence-transformers`, recherche hybride ; `MEMOIRE.md` | Recherche sémantique locale gratuite, sans coût récurrent d'API et sans dépendance externe. |
+| **Outils appelés par l'agent** | Compétences de l'équipe : modèle ML, règles de priorité P1 à P4, recherche RAG, vérification | Fonctions Python (`incidents_app/equipe.py`) ; commande `incidents` | Chaque agent n'a que les compétences de son rôle ; aucun agent n'exécute de commande sur un système. |
 | **API** | Exposition des prédictions et résolutions | FastAPI + Uvicorn + Pydantic v2 | Standard OpenAPI/Swagger, validation stricte des entrées/sorties et haute performance asynchrone. |
 | **Interface** | Dashboard utilisateur et analyse par lot | Streamlit | Prototypage rapide, affichage de graphiques de distribution et export direct des CSV enrichis. |
 | **Conteneur et CI** | Reproductibilité et validation continue | Docker, Docker Compose, GitHub Actions | Environnement hermétique et tests automatisés (ruff, mypy, pytest) à chaque commit. |
@@ -103,20 +103,20 @@ Nous avons étendu la classification supervisée du catalogue en intégrant un m
 | **Langue et période couverte** | Anglais technique d'entreprise |
 | **Licence et droits d'usage** | CC0 : Domaine Public (usage libre académique et commercial) |
 | **Données personnelles ou sensibles** | Aucune : anonymisation complète réalisée en amont (aucun nom, email ou IP réelle) |
-| **Emplacement des données complètes** | Racine locale du projet : `data/all_tickets_processed_improved_v3.csv` |
+| **Emplacement des données complètes** | `data/all_tickets_processed_improved_v3.csv`, hors Git, versionné par DVC ; source d'origine : Kaggle |
 
 ### 2.2 Qualité constatée sur l'échantillon
-Inspection de `data/sample/tickets_sample.csv` (120 lignes, 15 par catégorie) :
+L'échantillon `data/sample/tickets_sample.csv` compte 120 lignes, 15 par catégorie (équilibré par construction). Sur le jeu complet :
 - Zéro valeur manquante sur les deux colonnes.
-- Vocabulaire riche et diversifié représentatif des problématiques réelles de support IT.
-- Présence des 8 classes cibles réparties naturellement : `Hardware` (28.5%), `HR Support` (22.8%), `Access` (14.9%), `Miscellaneous` (14.8%), `Storage` (5.8%), `Purchase` (5.1%), `Internal Project` (4.4%), `Administrative rights` (3.7%).
+- Répartition déséquilibrée des 8 classes : `Hardware` (28.5%), `HR Support` (22.8%), `Access` (14.9%), `Miscellaneous` (14.8%), `Storage` (5.8%), `Purchase` (5.1%), `Internal Project` (4.4%), `Administrative rights` (3.7%), compensée par `class_weight='balanced'`.
+- Bruit : certaines étiquettes sont discutables (tickets Outlook étiquetés `Administrative rights`, alertes serveur étiquetées `Hardware`) et certains textes sont presque vides.
 
 ### 2.3 Justification par fonctionnalité
 
 | Fonctionnalité | Données utilisées | En quoi elles suffisent |
 | --- | --- | --- |
-| **F1 (Classification)** | 47 837 paires `Document` / `Topic_group` | Permet d'entraîner un classifieur supervisé robuste atteignant un F1-macro de 0.857. |
-| **F2 (Incertitude)** | Vecteurs de probabilité par classe | Les textes vagues obtiennent des scores faibles (<0.60), validant le mécanisme de sécurité. |
+| **F1 (Classification)** | 47 837 paires `Document` / `Topic_group` | Permet d'entraîner un classifieur supervisé atteignant un F1 macro de 0,868 sur un jeu de test disjoint. |
+| **F2 (Incertitude)** | Vecteurs de probabilité par classe | Au seuil de 0,60, 78,4 % des tickets de test sont traités seuls, avec 94,2 % de justesse ; les autres partent chez un technicien. |
 | **F3 (Lot CSV)** | Format tabulaire standard CSV | Permet d'injecter et traiter des fichiers d'incidents par lot dans Streamlit. |
 
 ### 2.4 Alternative de repli
@@ -126,8 +126,9 @@ En cas de problème sur la source principale :
 *Perte :* Légère adaptation du schéma des catégories cibles.
 
 ### 2.5 Jeu de test
-- **Jeu d'or unitaire :** 20 cas de référence formalisés dans `tests/test_jeu_or.py` par l'équipe, testant les cas nominaux, variantes syntaxiques et cas ambigus.
-- **Jeu de test d'évaluation globale :** 20% du dataset principal (9 567 tickets) isolés pour l'évaluation finale hors entraînement.
+- **Jeu d'or des tickets :** 20 tickets rédigés par l'équipe (`tests/jeu_or.csv`) : 11 justes, 6 abstentions, 3 erreurs franches déclarées comme erreurs connues.
+- **Jeu d'or des procédures :** 17 requêtes avec la section attendue (`tests/jeu_or_rag.csv`), dont 3 hors sujet qui doivent être refusées.
+- **Jeu de test d'évaluation globale :** 20% du dataset principal (9 568 tickets) isolés pour l'évaluation finale hors entraînement.
 
 **Critères d'acceptation (vérifiés par le relecteur)**
 - [x] L'échantillon est dans `data/sample/tickets_sample.csv` et s'ouvre sans erreur.
@@ -147,49 +148,57 @@ En cas de problème sur la source principale :
 
 ```mermaid
 flowchart TD
-    subgraph Client ["Interface et Clients"]
+    subgraph Client ["Interface et clients"]
         U["Utilisateur / Technicien L1"]
         UI["Interface Web Streamlit"]
-        CLI["CLI Python incidents"]
+        CLI["Commande incidents"]
         U -->|Texte d incident ou fichier CSV| UI
         U -->|Ligne de commande| CLI
     end
 
     subgraph Backend ["Service API FastAPI"]
-        API["FastAPI App /predict et /resolve"]
-        VAL["Validation Pydantic"]
+        API["FastAPI : predict, resolve, search, explain, drift, feedback"]
+        VAL["Validation Pydantic + cle X-API-Key"]
         API --- VAL
     end
 
-    subgraph Intelligence ["Moteurs IA"]
-        ML["Modele ML Scikit-Learn TF-IDF + LogisticRegression"]
-        AGENT["Agent de Resolution Autonome"]
-        RAG["Mini-RAG ChromaDB + sentence-transformers"]
-        RUNBOOKS[("Runbooks Markdown data/runbooks")]
-        
-        AGENT -->|1. Classifier| ML
-        AGENT -->|2. Rechercher procedure si score >= 0.60| RAG
-        RAG --- RUNBOOKS
+    subgraph Intelligence ["Equipe d agents : orchestrateur et bus de messages"]
+        Q["Qualificateur : modele ML TF-IDF + LogisticRegression"]
+        P["Priorisateur : regles metier P1 a P4"]
+        D["Documentaliste : Mini-RAG ChromaDB + sentence-transformers"]
+        R["Redacteur : reponse construite a partir des passages"]
+        V["Verificateur : source citee, escalade, injection"]
+        RUNBOOKS[("Runbooks Markdown data/runbooks, 27 sections")]
+
+        Q -->|categorie et confiance| P
+        P -->|priorite| D
+        D -->|passages si score >= 0.60| R
+        R -->|reponse| V
+        V -->|a corriger, boucle bornee| R
+        D --- RUNBOOKS
     end
 
     UI -->|Requete HTTP REST| API
-    CLI -->|Appel direct| AGENT
-    API -->|Delegation| AGENT
-    API -->|Reponse JSON Categorie, Confiance, Procedure, Statut| UI
+    CLI -->|Appel direct| Q
+    API -->|Delegation| Q
+    V -->|Verdict| API
+    API -->|Reponse JSON : categorie, confiance, priorite, procedure citee, statut| UI
 ```
 
 ### 3.2 Légende du schéma
-- **Interface Streamlit :** Écrans de saisie unitaire et de traitement par lot CSV avec visualisations graphiques.
-- **API FastAPI :** Service d'inférence sécurisé avec validation Pydantic v2.
-- **Modèle ML :** Pipeline supervisé Scikit-Learn (TF-IDF + Régression Logistique).
-- **Agent Autonome & Mini-RAG :** Module d'orchestration appliquant le seuil d'incertitude (60%) et récupérant les résolutions dans ChromaDB.
+- **Interface Streamlit :** cinq onglets (nouveau ticket, lot CSV, base de connaissances, supervision, mesures) ; elle ne parle qu'à l'API.
+- **API FastAPI :** service sécurisé par clé d'API avec validation Pydantic v2.
+- **Qualificateur :** pipeline supervisé scikit-learn (TF-IDF + régression logistique), seuil d'abstention 0,60.
+- **Priorisateur :** règles métier P1 à P4.
+- **Documentaliste (Mini-RAG) :** recherche hybride dans ChromaDB, citation « document > section », refus sous le seuil.
+- **Rédacteur et Vérificateur :** réponse construite à partir des passages, contrôlée (source, escalade, injection) dans une boucle bornée.
 
 ### 3.3 Maquette des écrans
 
 | Écran | Représentation | Fonctionnalités affichées | Action principale de l'utilisateur |
 | --- | --- | --- | --- |
-| **Écran 1 : Qualification unitaire** | Formulaire texte + Badge résultat | F1, F2, F4 | Saisir un incident et obtenir la catégorie, la confiance et la procédure recommandée. |
-| **Écran 2 : Alerte d'incertitude** | Bannière orange d'avertissement | F2 | Visualiser le statut `A_VERIFIER` et la réorientation vers un technicien humain. |
+| **Écran 1 : Qualification unitaire** | Formulaire texte + jauge + procédure citée | F1, F2, F4 | Saisir un incident et obtenir la catégorie, la confiance, la priorité et la procédure citée. |
+| **Écran 2 : Alerte d'incertitude** | Bannière orange d'avertissement | F2 | Visualiser le statut `A_VERIFIER` et envoyer la bonne catégorie au réentraînement. |
 | **Écran 3 : Traitement par lot CSV** | Table dynamique + Graphe de distribution | F3 | Déposer un fichier CSV et télécharger le rapport complet annoté. |
 
 #### Écran 1 — Qualification unitaire
@@ -202,9 +211,9 @@ flowchart TD
 ![Écran 3 — Traitement par lot CSV](img/ecran3_batch.png)
 
 ### 3.4 Parcours utilisateur
-1. Le technicien colle la description de l'incident dans l'interface Streamlit.
-2. Si le score est >= 60%, l'écran affiche le badge vert `VALIDE`, la catégorie et la démarche technique issue du runbook avec citation de la source.
-3. Si le score est < 60%, l'écran affiche une alerte `A_VERIFIER` et invite à un diagnostic manuel.
+1. Le technicien colle la description de l'incident (en anglais) dans l'interface Streamlit et lance l'équipe d'agents.
+2. Si le score est >= 60 % et qu'une procédure dépasse le seuil de recherche, l'écran affiche le badge vert `VALIDE`, la catégorie, la priorité et la procédure avec la section citée.
+3. Sinon, l'écran affiche une alerte `A_VERIFIER` ; le technicien choisit la bonne catégorie et envoie la correction.
 4. Pour un lot, l'utilisateur dépose un CSV et télécharge les prédictions complètes en un clic.
 
 **Critères d'acceptation (vérifiés par le relecteur)**
@@ -224,14 +233,14 @@ flowchart TD
 
 | ID | Tâche | Fonctionnalité | Responsable | Dépend de | Semaine | Terminée quand ? (Critère vérifiable) |
 | --- | --- | --- | --- | --- | --- | --- |
-| **T1** | Initialisation dépôt, structure Git, pre-commit | Socle | Ishak | - | 1 | Dépôt clonable et hooks pre-commit opérationnels. |
+| **T1** | Initialisation dépôt, structure Git, `.gitignore` strict | Socle | Ishak | - | 1 | Dépôt clonable ; `.venv/`, `.joblib` et CSV complet exclus. |
 | **T2** | Ingestion dataset et échantillon `data/sample/` | Données | Ismail | T1 | 1 | Fichier `tickets_sample.csv` (120 lignes) vérifié sous pandas. |
 | **T3** | Entraînement pipeline Scikit-Learn TF-IDF + LogReg | F1 | Ismail | T2 | 1 | Modèle sérialisé atteignant F1-macro >= 0.85. |
 | **T4** | Seuil de confiance 60% et règle d'abstention | F2 | Ishak | T3 | 1 | Sortie conforme avec distinction `VALIDE` / `A_VERIFIER`. |
 | **T5** | API REST FastAPI `/predict` et `/health` | F3 | Ismail | T4 | 2 | Endpoints répondant en HTTP 200 avec validation Pydantic. |
 | **T6** | Interface web interactive Streamlit (unitaire + lot) | F3 | Ishak | T5 | 2 | Interface opérationnelle avec formulaire et import CSV. |
 | **T7** | Indexation vectorielle des runbooks dans ChromaDB | F4 | Ismail | T5 | 3 | Requête sémantique renvoyant le bon runbook en < 1s. |
-| **T8** | Agent autonome couplant ML et Mini-RAG | F4 | Ishak | T7 | 3 | Agent produisant prédiction et citation de source. |
+| **T8** | Équipe d'agents couplant ML, règles et Mini-RAG | F4 | Ishak | T7 | 3 | Mission produisant catégorie, priorité et section citée, boucle bornée. |
 | **T9** | CLI Python `incidents` et packaging `pyproject.toml` | F1, F3 | Ismail | T8 | 3 | Commande `incidents` exécutable dans le terminal. |
 | **T10** | Conteneurisation Docker & Docker Compose | Déploiement | Ishak | T6, T9 | 3 | `docker compose up` démarre l'API et l'UI sans erreur. |
 | **T11** | Suite de tests pytest (unitaires, intégration, limites) | Qualité | Ismail | T10 | 4 | Suite pytest exécutant plus de 25 tests avec succès. |
@@ -303,16 +312,16 @@ gantt
 
 | Critère | Type | Respecté | Commentaire |
 | --- | --- | --- | --- |
-| Données accessibles et échantillon présent (L2) | Bloquant | ☑ | `data/sample/tickets_sample.csv` présent (120 lignes, 8 classes). |
-| MVP réaliste en 4 semaines pour cette taille d'équipe (L1, L4) | Bloquant | ☑ | Cadrage ciblé TF-IDF + FastAPI + Streamlit. |
-| Livrables répartis, chacun avec un rédacteur et un relecteur distincts | Bloquant | ☑ | Membre A et Membre B alternés sur les 4 livrables. |
-| Licence et données personnelles traitées (L2) | Bloquant | ☑ | Licence CC0 domaine public, aucune donnée personnelle (PII). |
-| Architecture cohérente avec les fonctionnalités (L1, L3) | À améliorer | ☑ | Architecture modulaire découplée (API, UI, ML, RAG). |
-| Écrans couvrant tout le MVP (L3) | À améliorer | ☑ | Écran unitaire, incertitude et lot CSV détaillés. |
-| Tâches courtes, critères de fin vérifiables, charge équilibrée (L4) | À améliorer | ☑ | 12 tâches <= 2j, 10j pour Ishak, 10j pour Ismail. |
-| Alternative de repli et jeu de test définis (L2) | À améliorer | ☑ | Archive locale et 20 cas de test d'or formalisés. |
+| Données accessibles et échantillon présent (L2) | Bloquant | ☐ |  |
+| MVP réaliste en 4 semaines pour cette taille d'équipe (L1, L4) | Bloquant | ☐ |  |
+| Livrables répartis, chacun avec un rédacteur et un relecteur distincts | Bloquant | ☐ |  |
+| Licence et données personnelles traitées (L2) | Bloquant | ☐ |  |
+| Architecture cohérente avec les fonctionnalités (L1, L3) | À améliorer | ☐ |  |
+| Écrans couvrant tout le MVP (L3) | À améliorer | ☐ |  |
+| Tâches courtes, critères de fin vérifiables, charge équilibrée (L4) | À améliorer | ☐ |  |
+| Alternative de repli et jeu de test définis (L2) | À améliorer | ☐ |  |
 
-**Décision :** ☑ Validé   ☐ À reprendre   ☐ Refusé (changement de sujet)
+**Décision :** ☐ Validé   ☐ À reprendre   ☐ Refusé (changement de sujet)
 
-Date et visa : 09/11/2026 — Enseignant : A. Larhlimi
+Date et visa : \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ (réservé à l'enseignant)
 

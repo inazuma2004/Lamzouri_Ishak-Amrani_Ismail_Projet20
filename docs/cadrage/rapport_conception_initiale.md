@@ -123,7 +123,7 @@ Conformément à la philosophie du cours (*"Le modèle est la plus petite boîte
 
 ## 6. Défense du RAG extractif (Semaines 9-10)
 
-> **Document détaillé :** [`docs/decisions/justification_rag.md`](../decisions/justification_rag.md). Cette section en reprend l'essentiel pour le rapport de cadrage.
+> Cette section est la défense complète du RAG pour le projet ; les valeurs sont celles de l'application 1.1.0.
 
 ### 6.1 Deux sous-problèmes, deux approches
 
@@ -136,22 +136,22 @@ Le RAG n'est donc **pas** utilisé pour le routage. Il intervient uniquement apr
 
 ### 6.2 Critère (b) : vérifiabilité
 
-Chaque réponse `VALIDE` renvoie **le texte exact du runbook** et **le chemin de la source** (`data/runbooks/Access.md`), avec le score de similarité. Les runbooks sont versionnés dans Git. Le technicien peut ouvrir la source et vérifier chaque étape. Un modèle génératif seul ne garantit jamais qu'une commande ou un numéro d'étape existe réellement dans le document.
+Chaque réponse `VALIDE` renvoie **le texte exact de la section du runbook** et **sa source** (`Access.md > Compte verrouillé`), avec le score de similarité. Les runbooks sont versionnés dans Git. Le technicien peut ouvrir la source et vérifier chaque étape. Un modèle génératif seul ne garantit jamais qu'une commande ou un numéro d'étape existe réellement dans le document.
 
 ### 6.3 Critère (c) : coût par requête
 
-Le RAG est **extractif** : ChromaDB + `sentence-transformers` (`all-MiniLM-L6-v2`) récupèrent le runbook, puis le texte est renvoyé **verbatim**. Aucune génération par LLM, donc aucun coût par token et aucun appel API payant.
+Le RAG est **extractif** : ChromaDB + `sentence-transformers` (`all-MiniLM-L6-v2`) récupèrent la section du runbook, puis le texte est renvoyé **verbatim**. Aucune génération par LLM, donc aucun coût par token et aucun appel API payant.
 
-| Mesure (09/11/2026, CPU, sans GPU) | Valeur |
+| Mesure (14/11/2026, CPU, sans GPU) | Valeur |
 | --- | --- |
-| Latence RAG moyenne / p95 | **23,00 ms** / **25,36 ms** |
-| Latence ML moyenne | **2,22 ms** |
-| Runbooks indexés | **8** |
-| Index ChromaDB | **21,90 Mo** |
-| Cache du modèle d'embedding | **87,34 Mo** |
+| Latence RAG moyenne / p95 | **12,9 ms** / **14,6 ms** |
+| Latence ML moyenne | **0,8 ms** |
+| Runbooks indexés | **8** (27 sections) |
+| Index ChromaDB | **0,6 Mo** |
+| Cache du modèle d'embedding | **87,4 Mo** |
 | Coût marginal par requête | **0 €** |
 
-À 1 000 tickets/jour, le RAG consomme environ **23 secondes de CPU cumulées** ; à 10 000 tickets/jour, environ **4 minutes**. Aucun serveur dédié ni plateforme payante n'est nécessaire.
+À 1 000 tickets/jour, le RAG consomme environ **13 secondes de CPU cumulées** ; à 10 000 tickets/jour, environ **2 minutes**. Aucun serveur dédié ni plateforme payante n'est nécessaire.
 
 **Comparaison avec un LLM :** un appel génératif est facturé au token (entrée + sortie) et nécessite un réseau. Le cours (`cas2-reglement.md`) accepte ce coût pour « quelques dizaines de questions par jour » ; notre volume est de **centaines de tickets par jour**, donc le même raisonnement conduit à un RAG **sans génération**.
 
@@ -161,10 +161,10 @@ Un RAG classique ajoute une étape de génération : le LLM reformule le runbook
 
 ### 6.5 Limites assumées
 
-1. **Un runbook par catégorie :** avec le filtre `where={"categorie": ...}`, la recherche est proche d'un lookup ; le score de similarité est indicatif. Évolution prévue : découper les runbooks en passages et indexer plusieurs passages par catégorie.
-2. **Modèle d'embedding anglais :** `all-MiniLM-L6-v2` est optimisé pour l'anglais, alors que les runbooks sont en français et les tickets en anglais. Évolution prévue : modèle multilingue ou runbooks en anglais.
-3. **Index non reconstruit automatiquement :** il est reconstruit par `scripts/indexer_runbooks.py` après modification des runbooks.
-4. **Pas de génération :** le RAG ne répond pas aux questions ouvertes absentes des runbooks ; l'agent renvoie alors `A_VERIFIER`.
+1. **Petit corpus :** 8 runbooks découpés en 27 sections, une par panne. Le seuil de recherche (0,27) a été choisi dans l'écart mesuré entre les bonnes réponses (≥ 0,40) et les questions hors sujet (≤ 0,15) sur un jeu d'or de 17 requêtes ; il devra être remesuré à chaque ajout de runbooks.
+2. **Modèle d'embedding anglais :** `all-MiniLM-L6-v2` est optimisé pour l'anglais, alors que les runbooks sont en français et les tickets en anglais. Correctif appliqué : chaque section porte une ligne de mots-clés anglais, seule encodée pour la recherche ; le texte rendu reste la procédure française.
+3. **Le RAG suit la catégorie du modèle :** un ticket mal classé reçoit le runbook de la mauvaise catégorie (1 cas sur 13 au jeu d'or) ; la source citée permet au technicien de le voir.
+4. **Pas de génération :** le RAG ne répond pas aux questions absentes des runbooks ; sous le seuil, aucune source n'est citée et l'agent renvoie `A_VERIFIER`.
 
 ### 6.6 Conclusion
 

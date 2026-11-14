@@ -16,7 +16,7 @@ Ce projet a pour objectif de concevoir, déployer et exploiter en production un 
 
 Conformément à la grille de cadrage méthodologique du cours, notre architecture logicielle combine deux mondes complémentaires :
 1. **Une brique de Machine Learning classique (NLP supervisé)** pour classifier et router instantanément les descriptions d'incidents utilisateurs vers la bonne catégorie avec un calcul de score d'incertitude.
-2. **Une brique IA Agentique et Mini-RAG** où l'agent autonome prend en charge la catégorie qualifiée, extrait la procédure de dépannage adéquate (runbook) depuis une base vectorielle, et fournit la solution directement à l'utilisateur.
+2. **Une équipe d'agents et un Mini-RAG** : après la qualification, des règles métier fixent la priorité (P1 à P4), la procédure de dépannage est extraite des runbooks avec sa section citée, puis un agent vérificateur contrôle la réponse avant de la fournir à l'utilisateur. Sous 60 % de confiance, le ticket part chez un technicien.
 
 ---
 
@@ -50,7 +50,7 @@ Dans le cadre du premier livrable (Cadrage et Choix d'Approche), les deux vidéo
 * **Volumétrie :** 47 837 tickets réels d'assistance informatique (anonymisés, licence CC0 Domaine Public)
 * **Format :** CSV (`Document`, `Topic_group`)
 * **Classes cibles (8) :** `Hardware`, `Access`, `Storage`, `HR Support`, `Purchase`, `Internal Project`, `Administrative rights`, `Miscellaneous`.
-* **Échantillon versionné :** [`data/sample/tickets_sample.csv`](data/sample/tickets_sample.csv) (120 tickets, 15 par classe, 25 Ko).
+* **Échantillon versionné :** [`data/sample/tickets_sample.csv`](data/sample/tickets_sample.csv) (120 tickets, 15 par classe, 33 Ko).
 * **Documentation du dataset :** [`data/README.md`](data/README.md)
 
 ---
@@ -62,7 +62,7 @@ En suivant l'arbre décisionnel officiel de **M. Larhlimi** :
 - **Pourquoi le Machine Learning Supervisé pour la classification ?**
   - **Critère (a) - Données étiquetées :** Nous disposons de 47 800+ tickets déjà annotés par des techniciens.
   - **Critère (b) - Vérifiabilité :** Évaluation sur un jeu de test disjoint via $F_1$-score macro et audit des n-grammes TF-IDF.
-  - **Critère (c) - Coût et Latence :** L'inférence sur CPU prend moins de 5 millisecondes avec une empreinte mémoire minime, évitant tout GPU payant en production.
+  - **Critère (c) - Coût et Latence :** L'inférence sur CPU prend environ 2 millisecondes (p95 mesuré) avec une empreinte mémoire minime, évitant tout GPU payant en production.
   - **Critère (d) - Conséquence d'une erreur :** Risque faible, sécurisé dans l'interface par un seuil d'incertitude (60%) réorientant les cas ambigus vers un opérateur humain (`A_VERIFIER`).
 
 ---

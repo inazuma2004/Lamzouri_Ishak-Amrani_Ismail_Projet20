@@ -10,15 +10,15 @@
 
 | ID | Tâche | Fonctionnalité | Responsable | Dépend de | Semaine | Terminée quand ? (Critère vérifiable) |
 | --- | --- | --- | --- | --- | --- | --- |
-| **T1** | Initialisation du dépôt, configuration Git, `pre-commit`, `.editorconfig` et conventions | Socle commun | Ishak Lamzouri | - | S1 | Le dépôt est clonable, les hooks pre-commit s'exécutent sans erreur. |
+| **T1** | Initialisation du dépôt, configuration Git, `.gitignore` strict et conventions de commit | Socle commun | Ishak Lamzouri | - | S1 | Le dépôt est clonable et `.gitignore` exclut `.venv/`, les modèles `.joblib` et le CSV complet. |
 | **T2** | Ingestion des données, analyse exploratoire et extraction de `data/sample/tickets_sample.csv` | Socle données | Ismail Amrani | T1 | S1 | Le sample de 120 lignes est validé et s'ouvre sous pandas sans erreur. |
 | **T3** | Entraînement du pipeline Scikit-learn (TF-IDF + LogisticRegression) et sérialisation | F1 | Ismail Amrani | T2 | S1 | Le modèle atteint F1-macro >= 0.85 et le fichier `.joblib` est généré. |
 | **T4** | Implémentation de la règle de confiance et seuil d'incertitude (60%) | F2 | Ishak Lamzouri | T3 | S1 | Le script renvoie le statut `VALIDE` ou `A_VERIFIER` selon la probabilité. |
 | **T5** | Développement de l'API REST FastAPI avec schémas Pydantic (`/predict`, `/health`) | F3 | Ismail Amrani | T4 | S2 | Les requêtes HTTP POST sur `/predict` renvoient un code 200 et un JSON conforme. |
 | **T6** | Construction de l'interface utilisateur Streamlit (saisie unitaire + lot CSV) | F3 | Ishak Lamzouri | T5 | S2 | L'application Web Streamlit permet de tester un ticket et de charger un CSV. |
 | **T7** | Mise en place de la base vectorielle ChromaDB et indexation des runbooks Markdown | F4 | Ismail Amrani | T5 | S3 | Une requête de test renvoie le runbook pertinent en moins d'une seconde. |
-| **T8** | Création de l'agent autonome de résolution combinant ML et RAG | F4 | Ishak Lamzouri | T7 | S3 | L'agent produit une qualification + une citation de runbook vérifiable. |
-| **T9** | Développement du CLI Python (`incidents`) et empaquetage `pyproject.toml` | F1, F3 | Ismail Amrani | T8 | S3 | La commande `incidents "panne écran"` s'exécute directement dans le terminal. |
+| **T8** | Création de l'équipe d'agents (qualification ML, priorité par règles, RAG, rédaction, vérification) | F4 | Ishak Lamzouri | T7 | S3 | La mission produit une qualification, une priorité et une citation « document > section » vérifiable, dans une boucle bornée. |
+| **T9** | Développement du CLI Python (`incidents`) et empaquetage `pyproject.toml` | F1, F3 | Ismail Amrani | T8 | S3 | La commande `incidents predict "screen flickering"` s'exécute directement dans le terminal. |
 | **T10** | Conteneurisation multi-services avec Docker et `docker-compose.yml` | Déploiement | Ishak Lamzouri | T6, T9 | S3 | `docker compose up` lance l'API et l'UI sans configuration manuelle. |
 | **T11** | Élaboration de la suite de tests complète (unitaires, intégration, jeu d'or, limites) | Qualité | Ismail Amrani | T10 | S4 | `pytest` valide au moins 25 tests avec 0 échec bloquant. |
 | **T12** | Pipeline CI GitHub Actions (`ruff`, `mypy`, `pytest`) et dossier final | Qualité | Ishak Lamzouri | T11 | S4 | La CI GitHub Actions passe au vert sur la branche principale `main`. |
