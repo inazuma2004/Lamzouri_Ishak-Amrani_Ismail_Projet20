@@ -6,7 +6,7 @@ Ce dossier contient un échantillon représentatif et léger du jeu de données 
 
 | Fichier | Format | Lignes | Taille | Description |
 |---|---|---|---|---|
-| `tickets_sample.csv` | CSV (UTF-8) | 120 lignes | ~25 Ko | Échantillon équilibré de 15 tickets par catégorie pour les 8 classes du projet. |
+| `tickets_sample.csv` | CSV (UTF-8) | 120 lignes | ~33 Ko | Échantillon équilibré de 15 tickets par catégorie pour les 8 classes du projet. |
 
 ## 🏷️ Structure des colonnes
 

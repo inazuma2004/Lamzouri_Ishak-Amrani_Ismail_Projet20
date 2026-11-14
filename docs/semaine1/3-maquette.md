@@ -4,7 +4,7 @@
 **Relecteur :** Ismail Amrani ([@Amaranix](https://github.com/Amaranix))  
 **Fichiers :** `docs/semaine1/3-maquette.md` + `docs/semaine1/img/` (3 wireframes PNG)
 
-> Les wireframes PNG sont régénérables avec `python scripts/generer_wireframes.py`. Les blocs ASCII ci-dessous en sont la version texte, lisible directement dans le Markdown.
+> Les wireframes PNG sont régénérables avec `python scripts/generer_wireframes.py`. Les blocs ASCII ci-dessous en sont la version texte, lisible directement dans le Markdown. Les valeurs affichées (catégories, scores, priorités, sections citées) sont celles que renvoie réellement l'application (version 1.1.0) pour ces tickets.
 
 ---
 
@@ -12,35 +12,41 @@
 
 ```mermaid
 flowchart TD
-    subgraph Client ["Interface et Clients"]
+    subgraph Client ["Interface et clients"]
         U["Utilisateur / Technicien L1"]
         UI["Interface Web Streamlit"]
-        CLI["CLI Python incidents"]
+        CLI["Commande incidents"]
         U -->|Texte d incident ou fichier CSV| UI
         U -->|Ligne de commande| CLI
     end
 
     subgraph Backend ["Service API FastAPI"]
-        API["FastAPI App /predict et /resolve"]
-        VAL["Validation Pydantic"]
+        API["FastAPI : predict, resolve, search, explain, drift, feedback"]
+        VAL["Validation Pydantic + cle X-API-Key"]
         API --- VAL
     end
 
-    subgraph Intelligence ["Moteurs IA"]
-        ML["Modele ML Scikit-Learn TF-IDF + LogisticRegression"]
-        AGENT["Agent de Resolution Autonome"]
-        RAG["Mini-RAG ChromaDB + sentence-transformers"]
-        RUNBOOKS[("Runbooks Markdown data/runbooks")]
-        
-        AGENT -->|1. Classifier| ML
-        AGENT -->|2. Rechercher procedure si score >= 0.60| RAG
-        RAG --- RUNBOOKS
+    subgraph Intelligence ["Equipe d agents : orchestrateur et bus de messages"]
+        Q["Qualificateur : modele ML TF-IDF + LogisticRegression"]
+        P["Priorisateur : regles metier P1 a P4"]
+        D["Documentaliste : Mini-RAG ChromaDB + sentence-transformers"]
+        R["Redacteur : reponse construite a partir des passages"]
+        V["Verificateur : source citee, escalade, injection"]
+        RUNBOOKS[("Runbooks Markdown data/runbooks, 27 sections")]
+
+        Q -->|categorie et confiance| P
+        P -->|priorite| D
+        D -->|passages si score >= 0.60| R
+        R -->|reponse| V
+        V -->|a corriger, boucle bornee| R
+        D --- RUNBOOKS
     end
 
     UI -->|Requete HTTP REST| API
-    CLI -->|Appel direct| AGENT
-    API -->|Delegation| AGENT
-    API -->|Reponse JSON Categorie, Confiance, Procedure, Statut| UI
+    CLI -->|Appel direct| Q
+    API -->|Delegation| Q
+    V -->|Verdict| API
+    API -->|Reponse JSON : categorie, confiance, priorite, procedure citee, statut| UI
 ```
 
 ---
@@ -49,39 +55,42 @@ flowchart TD
 
 | Composant | Rôle et technologies | Fonctionnalité servie |
 | --- | --- | --- |
-| **Interface Web (Streamlit)** | Saisie unitaire de ticket et import en lot de fichiers CSV avec visualisations graphiques. | F3 |
-| **CLI Python (`incidents`)** | Interface console pour automatisation batch ou invocation directe par script. | F1, F3 |
-| **API FastAPI** | Endpoints `/health`, `/predict`, `/resolve` avec validation automatique des schémas Pydantic. | F3 |
-| **Modèle ML** | Pipeline de classification supervisée Scikit-learn (TF-IDF + Régression Logistique). | F1 |
-| **Agent Autonome** | Orchestrateur logique appliquant le seuil d'incertitude (60%) et routant vers le RAG ou l'humain. | F1, F2 |
-| **Mini-RAG & Runbooks** | Base vectorielle ChromaDB indexant les procédures de dépannage techniques Markdown. | F4 |
+| **Interface Web (Streamlit)** | Cinq onglets : nouveau ticket, traitement par lot CSV, base de connaissances, supervision des tickets à vérifier, mesures du modèle. Elle ne parle qu'à l'API. | F2, F3 |
+| **Commande `incidents`** | `predict`, `resolve`, `index`, `serve`, `ui` : usage en terminal ou dans des scripts. | F1, F3 |
+| **API FastAPI** | Routes protégées par clé d'API, validation Pydantic, journal sans texte de ticket. | F3 |
+| **Qualificateur (modèle ML)** | Pipeline scikit-learn TF-IDF + régression logistique, seuil d'abstention 0,60. | F1, F2 |
+| **Priorisateur** | Règles métier explicables : P1 (sécurité, panne générale) à P4 (demande planifiable). | F1 |
+| **Documentaliste (Mini-RAG)** | Recherche hybride dans ChromaDB, citation « document > section », refus sous le seuil. | F4 |
+| **Rédacteur et Vérificateur** | Réponse construite uniquement à partir des passages ; contrôle de la source, de l'escalade et de l'injection ; boucle bornée. | F2, F4 |
 
 ---
 
 ## 3.3 Maquette des écrans (Interface Streamlit)
 
-### Écran 1 : Qualification unitaire d'un incident
+### Écran 1 : Qualification et résolution d'un incident
 
 ![Écran 1 — Qualification unitaire](img/ecran1_qualification.png)
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
-│ 🚀 IT Helpdesk Intelligent — Qualification d'incidents               │
+│ 🎫 Nouveau ticket                                                      │
 ├────────────────────────────────────────────────────────────────────────┤
-│ Description de l'incident :                                            │
+│ Description de l'incident (en anglais) :                               │
 │ ┌────────────────────────────────────────────────────────────────────┐ │
-│ │ VPN client fails to authenticate with error code 403               │ │
+│ │ Cannot connect to the VPN since this morning, my password expired  │ │
 │ └────────────────────────────────────────────────────────────────────┘ │
-│ [ Prédire la catégorie ]                                              │
+│ [ 🚀 Lancer l'équipe d'agents ]                                       │
 │                                                                        │
-│ Résultat :                                                             │
-│ • Catégorie : [ Access ]                                              │
-│ • Score de confiance : [ 92.4% ]  ████████████████░░░░                │
-│ • Statut : ✅ VALIDE (Confiance suffisante)                           │
+│ Catégorie : Access   Confiance : 88,1 % ████████████████░░   P2       │
+│ Statut : ✅ VALIDE                                                     │
 │                                                                        │
-│ Procédure suggérée (Runbook Access.md) :                              │
-│ > 1. Vérifier la date d'expiration du mot de passe Active Directory.  │
-│ > 2. Réinitialiser le jeton MFA sur le portail d'authentification.     │
+│ Procédure : Connexion VPN impossible                                   │
+│ > 1. Vérifier que le client VPN est à jour et que le poste a accès à   │
+│ >    Internet.                                                         │
+│ > 2. Contrôler la validité du certificat machine et la date système.   │
+│ > ...                                                                  │
+│ > Escalade : équipe Identité et sécurité, sous 4 h ouvrées.            │
+│ 📎 Source citée : Access.md > Connexion VPN impossible                 │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -91,14 +100,15 @@ flowchart TD
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
-│ Résultat pour : "something is weird with the office computer"          │
+│ Résultat pour : "Cannot access the shared network drive after my       │
+│                  password change"                                      │
 │                                                                        │
-│ • Catégorie suggérée : Miscellaneous                                   │
-│ • Score de confiance : 41.2%   ██████░░░░░░░░░░░░░░                   │
-│ • Statut : ⚠️ A_VERIFIER                                              │
+│ • Catégorie : INDETERMINE                                              │
+│ • Score de confiance : 53,1 %   ██████████░░░░░░░░░░   priorité P2     │
+│ • Statut : ⚠️ À VÉRIFIER                                               │
 │                                                                        │
-│ ⚠️ ATTENTION : Le niveau de confiance est inférieur au seuil de 60%.  │
-│ Ce ticket a été réorienté automatiquement vers un technicien humain.   │
+│ ⚠️ Ticket transmis à un technicien (confiance du modèle sous le seuil).│
+│ Bonne catégorie : [ Storage ▼ ]   [ Envoyer la correction ]            │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -108,21 +118,22 @@ flowchart TD
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
-│ 📁 Traitement par lot d'incidents IT                                  │
+│ 📁 Traitement par lot                                                  │
 │ Déposez votre fichier CSV contenant une colonne 'Document' :          │
 │ [ 📄 Glisser-déposer tickets_nouveaux.csv ici ]                       │
 │                                                                        │
-│ Distribution des prédictions (Graphique en barres)                    │
-│ [ Hardware: 35% | Access: 25% | HR Support: 20% | Autres: 20% ]       │
+│ Tickets : 120   Traités automatiquement : 109   À vérifier : 11       │
+│ Répartition des catégories (graphique) · confiance (histogramme)       │
+│ Dérive : mots inconnus, confiance moyenne, taux d'abstention           │
 │                                                                        │
-│ Tableau des résultats (Aperçu des 10 premiers tickets)                │
 │ ┌────────────────────────────────────────┬─────────────┬─────────┬───┐│
 │ │ Description                            │ Catégorie   │ Score   │St ││
 │ ├────────────────────────────────────────┼─────────────┼─────────┼───┤│
-│ │ Laptop screen flickering black         │ Hardware    │ 95.1%   │OK ││
-│ │ Request new mouse and keyboard         │ Purchase    │ 89.4%   │OK ││
+│ │ Laptop screen flickering black         │ Hardware    │ 95,2%   │OK ││
+│ │ Request new mouse and keyboard         │ INDETERMINE │ 53,2%   │ ⚠ ││
+│ │ Mailbox full quota exceeded            │ Storage     │ 99,9%   │OK ││
 │ └────────────────────────────────────────┴─────────────┴─────────┴───┘│
-│ [ ⬇️ Télécharger le CSV annoté avec prédictions et statuts ]           │
+│ [ ⬇️ Télécharger le CSV annoté ]                                       │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -132,17 +143,17 @@ flowchart TD
 
 1. **Scénario nominal unitaire :**
    - Le technicien L1 ouvre l'application Streamlit.
-   - Il colle la description reçue d'un utilisateur dans la zone de texte.
-   - Il clique sur *« Prédire la catégorie »*.
-   - L'écran affiche instantanément la catégorie (`Access`), le score (92%), le badge vert `VALIDE`, et le résumé de la procédure technique issue du runbook avec sa source.
+   - Il colle la description reçue d'un utilisateur dans la zone de texte, en anglais.
+   - Il clique sur *« Lancer l'équipe d'agents »*.
+   - L'écran affiche la catégorie (`Access`), la confiance (88 %), la priorité (`P2`), le badge `VALIDE` et la procédure de la section « Access.md > Connexion VPN impossible », avec sa source et l'équipe d'escalade. Le journal des agents montre que le Vérificateur a fait ajouter l'escalade (2 itérations).
 2. **Scénario d'incertitude :**
-   - Le texte saisi est ambigu ou trop court.
-   - Le score calculé est de 41% (< 60%).
-   - L'écran affiche une bannière orange d'alerte `A_VERIFIER` invitant à un diagnostic manuel sans forcer une décision erronée.
+   - Le texte saisi est ambigu, ou rédigé dans une autre langue que l'anglais.
+   - Le score calculé est de 53 % (< 60 %), ou le ticket est détecté comme non anglais.
+   - L'écran affiche une alerte orange `À VÉRIFIER`, sans procédure ni source ; le technicien choisit la bonne catégorie et envoie la correction, qui servira au prochain réentraînement.
 3. **Scénario de traitement par lot :**
-   - L'administrateur charge un export CSV de tickets hebdomadaires.
-   - L'application traite l'intégralité du fichier en quelques secondes.
-   - L'utilisateur visualise la répartition des pannes par catégorie et télécharge le fichier annoté avec les colonnes `prediction`, `score`, et `statut`.
+   - L'administrateur charge un export CSV de tickets.
+   - L'application qualifie tout le fichier en un appel, affiche la répartition, la confiance et les indicateurs de dérive ; si la colonne `Topic_group` est présente, elle mesure aussi la justesse.
+   - L'utilisateur télécharge le fichier annoté avec les colonnes `label`, `score`, `status` et `raison`.
 
 ---
 
@@ -153,4 +164,3 @@ flowchart TD
 - [x] Chaque fonctionnalité du MVP est illustrée sur au moins une maquette d'écran.
 - [x] Le diagramme Mermaid est valide et s'affiche nativement sur GitHub.
 - [x] Les cas d'erreur et d'incertitude sont explicitement traités visuellement.
-
