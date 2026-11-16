@@ -31,6 +31,25 @@ Exemple : « Cannot connect to the VPN since this morning, my password expired �
 Le jeu de données ne contient que des tickets en anglais : un ticket rédigé dans une autre langue
 part chez un technicien. L'application ne répare rien elle-même ; elle propose une procédure.
 
+## Installation
+
+Python 3.13 (les versions de `requirements.txt` sont celles qui ont entraîné le modèle).
+Compter environ 2 Go et une dizaine de minutes : PyTorch est installé en version CPU, sans CUDA.
+
+```powershell
+git clone https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20.git
+cd Lamzouri_Ishak-Amrani_Ismail_Projet20
+py -3.13 -m venv .venv
+.venv\Scripts\Activate.ps1                    # Linux, macOS : source .venv/bin/activate
+pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+pip install -r requirements.txt
+copy .env.example .env                          # Linux, macOS : cp .env.example .env
+```
+
+`.env` reste sur le poste (il est dans `.gitignore`). Remplacer les deux clés d'exemple par des
+valeurs d'au moins 16 caractères :
+`python -c "import secrets; print(secrets.token_urlsafe(24))"`.
+
 ## Avancement du dépôt
 
 Le dépôt suit la liste des 18 push du cours (six par semaine, une branche et une pull request
