@@ -50,6 +50,19 @@ copy .env.example .env                          # Linux, macOS : cp .env.example
 valeurs d'au moins 16 caractères :
 `python -c "import secrets; print(secrets.token_urlsafe(24))"`.
 
+## Lancer et tester
+
+Dans l'environnement activé, à la racine du dépôt :
+
+```powershell
+pip install -e .                 # installe la commande incidents
+incidents --version              # incidents-app 0.1.0
+pytest -q                        # 2 passed
+```
+
+À ce stade (semaine 1), la commande `incidents` ne fait qu'annoncer sa version : c'est le
+squelette exécutable. `incidents predict "<ticket>"` arrive avec le modèle au push S2-1.
+
 ## Avancement du dépôt
 
 Le dépôt suit la liste des 18 push du cours (six par semaine, une branche et une pull request
@@ -115,10 +128,14 @@ catégorie. Détails : [`data/README.md`](data/README.md).
 │   ├── cadrage/rapport_conception_initiale.md
 │   ├── media/                        # vidéos de cadrage des deux membres et leurs scripts
 │   └── semaine1/                     # dossier de lancement (4 livrables) et maquettes
+├── incidents_app/                    # le paquet : commande incidents (cli.py)
 ├── src/                              # scripts d'entraînement et d'évaluation (à partir de S2-1)
-├── tests/                            # tests pytest
+├── tests/test_cli.py                 # premier test : la commande se lance
+├── .env.example                      # variables attendues, sans secret
 ├── Lamzouri-Amrani_Projet20.md       # fiche de cadrage
 ├── modele-rapport-latex.zip          # modèle LaTeX fourni par l'enseignant pour le compte rendu
+├── pyproject.toml                    # paquet incidents-app et configuration pytest, Ruff, mypy
+├── requirements.txt                  # dépendances, versions figées
 └── README.md
 ```
 
