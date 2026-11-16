@@ -10,6 +10,18 @@
 | Ishak Lamzouri | [@inazuma2004](https://github.com/inazuma2004) | dépôt et intégration continue, seuil d'abstention, interface Streamlit, équipe d'agents, Docker |
 | Ismail Amrani | [@Amaranix](https://github.com/Amaranix) | données, modèle de classification, API FastAPI, recherche dans les runbooks, paquet et commande `incidents`, suite de tests |
 
+## 📌 Accès Direct aux Livrables et Fiches Officielles
+
+| Document | Emplacement racine | Emplacement officiel `docs/` | Description |
+| --- | --- | --- | --- |
+| 📋 **Fiche de suivi Semaine 1** | [`Fiche_de_suivi_semaine1.md`](Fiche_de_suivi_semaine1.md) | [`docs/suivi/fiche-semaine-1.md`](docs/suivi/fiche-semaine-1.md) | Cadrage, jalons, dataset et critères mesurables (Note : 5 pts) |
+| 🚀 **Dossier de lancement Semaine 1** | [`Dossier_de_lancement_semaine1.md`](Dossier_de_lancement_semaine1.md) | [`docs/semaine1/Dossier_de_lancement_semaine1.md`](docs/semaine1/Dossier_de_lancement_semaine1.md) | Document complet de lancement (descriptif, dataset, maquettes, pipeline) |
+| 🎯 **Fiche de cadrage officielle** | [`Lamzouri-Amrani_Projet20.md`](Lamzouri-Amrani_Projet20.md) | — | Cadrage initial validé du binôme (Sujet n° 20) |
+| 🗺️ **Jalons & Push GitHub (18 jalons)** | [`Jalons_Push_GitHub_Projet20.md`](Jalons_Push_GitHub_Projet20.md) | — | Feuille de route des 18 push, PRs et tags `s1`, `s2`, `v1.0.0` |
+| 🏗️ **Architecture système** | — | [`docs/architecture.md`](docs/architecture.md) | Schéma de flux Mermaid et composants logiciels |
+| 👥 **Équipe & Rôles** | — | [`docs/equipe.md`](docs/equipe.md) | Identification et répartition des responsabilités |
+| 🎥 **Vidéos de cadrage** | — | [`docs/media/`](docs/media/) | Présentations vidéo par Ishak Lamzouri et Ismail Amrani |
+
 ## Ce que fait l'application
 
 Un technicien du helpdesk colle la description d'un ticket, rédigée en anglais comme les tickets
