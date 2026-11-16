@@ -1,0 +1,42 @@
+# Dépendances du projet incidentsIT, versions figées (Python 3.13).
+# Ce sont les versions qui ont entraîné le modèle : scikit-learn relit le .joblib à l'identique.
+# PyTorch (tiré par sentence-transformers) s'installe AVANT ce fichier, en version CPU :
+#   pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+
+# Données et apprentissage
+pandas==3.1.1
+numpy==2.5.4
+scikit-learn==1.9.1
+joblib==1.6.0
+
+# API et validation des entrées
+fastapi==0.162.0
+uvicorn[standard]==0.54.0
+pydantic==2.14.2
+
+# CLI (commande incidents)
+click==8.5.0
+
+# Interface
+streamlit==1.66.1
+plotly==7.1.0
+python-dotenv==1.2.2
+
+# Recherche dans les runbooks (RAG) et équipe d'agents
+sentence-transformers==6.2.0
+chromadb==1.5.9
+
+# Suivi des expériences et des données
+mlflow==3.18.0
+dvc==3.67.1
+tabulate==0.10.0
+
+# Tests et qualité
+pytest==9.2.0
+pytest-asyncio==1.4.1.post1
+pytest-cov==7.1.0
+twine==7.0.0
+httpx==0.28.1
+pyyaml==6.0.3
+ruff==0.17.3
+mypy==2.4.1
