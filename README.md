@@ -1,107 +1,113 @@
-# 🤖 Agent Autonome de Résolution d'Incidents IT (IT Helpdesk Intelligent)
+# incidentsIT : agent de résolution d'incidents IT (projet 20)
 
-> **Module :** Développement et déploiement d’applications intelligentes (2026-2027)  
-> **Enseignant :** M. A. Larhlimi  
-> **Équipe de développement (Binôme) :**
-> - **Ishak Lamzouri** ([@inazuma2004](https://github.com/inazuma2004))
-> - **Ismail Amrani** ([@Amaranix](https://github.com/Amaranix))  
-> **Dépôt officiel GitHub :** [https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20)  
-> **Jalon actuel :** Semaine 1 — Cadrage & Dossier de lancement (Étiquette : `semaine1-remis`)
+> **Module :** Développement et déploiement d'applications intelligentes, 2026-2027
+> **Enseignant :** A. Larhlimi
+> **Groupe :** G3, IAD (IA et Data)
+> **Sujet :** n° 20 du catalogue, « Agent autonome de résolution d'incidents IT » ; fiche de cadrage : [`Lamzouri-Amrani_Projet20.md`](Lamzouri-Amrani_Projet20.md)
 
----
+| Membre | Compte GitHub | Rôle principal |
+| --- | --- | --- |
+| Ishak Lamzouri | [@inazuma2004](https://github.com/inazuma2004) | dépôt et intégration continue, seuil d'abstention, interface Streamlit, équipe d'agents, Docker |
+| Ismail Amrani | [@Amaranix](https://github.com/Amaranix) | données, modèle de classification, API FastAPI, recherche dans les runbooks, paquet et commande `incidents`, suite de tests |
 
-## 📌 Présentation du Projet
+## Ce que fait l'application
 
-Ce projet a pour objectif de concevoir, déployer et exploiter en production un **système intelligent et agentique dédié à la gestion autonome d'incidents informatiques (IT Helpdesk)**. 
+Un technicien du helpdesk colle la description d'un ticket, rédigée en anglais comme les tickets
+d'entraînement. L'application :
 
-Conformément à la grille de cadrage méthodologique du cours, notre architecture logicielle combine deux mondes complémentaires :
-1. **Une brique de Machine Learning classique (NLP supervisé)** pour classifier et router instantanément les descriptions d'incidents utilisateurs vers la bonne catégorie avec un calcul de score d'incertitude.
-2. **Une équipe d'agents et un Mini-RAG** : après la qualification, des règles métier fixent la priorité (P1 à P4), la procédure de dépannage est extraite des runbooks avec sa section citée, puis un agent vérificateur contrôle la réponse avant de la fournir à l'utilisateur. Sous 60 % de confiance, le ticket part chez un technicien.
+1. classe le ticket dans l'une des 8 catégories du dataset, avec un score de confiance ;
+2. sous un score de 0,60, ne décide pas : le ticket est marqué `A_VERIFIER` et confié à un
+   technicien ;
+3. fixe une priorité de P1 à P4 par des règles métier écrites (un utilisateur bloqué donne P2) ;
+4. cite, mot pour mot, la section de runbook qui s'applique (`Access.md > Compte verrouillé`),
+   ou n'en cite aucune si aucune section ne dépasse le seuil de pertinence ;
+5. fait contrôler la réponse par un agent vérificateur (source citée, équipe d'escalade, aucune
+   consigne recopiée depuis le ticket) avant de l'afficher.
 
----
+Exemple : « Cannot connect to the VPN since this morning, my password expired » donne
+`Access`, confiance 88 %, priorité `P2`, statut `VALIDE`, section
+« Access.md > Connexion VPN impossible ».
 
-## 📁 Livrables Officiels — Semaine 1 (Cadrage & Lancement)
+Le jeu de données ne contient que des tickets en anglais : un ticket rédigé dans une autre langue
+part chez un technicien. L'application ne répare rien elle-même ; elle propose une procédure.
 
-L'ensemble des livrables de cadrage et de lancement exigés par l'enseignant pour la Semaine 1 sont accessibles directement ci-dessous :
+## Avancement du dépôt
 
-| Livrable | Description | Emplacement dans le dépôt |
-| :--- | :--- | :--- |
-| **Dossier de lancement** | Dossier complet consolidé (Livrables 1, 2, 3 et 4) | [`docs/semaine1/Dossier_de_lancement_semaine1.md`](docs/semaine1/Dossier_de_lancement_semaine1.md) |
-| **Fiche de cadrage** | Fiche officielle du binôme pour le Projet 20 | [`Lamzouri-Amrani_Projet20.md`](Lamzouri-Amrani_Projet20.md) |
-| **Échantillon de données** | Échantillon représentatif réel (120 lignes, 8 classes équilibrées) | [`data/sample/tickets_sample.csv`](data/sample/tickets_sample.csv) |
-| **Rapport de conception** | Étude de cadrage initial et analyse des besoins | [`docs/cadrage/rapport_conception_initiale.md`](docs/cadrage/rapport_conception_initiale.md) |
-| **Vidéos de cadrage** | Enregistrements de soutenance des deux membres | [`docs/media/`](docs/media/) |
-| **Modèle de rapport** | Archive modèle LaTeX fournie pour les rapports | [`modele-rapport-latex.zip`](modele-rapport-latex.zip) |
+Le dépôt suit la liste des 18 push du cours (six par semaine, une branche et une pull request
+relue par l'autre membre pour chacun). L'application existe en prototype local ; son code entre
+dans le dépôt push après push.
 
----
+| Semaine | Push | Contenu pour ce projet | Tag |
+| --- | --- | --- | --- |
+| 1 | S1-1 à S1-6 | structure du dépôt, équipe, environnement figé, commande `incidents` minimale et son test, données et architecture, fiche de suivi 1 | `s1` |
+| 2 | S2-1 à S2-6 | modèle TF-IDF + régression logistique et fonction de prédiction, jeu d'or de 20 tickets et script d'évaluation, API FastAPI, interface Streamlit, CI (pytest, Ruff), fiche 2 | `s2` |
+| 3 | S3-1 à S3-6 | cas limites (texte vide, score faible, service indisponible), évaluation finale, installation sur clone neuf et Docker, documentation finale, fiche 3, compte rendu et support, release | `v1.0.0` |
 
-## 🎬 Vidéos de Soutenance & Cadrage Initial
+Les mesures citées dans la fiche de cadrage (F1 macro 0,868, couverture 78,4 %, précision des
+tickets traités seuls 94,2 %) viennent du prototype local, sur 9 568 tickets de test. Elles
+deviennent reproductibles dans ce dépôt avec les scripts d'évaluation du push S2-2.
 
-Dans le cadre du premier livrable (Cadrage et Choix d'Approche), les deux vidéos de présentation du binôme sont disponibles dans [`docs/media/`](docs/media/) :
-* 📹 **Vidéo d'Ismail Amrani :** [`docs/media/presentation_cadrage_Amrani_Ismail.mp4`](docs/media/presentation_cadrage_Amrani_Ismail.mp4)
-* 📹 **Vidéo d'Ishak Lamzouri :** [`docs/media/presentation_cadrage_Lamzouri_Ishak.mp4`](docs/media/presentation_cadrage_Lamzouri_Ishak.mp4)
-* 📜 **Scripts minutés et argumentations scientifiques :** [`docs/media/README.md`](docs/media/README.md)
+## Données
 
----
+[IT Service Ticket Classification Dataset](https://www.kaggle.com/datasets/adisongoh/it-service-ticket-classification-dataset)
+(Kaggle, licence CC0) : 47 837 tickets, 2 colonnes (`Document` : texte du ticket, déjà nettoyé, en
+minuscules et presque sans ponctuation ; `Topic_group` : catégorie), aucune valeur manquante,
+aucun doublon.
 
-## 📊 Le Dataset Retenu
+| Catégorie | Tickets | Part |
+| --- | --- | --- |
+| Hardware | 13 617 | 28,5 % |
+| HR Support | 10 915 | 22,8 % |
+| Access | 7 125 | 14,9 % |
+| Miscellaneous | 7 060 | 14,8 % |
+| Storage | 2 777 | 5,8 % |
+| Purchase | 2 464 | 5,2 % |
+| Internal Project | 2 119 | 4,4 % |
+| Administrative rights | 1 760 | 3,7 % |
 
-* **Nom :** [IT Service Ticket Classification Dataset sur Kaggle](https://www.kaggle.com/datasets/adisongoh/it-service-ticket-classification-dataset)
-* **Volumétrie :** 47 837 tickets réels d'assistance informatique (anonymisés, licence CC0 Domaine Public)
-* **Format :** CSV (`Document`, `Topic_group`)
-* **Classes cibles (8) :** `Hardware`, `Access`, `Storage`, `HR Support`, `Purchase`, `Internal Project`, `Administrative rights`, `Miscellaneous`.
-* **Échantillon versionné :** [`data/sample/tickets_sample.csv`](data/sample/tickets_sample.csv) (120 tickets, 15 par classe, 33 Ko).
-* **Documentation du dataset :** [`data/README.md`](data/README.md)
+Le fichier complet (14 Mo) reste hors Git. Le dépôt versionne un échantillon :
+[`data/sample/tickets_sample.csv`](data/sample/tickets_sample.csv), 120 tickets, 15 par
+catégorie. Détails : [`data/README.md`](data/README.md).
 
----
+## Pourquoi cette approche (grille du cours)
 
-## 🎯 Justification Scientifique de l'Approche (Grille du Cours)
+- **Pas de règles seules pour la catégorie :** un même problème s'écrit de dizaines de façons
+  (« vpn down », « cannot connect remote access ») ; une liste de mots-clés ne couvre pas ces
+  formulations.
+- **Apprentissage supervisé pour la catégorie :**
+  - (a) données étiquetées : 47 837 tickets déjà classés par des techniciens ;
+  - (b) vérifiabilité : F1 macro sur un jeu de test disjoint, et mots qui ont pesé dans chaque
+    décision ;
+  - (c) coût et latence : sur CPU, sans GPU ni API payante, environ 2 ms par ticket (p95 mesuré
+    sur le prototype) ;
+  - (d) conséquence d'une erreur : un ticket mal routé perd du temps ; sous 0,60 de confiance, un
+    humain tranche.
+- **Règles pour la priorité, recherche documentaire (RAG extractif) pour la procédure :** la
+  priorité doit s'expliquer, et la procédure doit venir d'un document interne, citée.
 
-En suivant l'arbre décisionnel officiel de **M. Larhlimi** :
-- **Pourquoi pas de simples Règles Métier ?** La diversité linguistique et le jargon des utilisateurs rendent la formulation des pannes non figée et non déterministe.
-- **Pourquoi le Machine Learning Supervisé pour la classification ?**
-  - **Critère (a) - Données étiquetées :** Nous disposons de 47 800+ tickets déjà annotés par des techniciens.
-  - **Critère (b) - Vérifiabilité :** Évaluation sur un jeu de test disjoint via $F_1$-score macro et audit des n-grammes TF-IDF.
-  - **Critère (c) - Coût et Latence :** L'inférence sur CPU prend environ 2 millisecondes (p95 mesuré) avec une empreinte mémoire minime, évitant tout GPU payant en production.
-  - **Critère (d) - Conséquence d'une erreur :** Risque faible, sécurisé dans l'interface par un seuil d'incertitude (60%) réorientant les cas ambigus vers un opérateur humain (`A_VERIFIER`).
-
----
-
-## 📂 Organisation du Dépôt — Semaine 1
+## Organisation du dépôt
 
 ```text
-projet_incidentsIT/
+.
 ├── data/
-│   ├── README.md               # Guide et spécification du dataset Kaggle
-│   └── sample/
-│       ├── README.md           # Description de l'échantillon
-│       └── tickets_sample.csv  # Échantillon réel (120 lignes, 8 classes)
+│   ├── README.md                     # le dataset Kaggle : origine, colonnes, classes
+│   └── sample/tickets_sample.csv     # 120 tickets, 15 par catégorie
 ├── docs/
-│   ├── cadrage/
-│   │   └── rapport_conception_initiale.md  # Rapport initial d'étude
-│   ├── media/
-│   │   ├── presentation_cadrage_Amrani_Ismail.mp4
-│   │   ├── presentation_cadrage_Lamzouri_Ishak.mp4
-│   │   └── README.md           # Scripts minutés des vidéos
-│   └── semaine1/
-│       ├── README.md           # Tableau de répartition Rédacteur / Relecteur
-│       ├── 1-descriptif.md     # Livrable 1 : Descriptif mis à jour
-│       ├── 2-dataset.md        # Livrable 2 : Description du dataset
-│       ├── 3-maquette.md       # Livrable 3 : Schéma Mermaid et wireframes
-│       ├── 4-pipeline.md       # Livrable 4 : 12 tâches et Gantt
-│       ├── Dossier_de_lancement_semaine1.md  # Version consolidée intégrale
-│       └── img/                # Maquettes des 3 écrans (PNG)
-│           ├── ecran1_qualification.png
-│           ├── ecran2_incertitude.png
-│           └── ecran3_batch.png
-├── Lamzouri-Amrani_Projet20.md # Fiche de cadrage officielle du binôme
-├── modele-rapport-latex.zip    # Modèle de rapport LaTeX
-├── .gitignore                  # Exclusion stricte des artefacts lourds
-└── README.md                   # Ce fichier de présentation
+│   ├── cadrage/rapport_conception_initiale.md
+│   ├── media/                        # vidéos de cadrage des deux membres et leurs scripts
+│   └── semaine1/                     # dossier de lancement (4 livrables) et maquettes
+├── src/                              # scripts d'entraînement et d'évaluation (à partir de S2-1)
+├── tests/                            # tests pytest
+├── Lamzouri-Amrani_Projet20.md       # fiche de cadrage
+├── modele-rapport-latex.zip          # modèle LaTeX fourni par l'enseignant pour le compte rendu
+└── README.md
 ```
 
----
+## Documents
 
-## 👥 Auteurs (Binôme)
-- **Ishak Lamzouri** ([@inazuma2004](https://github.com/inazuma2004)) — `lamzouriishak@gmail.com`
-- **Ismail Amrani** ([@Amaranix](https://github.com/Amaranix)) — `amranix33@gmail.com`
+| Document | Contenu |
+| --- | --- |
+| [`Lamzouri-Amrani_Projet20.md`](Lamzouri-Amrani_Projet20.md) | fiche de cadrage : besoin, périmètre, approche, critères de réussite |
+| [`docs/semaine1/Dossier_de_lancement_semaine1.md`](docs/semaine1/Dossier_de_lancement_semaine1.md) | dossier de lancement : descriptif, dataset, maquettes, plan des tâches |
+| [`docs/cadrage/rapport_conception_initiale.md`](docs/cadrage/rapport_conception_initiale.md) | choix de l'approche et défense du RAG extractif |
+| [`docs/media/`](docs/media/) | vidéos de cadrage d'Ishak Lamzouri et d'Ismail Amrani |
