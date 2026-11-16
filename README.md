@@ -10,6 +10,18 @@
 | Ishak Lamzouri | [@inazuma2004](https://github.com/inazuma2004) | dépôt et intégration continue, seuil d'abstention, interface Streamlit, équipe d'agents, Docker |
 | Ismail Amrani | [@Amaranix](https://github.com/Amaranix) | données, modèle de classification, API FastAPI, recherche dans les runbooks, paquet et commande `incidents`, suite de tests |
 
+## 📌 Accès Direct aux Livrables et Fiches Officielles
+
+| Document | Emplacement racine | Emplacement officiel `docs/` | Description |
+| --- | --- | --- | --- |
+| 📋 **Fiche de suivi Semaine 1** | [`Fiche_de_suivi_semaine1.md`](Fiche_de_suivi_semaine1.md) | [`docs/suivi/fiche-semaine-1.md`](docs/suivi/fiche-semaine-1.md) | Cadrage, jalons, dataset et critères mesurables (Note : 5 pts) |
+| 🚀 **Dossier de lancement Semaine 1** | [`Dossier_de_lancement_semaine1.md`](Dossier_de_lancement_semaine1.md) | [`docs/semaine1/Dossier_de_lancement_semaine1.md`](docs/semaine1/Dossier_de_lancement_semaine1.md) | Document complet de lancement (descriptif, dataset, maquettes, pipeline) |
+| 🎯 **Fiche de cadrage officielle** | [`Lamzouri-Amrani_Projet20.md`](Lamzouri-Amrani_Projet20.md) | — | Cadrage initial validé du binôme (Sujet n° 20) |
+| 🗺️ **Jalons & Push GitHub (18 jalons)** | [`Jalons_Push_GitHub_Projet20.md`](Jalons_Push_GitHub_Projet20.md) | — | Feuille de route des 18 push, PRs et tags `s1`, `s2`, `v1.0.0` |
+| 🏗️ **Architecture système** | — | [`docs/architecture.md`](docs/architecture.md) | Schéma de flux Mermaid et composants logiciels |
+| 👥 **Équipe & Rôles** | — | [`docs/equipe.md`](docs/equipe.md) | Identification et répartition des responsabilités |
+| 🎥 **Vidéos de cadrage** | — | [`docs/media/`](docs/media/) | Présentations vidéo par Ishak Lamzouri et Ismail Amrani |
+
 ## Ce que fait l'application
 
 Un technicien du helpdesk colle la description d'un ticket, rédigée en anglais comme les tickets
@@ -30,6 +42,38 @@ Exemple : « Cannot connect to the VPN since this morning, my password expired �
 
 Le jeu de données ne contient que des tickets en anglais : un ticket rédigé dans une autre langue
 part chez un technicien. L'application ne répare rien elle-même ; elle propose une procédure.
+
+## Installation
+
+Python 3.13 (les versions de `requirements.txt` sont celles qui ont entraîné le modèle).
+Compter environ 2 Go et une dizaine de minutes : PyTorch est installé en version CPU, sans CUDA.
+
+```powershell
+git clone https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20.git
+cd Lamzouri_Ishak-Amrani_Ismail_Projet20
+py -3.13 -m venv .venv
+.venv\Scripts\Activate.ps1                    # Linux, macOS : source .venv/bin/activate
+pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+pip install -r requirements.txt
+copy .env.example .env                          # Linux, macOS : cp .env.example .env
+```
+
+`.env` reste sur le poste (il est dans `.gitignore`). Remplacer les deux clés d'exemple par des
+valeurs d'au moins 16 caractères :
+`python -c "import secrets; print(secrets.token_urlsafe(24))"`.
+
+## Lancer et tester
+
+Dans l'environnement activé, à la racine du dépôt :
+
+```powershell
+pip install -e .                 # installe la commande incidents
+incidents --version              # incidents-app 0.1.0
+pytest -q                        # 2 passed
+```
+
+À ce stade (semaine 1), la commande `incidents` ne fait qu'annoncer sa version : c'est le
+squelette exécutable. `incidents predict "<ticket>"` arrive avec le modèle au push S2-1.
 
 ## Avancement du dépôt
 
@@ -96,10 +140,14 @@ catégorie. Détails : [`data/README.md`](data/README.md).
 │   ├── cadrage/rapport_conception_initiale.md
 │   ├── media/                        # vidéos de cadrage des deux membres et leurs scripts
 │   └── semaine1/                     # dossier de lancement (4 livrables) et maquettes
+├── incidents_app/                    # le paquet : commande incidents (cli.py)
 ├── src/                              # scripts d'entraînement et d'évaluation (à partir de S2-1)
-├── tests/                            # tests pytest
+├── tests/test_cli.py                 # premier test : la commande se lance
+├── .env.example                      # variables attendues, sans secret
 ├── Lamzouri-Amrani_Projet20.md       # fiche de cadrage
 ├── modele-rapport-latex.zip          # modèle LaTeX fourni par l'enseignant pour le compte rendu
+├── pyproject.toml                    # paquet incidents-app et configuration pytest, Ruff, mypy
+├── requirements.txt                  # dépendances, versions figées
 └── README.md
 ```
 
