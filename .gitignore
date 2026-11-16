@@ -19,21 +19,23 @@ models/*
 !models/metrics.json
 *.joblib
 *.pkl
-# Modèle embarqué dans le paquet (TP4) : présent dans la roue, exclu de Git
+# Copies embarquées dans la roue (scripts/preparer_roue.py) : présentes dans le paquet, exclues de Git
 incidents_app/models/*.joblib
 !incidents_app/models/.gitkeep
+incidents_app/runbooks/
 
 # Données volumineuses (CSVs bruts ou nettoyés volumineux)
 data/*
 !data/.gitkeep
 !data/sample/
 !data/sample/**
-!data/sample_reviews.csv
+!data/README.md
 # Runbooks IT (versionnés : base de connaissances RAG)
 !data/runbooks/
 !data/runbooks/**/*.md
-# Base vectorielle Chroma (générée, exclue de Git)
+# Base vectorielle Chroma et suivi MLflow (générés, exclus de Git)
 chroma_db/
+mlruns/
 
 # Tests & qualité
 .hypothesis/
@@ -52,6 +54,9 @@ Thumbs.db
 dist/
 build/
 *.egg-info/
+# Installateur Windows : plus de 60 Mo, joint à la release, jamais dans le dépôt
+installateur/build/
+installateur/Output/
 
 # Archives & artefacts temporaires
 *.zip
@@ -62,32 +67,8 @@ build/
 scratch/
 scratch_*
 
-# Code applicatif avancé (temporairement conservé en local / branche feature/dev-avance)
-app/
-ui/
-src/
-incidents_app/
-tests/
-scripts/
-models/
-data/runbooks/
-Dockerfile
-docker-compose.yml
-.dockerignore
-.env.example
-pyproject.toml
-requirements.txt
-CHANGELOG.md
-CONTEXTE_PROJET.md
-docs/architecture_agent.md
-docs/decisions/
-docs/journal_tp1_tp6.md
-docs/CONTRIBUTING.md
-docs/suivi_semaines/
-.github/
-
-# Documents et archives non sollicités
-*.pdf
+# PDF à la racine (le compte rendu et le support de soutenance vont dans docs/)
+/*.pdf
 
 # Images temporaires à la racine du dépôt (les captures dans docs/captures/ restent autorisées)
 /*.png
