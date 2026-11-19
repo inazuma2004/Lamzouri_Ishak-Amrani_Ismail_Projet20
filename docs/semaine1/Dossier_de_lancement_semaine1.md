@@ -5,6 +5,8 @@
 **Intitulé du projet :** Agent Autonome de Résolution d'Incidents IT (IT Helpdesk Intelligent)  
 **Dépôt GitHub :** [https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20)  
 
+> **Mise à jour du 19/11/2026.** Depuis la séance du 16/11/2026, le projet dure 3 semaines et suit la liste des 18 push : responsables et semaines à jour dans [`Jalons_Push_GitHub_Projet20.md`](../../Jalons_Push_GitHub_Projet20.md). Le plan T1 à T12 ci-dessous est celui remis le 09/11/2026 (étiquette `semaine1-remis`) ; depuis, seules la technologie de l'interface (React au lieu de Streamlit) et des chiffres inexacts ont été corrigés.
+
 ---
 
 ## Mode d'emploi
@@ -54,10 +56,10 @@ Classifier automatiquement les tickets d'incidents informatiques avec un score d
 
 | N° | Fonctionnalité | Ce que l'utilisateur voit ou obtient | Priorité |
 | --- | --- | --- | --- |
-| **F1** | Classification automatique supervisée en 8 catégories | Prédiction instantanée de la catégorie avec score de confiance calculé en probabilités. | Indispensable |
+| **F1** | Classification automatique supervisée en 8 catégories | Catégorie prédite avec son score de confiance (probabilité du modèle), en 1,5 ms par ticket (p95 mesuré). | Indispensable |
 | **F2** | Gestion de l'incertitude et abstention automatique | Statut `VALIDE` si confiance >= 60%, ou statut `A_VERIFIER` avec avertissement explicite. | Indispensable |
-| **F3** | API REST FastAPI et Interface Web Streamlit | Routes `/predict`, `/resolve`, `/search`... et interface interactive : saisie unitaire, lot CSV, base de connaissances, supervision. | Indispensable |
-| **F4** | Moteur Mini-RAG local branché sur runbooks | Étapes de dépannage issues des runbooks, avec la section citée (« document > section »). | Indispensable (livré S9-10) |
+| **F3** | API REST FastAPI et interface web React | Routes `/v1/predict`, `/v1/resolve`, `/v1/search`... et interface web servie par l'API : saisie unitaire, lot CSV, base de connaissances, supervision. | Indispensable |
+| **F4** | Moteur Mini-RAG local branché sur runbooks | Étapes de dépannage issues des runbooks, avec la section citée (« document > section »). | Indispensable (prototype des semaines 9-10 du cours ; dans le dépôt aux push S2-1 à S3-1) |
 
 ### 1.5 Services et composants techniques
 
@@ -67,7 +69,7 @@ Classifier automatiquement les tickets d'incidents informatiques avec un score d
 | **Recherche ou mémoire** | Base vectorielle de runbooks (8 runbooks, 27 sections) et mémoire de l'équipe d'agents | ChromaDB locale + `sentence-transformers`, recherche hybride ; `MEMOIRE.md` | Recherche sémantique locale gratuite, sans coût récurrent d'API et sans dépendance externe. |
 | **Outils appelés par l'agent** | Compétences de l'équipe : modèle ML, règles de priorité P1 à P4, recherche RAG, vérification | Fonctions Python (`incidents_app/equipe.py`) ; commande `incidents` | Chaque agent n'a que les compétences de son rôle ; aucun agent n'exécute de commande sur un système. |
 | **API** | Exposition des prédictions et résolutions | FastAPI + Uvicorn + Pydantic v2 | Standard OpenAPI/Swagger, validation stricte des entrées/sorties et haute performance asynchrone. |
-| **Interface** | Dashboard utilisateur et analyse par lot | Streamlit | Prototypage rapide, affichage de graphiques de distribution et export direct des CSV enrichis. |
+| **Interface** | Saisie d'un ticket, analyse d'un lot CSV, supervision | React 19 + Vite + TypeScript + Tailwind CSS (dossier `web/`) | Écrans sur mesure (jauge avec seuil, relais des cinq agents, lot CSV annoté) ; construite en fichiers statiques que l'API sert : un seul service à lancer. |
 | **Conteneur et CI** | Reproductibilité et validation continue | Docker, Docker Compose, GitHub Actions | Environnement hermétique et tests automatisés (ruff, mypy, pytest) à chaque commit. |
 
 ### 1.6 Hors périmètre
@@ -98,17 +100,17 @@ Nous avons étendu la classification supervisée du catalogue en intégrant un m
 | --- | --- |
 | **Nom et source (lien)** | `all_tickets_processed_improved_v3.csv` — [Kaggle IT Service Ticket Classification Dataset](https://www.kaggle.com/datasets/adisongoh/it-service-ticket-classification-dataset) |
 | **Producteur ou propriétaire** | Adison Goh (données de tickets d'assistance IT d'entreprise réelles et anonymisées) |
-| **Volume** | 47 837 lignes, 2 colonnes, environ 14.5 Mo |
+| **Volume** | 47 837 lignes, 2 colonnes, 14,6 Mo (14 568 920 octets) |
 | **Format et structure** | CSV UTF-8. Colonnes : `Document` (description brute de l'incident), `Topic_group` (classe cible) |
 | **Langue et période couverte** | Anglais technique d'entreprise |
 | **Licence et droits d'usage** | CC0 : Domaine Public (usage libre académique et commercial) |
-| **Données personnelles ou sensibles** | Aucune : anonymisation complète réalisée en amont (aucun nom, email ou IP réelle) |
+| **Données personnelles ou sensibles** | Aucune repérée : aucun chiffre, adresse e-mail ni adresse IP dans les 47 837 textes (recherche par expression régulière, 19/11/2026) ; les noms propres ne se détectent pas automatiquement |
 | **Emplacement des données complètes** | `data/all_tickets_processed_improved_v3.csv`, hors Git, versionné par DVC ; source d'origine : Kaggle |
 
 ### 2.2 Qualité constatée sur l'échantillon
 L'échantillon `data/sample/tickets_sample.csv` compte 120 lignes, 15 par catégorie (équilibré par construction). Sur le jeu complet :
 - Zéro valeur manquante sur les deux colonnes.
-- Répartition déséquilibrée des 8 classes : `Hardware` (28.5%), `HR Support` (22.8%), `Access` (14.9%), `Miscellaneous` (14.8%), `Storage` (5.8%), `Purchase` (5.1%), `Internal Project` (4.4%), `Administrative rights` (3.7%), compensée par `class_weight='balanced'`.
+- Répartition déséquilibrée des 8 classes : `Hardware` (28.5%), `HR Support` (22.8%), `Access` (14.9%), `Miscellaneous` (14.8%), `Storage` (5.8%), `Purchase` (5.2%), `Internal Project` (4.4%), `Administrative rights` (3.7%), compensée par `class_weight='balanced'`.
 - Bruit : certaines étiquettes sont discutables (tickets Outlook étiquetés `Administrative rights`, alertes serveur étiquetées `Hardware`) et certains textes sont presque vides.
 
 ### 2.3 Justification par fonctionnalité
@@ -117,11 +119,11 @@ L'échantillon `data/sample/tickets_sample.csv` compte 120 lignes, 15 par catég
 | --- | --- | --- |
 | **F1 (Classification)** | 47 837 paires `Document` / `Topic_group` | Permet d'entraîner un classifieur supervisé atteignant un F1 macro de 0,868 sur un jeu de test disjoint. |
 | **F2 (Incertitude)** | Vecteurs de probabilité par classe | Au seuil de 0,60, 78,4 % des tickets de test sont traités seuls, avec 94,2 % de justesse ; les autres partent chez un technicien. |
-| **F3 (Lot CSV)** | Format tabulaire standard CSV | Permet d'injecter et traiter des fichiers d'incidents par lot dans Streamlit. |
+| **F3 (Lot CSV)** | Format tabulaire standard CSV | Le même format se dépose dans l'interface web (colonne `Document`), qui renvoie le fichier annoté. |
 
 ### 2.4 Alternative de repli
 En cas de problème sur la source principale :
-1. Archive locale complète `data/archive.zip` (indépendante du réseau).
+1. Copie de l'archive Kaggle `data/archive.zip` (3,6 Mo) sur le poste de développement, hors Git : réentraînement possible sans réseau.
 2. Dataset Kaggle alternatif *"IT Support Tickets"* de Suraj Kumar.
 *Perte :* Légère adaptation du schéma des catégories cibles.
 
@@ -133,7 +135,7 @@ En cas de problème sur la source principale :
 **Critères d'acceptation (vérifiés par le relecteur)**
 - [x] L'échantillon est dans `data/sample/tickets_sample.csv` et s'ouvre sans erreur.
 - [x] La licence CC0 autorise l'usage dans le cadre du projet.
-- [x] Les données personnelles sont totalement absentes.
+- [x] Aucune donnée personnelle repérée (recherche de chiffres, d'e-mails et d'adresses IP : 0 résultat).
 - [x] Chaque fonctionnalité du MVP est couverte par la justification.
 - [x] L'alternative de repli est vérifiée et documentée.
 - [x] Le jeu de test est défini et automatisé.
@@ -150,7 +152,7 @@ En cas de problème sur la source principale :
 flowchart TD
     subgraph Client ["Interface et clients"]
         U["Utilisateur / Technicien L1"]
-        UI["Interface Web Streamlit"]
+        UI["Interface web React (servie par l API)"]
         CLI["Commande incidents"]
         U -->|Texte d incident ou fichier CSV| UI
         U -->|Ligne de commande| CLI
@@ -186,7 +188,7 @@ flowchart TD
 ```
 
 ### 3.2 Légende du schéma
-- **Interface Streamlit :** cinq onglets (nouveau ticket, lot CSV, base de connaissances, supervision, mesures) ; elle ne parle qu'à l'API.
+- **Interface web React :** cinq écrans (ticket, lot CSV, procédures, supervision, modèle) ; servie par l'API sur le port 8000, elle ne parle qu'à elle.
 - **API FastAPI :** service sécurisé par clé d'API avec validation Pydantic v2.
 - **Qualificateur :** pipeline supervisé scikit-learn (TF-IDF + régression logistique), seuil d'abstention 0,60.
 - **Priorisateur :** règles métier P1 à P4.
@@ -211,7 +213,7 @@ flowchart TD
 ![Écran 3 — Traitement par lot CSV](img/ecran3_batch.png)
 
 ### 3.4 Parcours utilisateur
-1. Le technicien colle la description de l'incident (en anglais) dans l'interface Streamlit et lance l'équipe d'agents.
+1. Le technicien colle la description de l'incident (en anglais) dans l'interface web et lance l'équipe d'agents.
 2. Si le score est >= 60 % et qu'une procédure dépasse le seuil de recherche, l'écran affiche le badge vert `VALIDE`, la catégorie, la priorité et la procédure avec la section citée.
 3. Sinon, l'écran affiche une alerte `A_VERIFIER` ; le technicien choisit la bonne catégorie et envoie la correction.
 4. Pour un lot, l'utilisateur dépose un CSV et télécharge les prédictions complètes en un clic.
@@ -237,12 +239,12 @@ flowchart TD
 | **T2** | Ingestion dataset et échantillon `data/sample/` | Données | Ismail | T1 | 1 | Fichier `tickets_sample.csv` (120 lignes) vérifié sous pandas. |
 | **T3** | Entraînement pipeline Scikit-Learn TF-IDF + LogReg | F1 | Ismail | T2 | 1 | Modèle sérialisé atteignant F1-macro >= 0.85. |
 | **T4** | Seuil de confiance 60% et règle d'abstention | F2 | Ishak | T3 | 1 | Sortie conforme avec distinction `VALIDE` / `A_VERIFIER`. |
-| **T5** | API REST FastAPI `/predict` et `/health` | F3 | Ismail | T4 | 2 | Endpoints répondant en HTTP 200 avec validation Pydantic. |
-| **T6** | Interface web interactive Streamlit (unitaire + lot) | F3 | Ishak | T5 | 2 | Interface opérationnelle avec formulaire et import CSV. |
+| **T5** | API REST FastAPI `/v1/predict` et `/health` | F3 | Ismail | T4 | 2 | Endpoints répondant en HTTP 200 avec validation Pydantic. |
+| **T6** | Interface web React (unitaire + lot) | F3 | Ishak | T5 | 2 | Interface opérationnelle avec formulaire et import CSV. |
 | **T7** | Indexation vectorielle des runbooks dans ChromaDB | F4 | Ismail | T5 | 3 | Requête sémantique renvoyant le bon runbook en < 1s. |
 | **T8** | Équipe d'agents couplant ML, règles et Mini-RAG | F4 | Ishak | T7 | 3 | Mission produisant catégorie, priorité et section citée, boucle bornée. |
 | **T9** | CLI Python `incidents` et packaging `pyproject.toml` | F1, F3 | Ismail | T8 | 3 | Commande `incidents` exécutable dans le terminal. |
-| **T10** | Conteneurisation Docker & Docker Compose | Déploiement | Ishak | T6, T9 | 3 | `docker compose up` démarre l'API et l'UI sans erreur. |
+| **T10** | Conteneurisation Docker & Docker Compose | Déploiement | Ishak | T6, T9 | 3 | `docker compose up` démarre l'API, qui sert aussi l'interface web. |
 | **T11** | Suite de tests pytest (unitaires, intégration, limites) | Qualité | Ismail | T10 | 4 | Suite pytest exécutant plus de 25 tests avec succès. |
 | **T12** | Pipeline CI GitHub Actions (`ruff`, `mypy`, `pytest`) | Qualité | Ishak | T11 | 4 | CI GitHub Actions au vert sur la branche `main`. |
 
@@ -251,7 +253,7 @@ flowchart TD
 | Semaine | Jalon démontrable | Tâches qui y mènent |
 | --- | --- | --- |
 | **1** | Dossier de lancement validé, échantillon `data/sample/`, prototype ML opérationnel en script. | T1, T2, T3, T4 |
-| **2** | Agent exposé par l'API FastAPI, interface Streamlit fonctionnelle, premiers tests. | T5, T6 |
+| **2** | Agent exposé par l'API FastAPI, interface web React fonctionnelle, premiers tests. | T5, T6 |
 | **3** | MVP complet avec Mini-RAG, Docker et docker-compose au vert. | T7, T8, T9, T10 |
 | **4** | Suite de tests d'or et limites validée, CI GitHub Actions au vert, soutenance prête. | T11, T12 |
 
@@ -270,7 +272,7 @@ gantt
     
     section Semaine 2 : API et UI
     T5 API FastAPI (Ismail)               :t5, 2026-11-16, 2d
-    T6 Interface Streamlit (Ishak)        :t6, after t5, 2d
+    T6 Interface web React (Ishak)        :t6, after t5, 2d
     
     section Semaine 3 : Agent et RAG
     T7 ChromaDB et Runbooks (Ismail)      :t7, 2026-11-23, 2d
@@ -288,7 +290,7 @@ gantt
 - **Charge par membre :**
   - Ishak Lamzouri (Membre A) : **10 jours**.
   - Ismail Amrani (Membre B) : **10 jours**.
-  - Écart : 0 jour (parfaite parité).
+  - Écart : 0 jour (10 jours chacun).
 
 **Critères d'acceptation (vérifiés par le relecteur)**
 - [x] Aucune tâche ne dépasse 2 jours.

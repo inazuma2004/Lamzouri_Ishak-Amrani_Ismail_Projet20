@@ -26,10 +26,10 @@ Le projet est rythmé par 18 jalons obligatoires (6 par semaine), chacun dévelo
 | Jalon | Branche | Contenu ciblé pour le Projet 20 | Auteur principal | Preuve vérifiée sur GitHub |
 | --- | --- | --- | --- | --- |
 | **S1-1** | `s1-1-initialisation` | Structure du projet (`src/`, `tests/`, `docs/`, `data/`), `.gitignore` assaini et `README.md` initial complet. | Ishak Lamzouri | README lisible, arborescence propre (PR #4 fusionnée). |
-| **S1-2** | `s1-2-equipe` | Fichier `docs/equipe.md` avec nom, compte GitHub et rôle de chaque membre. | Ismail Amrani | Commit de chaque compte dans l'historique (PR #5 fusionnée). |
-| **S1-3** | `s1-3-environnement` | Fichier `requirements.txt` figé, `.env.example` sans secret, documentation des commandes d'installation. | Ismail Amrani | Installation reproductible sur clone neuf. |
+| **S1-2** | `s1-2-equipe` | Fichier `docs/equipe.md` avec nom, compte GitHub et rôle de chaque membre, chacun depuis son compte. | Ishak Lamzouri (sa ligne, `74d1844`) ; Ismail Amrani (sa ligne : à pousser) | Commit de chaque compte dans l'historique (PR #5 fusionnée). |
+| **S1-3** | `s1-3-environnement` | Fichier `requirements.txt` figé, `.env.example` sans secret, documentation des commandes d'installation. | Ishak Lamzouri (`53b3186`) | Installation reproductible sur clone neuf. |
 | **S1-4** | `s1-4-squelette` | Commande CLI `incidents --version` (v0.1.0) dans `incidents_app/cli.py` et premier test unitaire. | Ishak Lamzouri | `pytest -q` passe avec succès sur le point d'entrée. |
-| **S1-5** | `s1-5-donnees-architecture` | Échantillon représentatif `data/sample/tickets_sample.csv`, script `scripts/decrire_donnees.py` et schéma `docs/architecture.md`. | Ismail Amrani | Script exécutable recalculant les chiffres exacts (47 837 tickets, 8 classes). |
+| **S1-5** | `s1-5-donnees-architecture` | Échantillon représentatif `data/sample/tickets_sample.csv`, script `scripts/decrire_donnees.py` et schéma `docs/architecture.md`. | Ishak Lamzouri (`828c968`) | Script exécutable recalculant les chiffres exacts (47 837 tickets, 8 classes). |
 | **S1-6** | `s1-6-fiche-suivi` | Fiche de suivi `docs/suivi/fiche-semaine-1.md` et racine `Fiche_de_suivi_semaine1.md` complétées ; tag `s1`. | Binôme (Ishak & Ismail) | Tag `s1` visible sur GitHub, fiches entièrement renseignées. |
 
 ---
@@ -40,9 +40,9 @@ Le projet est rythmé par 18 jalons obligatoires (6 par semaine), chacun dévelo
 | --- | --- | --- | --- | --- |
 | **S2-1** | `s2-1-coeur-ml` | Pipeline Scikit-Learn (TF-IDF + LogisticRegression), fonction `predict` et sous-commande CLI `incidents predict`. | Ishak Lamzouri | Tests de prédiction unitaires verts ; exemple dans le README. |
 | **S2-2** | `s2-2-jeu-evaluation` | Jeu de test étiqueté (jeu d'or de 20 tickets), script de calcul du macro F1-score et documentation dans `docs/evaluation.md`. | Ismail Amrani | Mesure chiffrée (F1 $\ge 0{,}85$) vérifiable par script. |
-| **S2-3** | `s2-3-api` | Routes FastAPI `/v1/health` et `/v1/predict`, gestion des codes d'erreur, validation Pydantic et tests d'API. | Ishak Lamzouri | Documentation OpenAPI interactive `/docs` ; tests API verts. |
-| **S2-4** | `s2-4-interface` | Dashboard Streamlit relié à l'API pour la qualification unitaire d'un ticket avec jauge de confiance. | Ismail Amrani | Capture d'écran dans `docs/` et démonstration fonctionnelle en direct. |
-| **S2-5** | `s2-5-qualite` | Pipeline CI GitHub Actions exécutant automatiquement Pytest et Ruff sur chaque PR. | Ishak Lamzouri | Coche verte CI sur le dernier commit de `main`. |
+| **S2-3** | `s2-3-api` | Routes FastAPI `/health` (publique) et `/v1/predict` (clé d'API), gestion des codes d'erreur, validation Pydantic et tests d'API. | Ishak Lamzouri | Documentation OpenAPI interactive `/docs` ; tests API verts. |
+| **S2-4** | `s2-4-interface` | Interface web React (Vite, TypeScript, Tailwind CSS) servie par l'API sur `/`, reliée à `/v1/predict` : saisie d'un ticket, jauge de confiance avec le seuil, statut `A_VERIFIER`. | Ismail Amrani | Capture d'écran dans `docs/` et démonstration fonctionnelle en direct. |
+| **S2-5** | `s2-5-qualite` | Pipeline CI GitHub Actions exécutant Pytest, Ruff et la construction de l'interface (contrôle de types TypeScript) sur chaque PR. | Ishak Lamzouri | Coche verte CI sur le dernier commit de `main`. |
 | **S2-6** | `s2-6-fiche-suivi` | Fiche de suivi `docs/suivi/fiche-semaine-2.md`, README mis à jour (lancement en 3 commandes), tag `s2`. | Binôme (Ishak & Ismail) | Tag `s2` poussé sur GitHub. |
 
 ---

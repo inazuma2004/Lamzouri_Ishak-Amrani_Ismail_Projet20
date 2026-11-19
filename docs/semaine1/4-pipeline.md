@@ -4,6 +4,8 @@
 **Relecteur :** Ishak Lamzouri ([@inazuma2004](https://github.com/inazuma2004))  
 **Fichier :** `docs/semaine1/4-pipeline.md`
 
+> **Mise à jour du 19/11/2026.** Depuis la séance du 16/11/2026, le projet dure 3 semaines et suit la liste des 18 push : responsables et semaines à jour dans [`Jalons_Push_GitHub_Projet20.md`](../../Jalons_Push_GitHub_Projet20.md). Le plan T1 à T12 ci-dessous est celui remis le 09/11/2026 (étiquette `semaine1-remis`) ; depuis, seules la technologie de l'interface (React au lieu de Streamlit) et des chiffres inexacts ont été corrigés.
+
 ---
 
 ## 4.1 Liste des tâches découpées (Tâches de 1 à 2 jours)
@@ -14,12 +16,12 @@
 | **T2** | Ingestion des données, analyse exploratoire et extraction de `data/sample/tickets_sample.csv` | Socle données | Ismail Amrani | T1 | S1 | Le sample de 120 lignes est validé et s'ouvre sous pandas sans erreur. |
 | **T3** | Entraînement du pipeline Scikit-learn (TF-IDF + LogisticRegression) et sérialisation | F1 | Ismail Amrani | T2 | S1 | Le modèle atteint F1-macro >= 0.85 et le fichier `.joblib` est généré. |
 | **T4** | Implémentation de la règle de confiance et seuil d'incertitude (60%) | F2 | Ishak Lamzouri | T3 | S1 | Le script renvoie le statut `VALIDE` ou `A_VERIFIER` selon la probabilité. |
-| **T5** | Développement de l'API REST FastAPI avec schémas Pydantic (`/predict`, `/health`) | F3 | Ismail Amrani | T4 | S2 | Les requêtes HTTP POST sur `/predict` renvoient un code 200 et un JSON conforme. |
-| **T6** | Construction de l'interface utilisateur Streamlit (saisie unitaire + lot CSV) | F3 | Ishak Lamzouri | T5 | S2 | L'application Web Streamlit permet de tester un ticket et de charger un CSV. |
+| **T5** | Développement de l'API REST FastAPI avec schémas Pydantic (`/v1/predict`, `/health`) | F3 | Ismail Amrani | T4 | S2 | Les requêtes HTTP POST sur `/v1/predict` renvoient un code 200 et un JSON conforme. |
+| **T6** | Construction de l'interface web React (saisie unitaire + lot CSV) | F3 | Ishak Lamzouri | T5 | S2 | L'interface web, servie par l'API, permet de tester un ticket et de charger un CSV. |
 | **T7** | Mise en place de la base vectorielle ChromaDB et indexation des runbooks Markdown | F4 | Ismail Amrani | T5 | S3 | Une requête de test renvoie le runbook pertinent en moins d'une seconde. |
 | **T8** | Création de l'équipe d'agents (qualification ML, priorité par règles, RAG, rédaction, vérification) | F4 | Ishak Lamzouri | T7 | S3 | La mission produit une qualification, une priorité et une citation « document > section » vérifiable, dans une boucle bornée. |
 | **T9** | Développement du CLI Python (`incidents`) et empaquetage `pyproject.toml` | F1, F3 | Ismail Amrani | T8 | S3 | La commande `incidents predict "screen flickering"` s'exécute directement dans le terminal. |
-| **T10** | Conteneurisation multi-services avec Docker et `docker-compose.yml` | Déploiement | Ishak Lamzouri | T6, T9 | S3 | `docker compose up` lance l'API et l'UI sans configuration manuelle. |
+| **T10** | Conteneurisation multi-services avec Docker et `docker-compose.yml` | Déploiement | Ishak Lamzouri | T6, T9 | S3 | `docker compose up` lance l'API, qui sert aussi l'interface web, sans configuration manuelle. |
 | **T11** | Élaboration de la suite de tests complète (unitaires, intégration, jeu d'or, limites) | Qualité | Ismail Amrani | T10 | S4 | `pytest` valide au moins 25 tests avec 0 échec bloquant. |
 | **T12** | Pipeline CI GitHub Actions (`ruff`, `mypy`, `pytest`) et dossier final | Qualité | Ishak Lamzouri | T11 | S4 | La CI GitHub Actions passe au vert sur la branche principale `main`. |
 
@@ -30,7 +32,7 @@
 | Semaine | Jalon démontrable | Tâches associées |
 | --- | --- | --- |
 | **Semaine 1** | Dossier de lancement validé, échantillon `data/sample/`, prototype ML opérationnel en script. | T1, T2, T3, T4 |
-| **Semaine 2** | API REST FastAPI exposée et documentée Swagger, interface Streamlit fonctionnelle. | T5, T6 |
+| **Semaine 2** | API REST FastAPI exposée et documentée Swagger, interface web React fonctionnelle. | T5, T6 |
 | **Semaine 3** | Mini-RAG local intégré, agent autonome opérationnel, conteneurisation Docker au point. | T7, T8, T9, T10 |
 | **Semaine 4** | Suite de tests d'or et limites validée, CI GitHub Actions au vert, code gelé et livrable final. | T11, T12 |
 
@@ -51,7 +53,7 @@ gantt
     
     section Semaine 2 : API et Interface
     T5 API FastAPI et Pydantic (Ismail)       :t5, 2026-11-16, 2d
-    T6 Interface Web Streamlit (Ishak)        :t6, after t5, 2d
+    T6 Interface web React (Ishak)            :t6, after t5, 2d
     
     section Semaine 3 : Agent et RAG
     T7 ChromaDB et Runbooks (Ismail)          :t7, 2026-11-23, 2d
@@ -73,7 +75,7 @@ gantt
 - **Équilibre de charge par membre :**
   - **Ishak Lamzouri (Membre A) :** T1 (2j) + T4 (1j) + T6 (2j) + T8 (2j) + T10 (1j) + T12 (2j) = **10 jours**.
   - **Ismail Amrani (Membre B) :** T2 (1j) + T3 (2j) + T5 (2j) + T7 (2j) + T9 (1j) + T11 (2j) = **10 jours**.
-  - **Écart de charge :** 0 jour (parfaite équité et symétrie des contributions).
+  - **Écart de charge :** 0 jour (10 jours chacun).
 
 ---
 

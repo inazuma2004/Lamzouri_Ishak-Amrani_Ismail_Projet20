@@ -8,7 +8,7 @@ Ce document détaille le jeu de données officiel retenu pour l'entraînement et
 
 * **Lien du Dataset :** [IT Service Ticket Classification Dataset sur Kaggle](https://www.kaggle.com/datasets/adisongoh/it-service-ticket-classification-dataset)
 * **Auteur / Source :** Adison Goh (Kaggle)
-* **Fichier principal utilisé :** `all_tickets_processed_improved_v3.csv` (taille : ~14.5 Mo)
+* **Fichier principal utilisé :** `all_tickets_processed_improved_v3.csv` (taille : 14,6 Mo, soit 14 568 920 octets)
 
 ---
 
@@ -36,9 +36,9 @@ Ce document détaille le jeu de données officiel retenu pour l'entraînement et
 
 Le choix de ce dataset répond point par point aux contraintes imposées par **M. A. Larhlimi** :
 - **100% Gratuit et Open Data :** Accessible librement sur Kaggle, aucune dépendance à des APIs payantes.
-- **Entraînement local & léger :** Fichier tabulaire de 14.5 Mo. L'entraînement d'un pipeline scikit-learn complet (`TfidfVectorizer` + `LogisticRegression` ou `LinearSVC`) s'effectue en **moins d'une minute sur un ordinateur portable standard**.
+- **Entraînement local & léger :** Fichier tabulaire de 14,6 Mo. Un entraînement du pipeline retenu (`TfidfVectorizer` + `LogisticRegression`) prend **environ 30 s sur le portable de développement** (29,9 s mesurées dans la grille d'expériences).
 - **Anonymisation et Éthique :** Données débarrassées de toute information nominative sensible (PII), respectant les exigences éthiques et légales (RGPD / Loi 09-08 Maroc).
-- **Évolution naturelle vers le Mini-RAG & Agent (S9 - S10) :** La catégorie prédite permet d'aiguiller l'Agent Autonome directement vers les runbooks techniques correspondants (ex: runbook VPN pour la classe *Access*).
+- **Évolution naturelle vers le Mini-RAG & Agent (semaines 9-10 du cours) :** La catégorie prédite permet d'aiguiller l'Agent Autonome directement vers les runbooks techniques correspondants (ex: runbook VPN pour la classe *Access*).
 
 ---
 

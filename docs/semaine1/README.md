@@ -46,7 +46,7 @@ data/sample/
 - **Dépôt Git & Hygiène :** `.gitignore`, `ruff`, `mypy`, et tests `pytest` configurés.
 - **Échantillon de données :** Présent dans `data/sample/tickets_sample.csv` (33 Ko, 120 tickets équilibrés).
 - **Maquette :** 3 wireframes PNG dans `docs/semaine1/img/` (qualification, incertitude, batch CSV).
-- **Prototypage & Suites :** Prototype fonctionnel déjà opérationnel (API FastAPI + Modèle ML + Interface Streamlit + RAG extractif).
+- **Prototypage & Suites :** Prototype fonctionnel déjà opérationnel (API FastAPI + modèle ML + interface web React + RAG extractif).
 - **Défense du RAG :** [`docs/cadrage/rapport_conception_initiale.md`, section 6](../cadrage/rapport_conception_initiale.md#6-défense-du-rag-extractif-semaines-9-10) : critères (b) et (c), coûts mesurés, limites.
 
 ---

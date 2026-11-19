@@ -1,179 +1,167 @@
-# Fiche de suivi — Semaine 1 : Cadrage et lancement du projet
+# Fiche de suivi, semaine 1 : cadrage et lancement du projet
+
+> Copies identiques : `docs/suivi/fiche-semaine-1.md` (emplacement de la liste des push), `Fiche_de_suivi_semaine1.md` et
+> `Fiche de suivi, semaine 1 cadrage et lancement du projet.md` (racine du dépôt). Corrigée le 19/11/2026 : chiffres
+> recalculés par `scripts/decrire_donnees.py`, exemples tirés du fichier réel, auteurs des commits relus dans l'historique,
+> interface Streamlit remplacée par une interface web React.
 
 ## 1. Identification du groupe
 
 | Élément | Votre réponse |
 | --- | --- |
-| **Nom du groupe** | G3 (Groupe 3) — IAD (Intelligence Artificielle & Data) |
-| **Titre du projet** | Agent Autonome de Résolution d'Incidents IT (IT Helpdesk Intelligent) |
-| **Sujet : numéro du catalogue** | Sujet n° 20 du catalogue officiel : *Classification et résolution d'incidents IT* |
-| **Adresse du dépôt GitHub** | [https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20) |
-| **Enseignant ajouté au dépôt** | Oui (`@Larhlimi` invité avec accès complet en lecture/évaluation) |
-| **Date de remise de la fiche** | 16 novembre 2026 |
+| Nom du groupe | G3, IAD (IA et Data), binôme Lamzouri-Amrani |
+| Titre du projet | incidentsIT : agent de résolution d'incidents IT |
+| Sujet : numéro du catalogue | n° 20, « Agent autonome de résolution d'incidents IT » |
+| Adresse du dépôt GitHub | https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20 |
+| Enseignant ajouté au dépôt (oui ou non) | Oui : compte `@Larhlimi`, collaborateur du dépôt |
+| Date de remise de la fiche | 16/11/2026 ; version corrigée le 19/11/2026 |
 
-**Membres du groupe :**
+Membres du groupe :
 
 | Nom et prénom | Compte GitHub | Rôle principal dans le projet |
 | --- | --- | --- |
-| **Lamzouri Ishak** | [@inazuma2004](https://github.com/inazuma2004) | Architecture système, squelette CLI, intégration continue, pipeline ML, conteneurisation Docker |
-| **Amrani Ismail** | [@Amaranix](https://github.com/Amaranix) | Curation du dataset, métriques d'évaluation & jeux d'or, API FastAPI, interface Streamlit, documentation |
-
----
+| Lamzouri Ishak | [@inazuma2004](https://github.com/inazuma2004) | dépôt et intégration continue, commande `incidents`, modèle de classification, API FastAPI, cas limites, Docker |
+| Amrani Ismail | [@Amaranix](https://github.com/Amaranix) | jeu d'évaluation et mesures, interface web React, évaluation finale, documentation finale |
 
 ## 2. Sujet et besoin
 
 | Question | Votre réponse |
 | --- | --- |
-| **Besoin en une phrase** | Automatiser le tri, la qualification et la proposition de procédure pour les tickets d'incidents informatiques afin de réduire drastiquement le délai de prise en charge du helpdesk IT. |
-| **Utilisateur final** | Techniciens et superviseurs de support informatique d'entreprise (Niveau 1 et Niveau 2). |
-| **Ce que fait l'application, vu par l'utilisateur (3 lignes)** | Le technicien soumet la description brute d'un incident (ou importe un lot CSV) ; l'application prédit instantanément la catégorie parmi 8 domaines avec un indice de confiance mesuré. Sous 60 % de certitude, elle s'abstient et passe le relais à l'humain (`A_VERIFIER`) ; au-delà, elle suggère mot pour mot la section de runbook technique correspondante. |
-| **Approche retenue et raison du choix** | Approche hybride supervisée et déterministe : classification par TF-IDF + Régression Logistique avec gestion du déséquilibre (`class_weight='balanced'`), complétée par un filtre d'abstention à 0,60 et un RAG extractif local sur des runbooks validés. Ce choix garantit un temps de réponse ultra-court (< 10 ms), une explicabilité totale pour l'équipe technique et zéro coût d'API ou risque d'hallucination. |
-| **Conséquence d'une erreur de l'application, et validation humaine prévue** | Un mauvais routage envoie le ticket vers la mauvaise équipe support, retardant la résolution d'une panne critique. L'application intègre un seuil de garde à 0,60 : tout ticket ambigu est marqué `A_VERIFIER` et requiert une validation humaine explicite avant toute action. |
-| **Sujet hors catalogue** | Sans objet (Projet n° 20 du catalogue officiel). |
-
----
+| Besoin en une phrase | Le helpdesk lit et route chaque ticket à la main ; l'application classe le ticket, fixe sa priorité et cite la procédure à suivre, et signale les tickets qu'elle ne sait pas traiter. |
+| Utilisateur final | Technicien de support de niveau 1, qui reçoit les tickets rédigés par les employés. |
+| Ce que fait l'application, vu par l'utilisateur (3 lignes au plus) | Le technicien colle un ticket (en anglais) ou dépose un CSV. Il obtient la catégorie parmi 8, la confiance, la priorité P1 à P4 et la section de runbook citée mot pour mot. Sous 0,60 de confiance, le ticket est marqué `A_VERIFIER` et lui revient. |
+| Approche retenue et raison du choix | Apprentissage supervisé (TF-IDF + régression logistique) pour la catégorie : 47 837 tickets déjà étiquetés, 1,5 ms par ticket sur CPU, mots décisifs affichables. Règles écrites pour la priorité (elle doit s'expliquer). Recherche dans les runbooks (RAG extractif) pour la procédure : le texte est recopié, pas généré. |
+| Conséquence d'une erreur de l'application, et validation humaine prévue | Un ticket mal classé part vers la mauvaise équipe et attend. Garde-fous : abstention sous 0,60 (le technicien choisit la catégorie et sa correction est enregistrée), aucune procédure citée sous le seuil de pertinence 0,27, aucune action exécutée sur un poste. |
+| Sujet hors catalogue | Sans objet. |
 
 ## 3. Périmètre
 
 | Rubrique | Votre réponse |
 | --- | --- |
-| **Version minimale (semaine 2)** | Entrée d'un texte d'incident via commande CLI ou route API `/v1/predict`, prédiction de la catégorie parmi les 8 classes, affichage du score de probabilité, déclenchement de l'abstention si score < 0,60, vérifié sur un jeu de test de référence de 20 cas. |
-| **Fonction 1, indispensable** | Qualification automatique du ticket parmi 8 catégories avec calcul de probabilité calibrée (`predict_proba`). |
-| **Fonction 2, indispensable** | Mécanisme de garde et d'abstention sous le seuil de 0,60 avec bascule automatique vers revue humaine. |
-| **Fonction 3, si le temps le permet** | Traitement par lot de fichiers CSV de tickets et suggestion de procédure issue de runbooks internes (RAG extractif local). |
-| **Hors périmètre** | Déploiement multi-cloud managé, appels à des API LLM propriétaires payantes, exécution automatique de scripts destructeurs sur les machines clientes sans accord humain. |
-
----
+| Version minimale : le parcours montré en semaine 2 | Le technicien colle un ticket dans l'interface web React ; elle appelle `POST /v1/predict` ; l'écran affiche la catégorie, la confiance sur une jauge marquée au seuil 0,60, et `A_VERIFIER` sous ce seuil. Même parcours en ligne de commande : `incidents predict "<ticket>"`. |
+| Fonction 1, indispensable | Classer un ticket parmi les 8 catégories, avec la probabilité du modèle comme confiance. |
+| Fonction 2, indispensable | S'abstenir sous 0,60 : statut `A_VERIFIER`, correction du technicien enregistrée pour le réentraînement. |
+| Fonction 3, si le temps le permet | Qualifier un lot CSV, et citer la section de runbook qui s'applique (8 runbooks, 27 sections). |
+| Hors périmètre | Exécuter une réparation sur un poste ; appeler un modèle de langage payant ; se connecter à un outil de ticketing (ServiceNow, Jira) ; traiter des tickets dans une autre langue que l'anglais (ils partent chez un humain). |
 
 ## 4. Architecture et technologies
 
 | Composant | Choix prévu | Dossier ou fichier dans le dépôt |
 | --- | --- | --- |
-| **Cœur : modèle et prédiction** | Scikit-Learn : TF-IDF unigrammes/bigrammes + Logistic Regression (`class_weight='balanced'`) | `incidents_app/predict.py`, `src/train.py` (jalon S2-1) |
-| **API** | FastAPI avec validation Pydantic v2 et documentation Swagger | `app/` (jalon S2-3) |
-| **Interface** | Dashboard Streamlit pour qualification unitaire et par lot CSV | `ui/` (jalon S2-4) |
-| **Données et stockage** | Échantillon versionné (120 lignes), dataset complet (47 837 lignes hors git), 8 runbooks Markdown | `data/sample/tickets_sample.csv`, `data/runbooks/` |
-| **Tests & Qualité** | Pytest (tests unitaires et fonctionnels), Ruff (linting et formatage de code) | `tests/`, `pyproject.toml` |
-| **Services externes et clés** | Aucun service tiers payant : exécution 100 % locale et autonome | `requirements.txt`, `.env.example` |
+| Cœur : modèle | scikit-learn : TF-IDF (mots et paires de mots) + régression logistique, `class_weight="balanced"` | `src/train.py`, `incidents_app/predict.py` (push S2-1) |
+| API | FastAPI + Pydantic v2 : `/health` public, `/v1/predict` protégé par clé, erreurs au format `{"erreur": {"code", "message"}}` | `app/` (push S2-3) |
+| Interface | React 19 + Vite + TypeScript + Tailwind CSS ; construite en fichiers statiques que l'API sert sur `/` (un seul service, un seul port) | `web/` (push S2-4) |
+| Données et stockage | Échantillon de 120 tickets versionné ; fichier complet hors Git (DVC) ; runbooks Markdown | `data/sample/tickets_sample.csv`, `data/runbooks/` (push S2-1 à S3-1) |
+| Tests | pytest ; Ruff ; contrôle de types TypeScript au build de l'interface | `tests/`, `pyproject.toml` |
+| Services externes et clés nécessaires | Aucun service payant ni appel réseau. Une clé : `API_KEYS` (accès à l'API), dans `.env`, jamais dans Git ; modèle à remplir : `.env.example` | `.env.example` |
 
-**Schéma d'architecture :** Documenté et consultable dans [`docs/architecture.md`](docs/architecture.md).
-
----
+Schéma d'architecture (Mermaid) : [`docs/architecture.md`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/blob/main/docs/architecture.md).
 
 ## 5. Données
 
 | Question | Votre réponse |
 | --- | --- |
-| **Origine des données (source, licence)** | [Kaggle IT Service Ticket Classification Dataset](https://www.kaggle.com/datasets/adisongoh/it-service-ticket-classification-dataset) (Adison Goh). Licence CC0 (Domaine Public). |
-| **Volume disponible aujourd'hui** | 47 837 tickets d'incidents réels (14,5 Mo en CSV brut). |
-| **Format** | Fichier CSV encodé en UTF-8, séparateur virgule, 2 colonnes (`Document`, `Topic_group`). |
-| **Données personnelles** | Aucune donnée personnelle : anonymisation stricte préalable (noms, adresses IP et identifiants masqués à la source). |
-| **Jeu d'essai versionné dans le dépôt** | `data/sample/tickets_sample.csv` (120 tickets, 15 par classe, équilibré, 0 valeur manquante). |
+| Origine des données (source, licence) | [IT Service Ticket Classification Dataset](https://www.kaggle.com/datasets/adisongoh/it-service-ticket-classification-dataset), Kaggle (Adison Goh), licence CC0 1.0 |
+| Volume disponible aujourd'hui | 47 837 tickets, fichier `all_tickets_processed_improved_v3.csv` de 14,6 Mo |
+| Format | CSV UTF-8, séparateur virgule, 2 colonnes |
+| Données personnelles | Non repérées : aucun chiffre, adresse e-mail ni adresse IP dans les 47 837 textes (recherche par expression régulière, 19/11/2026). Les noms propres ne se détectent pas automatiquement. |
+| Jeu d'essai versionné dans le dépôt | `data/sample/tickets_sample.csv` : 120 tickets, 15 par catégorie |
 
 ### Description du jeu de données
 
-**Vue d'ensemble :**
+Vue d'ensemble :
 
 | Caractéristique | Votre réponse |
 | --- | --- |
-| **Ce que représente une ligne** | Un ticket de support informatique réel soumis par un collaborateur en entreprise. |
-| **Nombre de lignes** | 47 837 lignes réelles (échantillon de test dans Git : 120 lignes). |
-| **Nombre de variables (colonnes)** | 2 colonnes (`Document` et `Topic_group`). |
-| **Période couverte et langue** | Historique récent de support informatique en entreprise ; langue anglaise technique. |
-| **Variable cible** | `Topic_group` (8 catégories distinctes de support informatique). |
-| **Répartition de la cible (jeu complet)** | `Hardware` : 13 617 (28,5 %) \| `HR Support` : 10 915 (22,8 %) \| `Access` : 7 125 (14,9 %) \| `Miscellaneous` : 7 060 (14,8 %) \| `Storage` : 2 777 (5,8 %) \| `Purchase` : 2 464 (5,2 %) \| `Internal Project` : 2 119 (4,4 %) \| `Administrative rights` : 1 760 (3,7 %). |
-| **Longueur moyenne d'un ticket en mots** | 41 mots en moyenne (médiane : 28 mots, minimum : 3 mots, maximum : 450 mots). |
-| **Valeurs manquantes et doublons** | 0 valeur manquante (0,0 %). 26 doublons stricts écartés lors de la séparation train/test. |
-| **Découpage prévu** | 80 % entraînement (38 269 tickets) et 20 % test d'évaluation finale (9 568 tickets), découpage stratifié (`random_state=42`). |
-| **Script qui recalcule ces chiffres** | `scripts/decrire_donnees.py` (validé par `tests/test_decrire_donnees.py`). |
+| Ce que représente une ligne | Un ticket de support IT : le texte écrit par l'employé, et la catégorie donnée par le support. |
+| Nombre de lignes | 47 837 |
+| Nombre de variables (colonnes) | 2 |
+| Période couverte et langue | Période non indiquée par la source ; anglais. Texte déjà nettoyé : minuscules, sans ponctuation ni chiffres. |
+| Variable cible | `Topic_group`, 8 catégories |
+| Répartition de la cible | Hardware 13 617 (28,5 %), HR Support 10 915 (22,8 %), Access 7 125 (14,9 %), Miscellaneous 7 060 (14,8 %), Storage 2 777 (5,8 %), Purchase 2 464 (5,2 %), Internal Project 2 119 (4,4 %), Administrative rights 1 760 (3,7 %) |
+| Longueur d'un ticket, en mots | moyenne 43,6 ; médiane 26 ; minimum 2 ; maximum 981 |
+| Valeurs manquantes et doublons | 0 valeur manquante, 0 ligne en double : aucun traitement nécessaire |
+| Découpage prévu | Test : 20 % stratifié, graine 42 (9 568 tickets), utilisé une seule fois pour le modèle retenu. Entraînement : 38 269 tickets, dont 20 % mis de côté comme validation pour choisir les réglages. |
+| Script qui recalcule ces chiffres | `python scripts/decrire_donnees.py data/all_tickets_processed_improved_v3.csv` (sans argument : l'échantillon versionné) ; testé par `tests/test_decrire_donnees.py` |
 
-**Dictionnaire des variables :**
+Dictionnaire des variables :
 
 | Variable | Type | Signification | Exemple de valeur | Valeurs manquantes (%) |
 | --- | --- | --- | --- | --- |
-| `Document` | texte | Description textuelle de la panne ou de la demande soumise par l'utilisateur | *"Cannot connect to the VPN since this morning, password expired"* | 0,0 % |
-| `Topic_group` | catégorie | Famille technique d'attribution du ticket parmi les 8 classes métier | *"Access"* | 0,0 % |
+| `Document` | texte | Description du problème par l'employé, nettoyée | `access to tuesday july joiner hello please confluence folder please create accounts credentials thank` | 0 |
+| `Topic_group` | catégorie (8 valeurs) | Équipe ou famille de demande attribuée par le support | `Access` | 0 |
 
-**Trois exemples tirés du jeu de données :**
+Trois exemples tirés du jeu de données (numéro de ligne du CSV, en-tête exclu, compté à partir de 0) ; la prédiction est celle du prototype local, sous le seuil 0,60 :
 
 | Exemple (entrée) | Réponse attendue | Nature de l'exemple |
 | --- | --- | --- |
-| *"Printer on 2nd floor jammed with paper and showing ink error message"* | `Hardware` | **Cas simple :** lexique matériel sans ambiguïté. |
-| *"User cannot open shared folder after transfer to finance team"* | `Access` | **Cas difficile :** risque de confusion entre gestion des accès et stockage (`Storage`) ou RH (`HR Support`). |
-| *"Hi team, please check urgently"* | `A_VERIFIER` (score < 0,60) | **Cas limite :** texte ultra-court sans contexte technique suffisant ; déclenche l'abstention vers un opérateur. |
+| ligne 12 880 : `access to tuesday july joiner hello please confluence folder please create accounts credentials thank` | `Access` | Cas simple : prédit `Access`, confiance 0,99, traité seul. |
+| ligne 20 737 : `access to thursday february pm hello want give permissions find repositories folder please help thank developer` | `Access` | Cas difficile : prédit `Storage` à 0,73, donc au-dessus du seuil ; « repositories folder » tire vers le stockage. C'est le type d'erreur que le seuil ne rattrape pas. |
+| ligne 5 979 : `printer driver printer driver hello needed printer driver installed had rights logging against thank fixing best` | `Hardware` | Cas limite : confiance 0,58, juste sous 0,60 ; le ticket part chez un technicien (`A_VERIFIER`). |
 
-**Limites connues du jeu de données :**
-Déséquilibre de classe marqué (rapport 1 à 8 entre `Administrative rights` à 3,7 % et `Hardware` à 28,5 %), traité par `class_weight='balanced'`. Langue restreinte à l'anglais technique. Bruit résiduel dans certaines annotations historiques d'origine.
-
----
+Limites connues du jeu de données : classes déséquilibrées (Hardware 7,7 fois plus fréquent qu'Administrative rights) ; anglais seulement ; texte déjà nettoyé, alors qu'un ticket réel contient majuscules, chiffres et ponctuation ; étiquettes parfois discutables (tickets Outlook classés `Administrative rights`) ; 14 tickets de 2 mots seulement.
 
 ## 6. Critères de réussite
 
+Mesures du prototype local ; elles deviennent reproductibles dans le dépôt avec le script d'évaluation du push S2-2.
+
 | Critère | Mesure | Valeur cible | Comment vous le vérifierez |
 | --- | --- | --- | --- |
-| **1. Justesse globale de classification** | Macro F1-score sur le jeu de test disjoint (20 %, 9 568 tickets) | $\ge 0{,}85$ (baseline mesurée : 0,868) | Script d'évaluation automatique `src/evaluate.py` |
-| **2. Fiabilité sous abstention** | Précision sur les tickets acceptés automatiquement (seuil $\ge 0{,}60$) | $\ge 90\,\%$ (mesuré : 94,2 %) | Rapport de classification avec seuil de confiance |
-| **3. Temps de réponse en inférence** | Latence moyenne par requête sur processeur standard (CPU) | $\le 100\text{ ms}$ (mesuré : ~2 ms) | Test de performance automatisé avec pytest |
-
----
+| Justesse de la classification | F1 macro sur les 9 568 tickets de test | ≥ 0,85 (prototype : 0,868) | `python src/evaluate.py`, qui écrit `models/metrics.json` |
+| Fiabilité quand l'application décide seule | Précision sur les tickets au-dessus de 0,60, avec au moins 70 % des tickets traités seuls | ≥ 90 % (prototype : 94,2 % sur 78,4 % des tickets) | même script ; seuil lu dans `incidents_app/predict.py` |
+| Rapidité | Latence p95 de `/v1/predict` | < 100 ms (prototype : 1,5 ms) | même script, mesure sur un échantillon de tickets de test |
 
 ## 7. Répartition et planning sur 3 semaines
 
-| Semaine | Livrable attendu | Pour votre projet, concrètement | Responsable | Tag |
+| Semaine | Livrable attendu | Pour notre projet, concrètement | Responsable | Tag |
 | --- | --- | --- | --- | --- |
-| **1** | Cadrage, dépôt initialisé, squelette exécutable | Dépôt configuré, dépendances figées, dataset exploré avec script reproductible, point d'entrée CLI v0.1.0 avec test passant, fiche de cadrage validée. | Ishak Lamzouri & Ismail Amrani | `s1` |
-| **2** | Version minimale qui fonctionne de bout en bout | Pipeline ML entraîné, inférence avec score et filtre d'abstention à 0,60, API REST `/v1/predict`, interface Streamlit, intégration continue GitHub Actions. | Ishak Lamzouri (ML/API) & Ismail Amrani (UI/Évaluation) | `s2` |
-| **3** | Application finale, documentation, compte rendu | RAG extractif sur runbooks Markdown, durcissement sur cas limites, packaging redistribuable, compte rendu complet (30 pages max) et diapositives. | Ishak Lamzouri & Ismail Amrani | `v1.0.0` |
+| 1 | Cadrage, dépôt initialisé, squelette exécutable | README, `.gitignore`, `requirements.txt` figé, `.env.example`, commande `incidents --version` et son test, script de description des données, schéma d'architecture, cette fiche | Ishak Lamzouri (S1-1, S1-3 à S1-5) ; Ismail Amrani (S1-2, sa ligne) ; binôme (S1-6) | `s1` |
+| 2 | Version minimale de bout en bout | modèle et `incidents predict` (S2-1, Ishak) ; jeu d'or de 20 tickets et `docs/evaluation.md` (S2-2, Ismail) ; API `/health` et `/v1/predict` (S2-3, Ishak) ; interface web React reliée à l'API (S2-4, Ismail) ; CI pytest, Ruff, build de l'interface (S2-5, Ishak) ; fiche 2 (S2-6, binôme) | voir colonne précédente | `s2` |
+| 3 | Application finale, documentation, compte rendu | texte vide ou trop long, API indisponible, abstention, chacun testé (S3-1, Ishak) ; évaluation finale (S3-2, Ismail) ; clone neuf et Docker (S3-3, Ishak) ; README final et `CHANGELOG.md` (S3-4, Ismail) ; fiche 3, compte rendu, support (S3-5, binôme) ; release (S3-6, binôme) | voir colonne précédente | `v1.0.0` |
 
-**Répartition des responsabilités :**
+Répartition des responsabilités :
 
 | Membre | Responsabilités sur les 3 semaines | Remplaçant en cas d'absence |
 | --- | --- | --- |
-| **Ishak Lamzouri** | Architecture logicielle, point d'entrée CLI, pipeline ML Scikit-Learn, API FastAPI, pipeline CI/CD GitHub Actions, conteneurisation Docker. | Ismail Amrani |
-| **Ismail Amrani** | Exploration et préparation des données, scripts d'évaluation et jeux d'or, interface Streamlit, intégration des runbooks, documentation et rapports. | Ishak Lamzouri |
-
----
+| Ishak Lamzouri | dépôt et CI, commande `incidents`, modèle de classification, API FastAPI, cas limites, Docker | Ismail Amrani |
+| Ismail Amrani | jeu d'évaluation et mesures, interface web React, évaluation finale, documentation finale | Ishak Lamzouri |
 
 ## 8. Travail réalisé en semaine 1
 
+Chaque membre remplit sa ligne lui-même. Commits relus dans l'historique de `main` le 19/11/2026.
+
 | Membre | Ce que j'ai fait cette semaine | Lien vers mes commits | Temps passé (heures) |
 | --- | --- | --- | --- |
-| **Ishak Lamzouri** | Initialisation de la structure du projet (S1-1), squelette exécutable de la commande CLI `incidents` et tests associés (S1-4), rédaction de la fiche de suivi et tagging Git (S1-6). | PR #4 (`e93bcc6`), commit `fd3c2ce` | 12 h |
-| **Ismail Amrani** | Enregistrement de l'équipe (S1-2), figeage des dépendances `requirements.txt` et configuration `.env.example` (S1-3), script de description des données `scripts/decrire_donnees.py` et schéma d'architecture (S1-5). | PR #5 (`74d1844`), commits `53b3186`, `828c968` | 11 h |
+| Ishak Lamzouri | S1-1 structure et README ; S1-2 ma ligne de `docs/equipe.md` ; S1-3 `requirements.txt` figé et `.env.example` ; S1-4 commande `incidents` et ses 2 tests ; S1-5 `scripts/decrire_donnees.py` et `docs/architecture.md` ; S1-6 cette fiche et les jalons ; fusion des PR #4, #6, #7 | [`e93bcc6`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/e93bcc6), [`74d1844`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/74d1844), [`53b3186`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/53b3186), [`fd3c2ce`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/fd3c2ce), [`828c968`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/828c968), [`194995b`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/194995b) | 12 |
+| Ismail Amrani | Relecture et fusion de la PR #5 (commit de fusion [`1ababd0`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/1ababd0), depuis @Amaranix). À compléter par Ismail depuis son compte, avec le commit de sa ligne de `docs/equipe.md`. | à compléter par Ismail | à compléter par Ismail |
 
-**État du dépôt à la remise de la fiche :**
+État du dépôt à la remise de la fiche :
 
 - [x] Dépôt créé, enseignant et tous les membres ajoutés
 - [x] README avec le titre, les membres, le sujet et les commandes d'installation (S1-1)
-- [x] Au moins un commit de chaque membre, depuis son propre compte (S1-2)
-- [x] `requirements.txt` installable sur un clone neuf, `.env.example` présent, aucun secret poussé (S1-3)
-- [x] Squelette exécutable et au moins un test qui passe (S1-4)
+- [ ] Au moins un commit de chaque membre, depuis son propre compte (S1-2) : Ismail n'a qu'un commit de fusion ; sa ligne de `docs/equipe.md` reste à pousser depuis @Amaranix
+- [ ] `requirements.txt` installable sur un clone neuf, `.env.example` présent, aucun secret poussé (S1-3) : installation sur clone neuf à refaire et à consigner ici
+- [x] Squelette exécutable et au moins un test qui passe (S1-4) : `pytest -q` donne 4 tests réussis
 - [x] Jeu d'essai et schéma d'architecture dans le dépôt (S1-5)
-- [x] Cette fiche poussée dans `docs/suivi/` et tag `s1` posé (S1-6)
-
----
+- [ ] Cette fiche poussée dans `docs/suivi/` et tag `s1` posé (S1-6) : le tag `s1` désigne `16f0369`, avant cette correction ; à déplacer sur le commit de fusion de la correction
 
 ## 9. Risques et points de blocage
 
-| Risque ou blocage | Probabilité | Ce que vous ferez si cela arrive | Qui surveille |
+| Risque ou blocage | Probabilité | Ce que nous ferons si cela arrive | Qui surveille |
 | --- | --- | --- | --- |
-| **Déséquilibre des classes dans le dataset (ratio 1 à 8)** | Moyenne | Utilisation de la pondération de coût `class_weight='balanced'` et optimisation du F1-macro plutôt que de l'accuracy globale. | Ishak Lamzouri |
-| **Prédictions trop confiantes sur des tickets ambigus** | Moyenne | Maintien d'un seuil de sécurité à 0,60 pour router systématiquement les cas incertains vers le statut `A_VERIFIER` (contrôle humain). | Ismail Amrani |
-| **Incompatibilité d'environnement lors de l'installation sur une machine vierge** | Faible | Dépendances strictement figées avec versions exactes dans `requirements.txt` et validation automatisée en intégration continue. | Ishak Lamzouri |
+| Ismail sans push à son nom en semaine 1 (règle : un push par membre et par semaine) | forte | Ismail pousse sa ligne de `docs/equipe.md` depuis @Amaranix avant la remise ; il est auteur de S2-2 et S2-4 en semaine 2 | Ismail Amrani |
+| Erreur sûre d'elle (au-dessus de 0,60 mais fausse), comme l'exemple de la ligne 20 737 | moyenne | Mesurer la précision des tickets traités seuls (cible ≥ 90 %) ; relever le seuil si elle passe sous la cible | Ismail Amrani |
+| Installation impossible sur le poste de l'enseignant (PyTorch volumineux, Node.js absent) | moyenne | Versions figées dans `requirements.txt` et `web/package-lock.json` ; interface construite par la CI et par l'image Docker, sans Node.js chez l'utilisateur | Ishak Lamzouri |
 
-**Question à poser à l'enseignant :** Aucune question bloquante à ce stade. Les critères de notation et les jalons de livraison hebdomadaires sont parfaitement clairs.
-
----
+Question à poser à l'enseignant : le tag `v1.0.0` existe déjà dans le dépôt (version du TP 4). Faut-il le supprimer pour réserver `v1.0.0` à la release finale (push S3-6), ou numéroter la release finale autrement ?
 
 ## 10. Engagements pour la semaine 2
 
 | Engagement | Responsable | Comment on saura que c'est fait |
 | --- | --- | --- |
-| **1. Entraîner et livrer le modèle de classification avec prédiction de probabilités et seuil d'abstention à 0,60 (Push S2-1)** | Ishak Lamzouri | La commande `incidents predict "ticket text"` fonctionne et `pytest -q` valide le module de prédiction. |
-| **2. Formaliser le jeu d'or d'évaluation et automatiser le calcul des métriques de référence (Push S2-2)** | Ismail Amrani | Le fichier `tests/jeu_or.csv` est testé automatiquement et les résultats sont consignés dans `docs/evaluation.md`. |
-| **3. Déployer l'API REST FastAPI et la relier à la première version de l'interface Streamlit (Push S2-3 & S2-4)** | Binôme (Ishak & Ismail) | Démonstration en séance du parcours utilisateur complet : saisie d'un ticket, affichage de la catégorie et du niveau de confiance. |
-
----
+| `incidents predict "<ticket>"` renvoie catégorie, confiance et statut (S2-1) | Ishak Lamzouri | tests du module de prédiction verts dans la CI ; exemple d'appel dans le README |
+| 20 tickets avec la réponse attendue et un script qui calcule les trois critères de la rubrique 6 (S2-2) | Ismail Amrani | `tests/jeu_or.csv` et `src/evaluate.py` dans le dépôt ; première mesure écrite dans `docs/evaluation.md` |
+| Interface web React reliée à `/v1/predict` : saisie d'un ticket, jauge, statut (S2-4) | Ismail Amrani | capture d'écran dans `docs/` ; démonstration en séance |
 
 ## Cadre réservé à l'enseignant
 
@@ -185,6 +173,6 @@ Déséquilibre de classe marqué (rapport 1 à 8 entre `Administrative rights` �
 | Risques et engagements pour la semaine 2 (rubriques 9 et 10) | 0,5 |  |
 | **Total** | **5** |  |
 
-**Décision :** sujet validé, ou fiche à reprendre avant le :
+Décision : sujet validé, ou fiche à reprendre avant le :
 
-**Commentaire :**
+Commentaire :

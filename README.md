@@ -7,8 +7,8 @@
 
 | Membre | Compte GitHub | Rôle principal |
 | --- | --- | --- |
-| Ishak Lamzouri | [@inazuma2004](https://github.com/inazuma2004) | dépôt et intégration continue, seuil d'abstention, interface Streamlit, équipe d'agents, Docker |
-| Ismail Amrani | [@Amaranix](https://github.com/Amaranix) | données, modèle de classification, API FastAPI, recherche dans les runbooks, paquet et commande `incidents`, suite de tests |
+| Ishak Lamzouri | [@inazuma2004](https://github.com/inazuma2004) | dépôt et intégration continue, commande `incidents`, modèle de classification, API FastAPI, cas limites, Docker |
+| Ismail Amrani | [@Amaranix](https://github.com/Amaranix) | jeu d'évaluation et mesures, interface web React, évaluation finale, documentation finale |
 
 ## 📌 Accès Direct aux Livrables et Fiches Officielles
 
@@ -84,7 +84,7 @@ dans le dépôt push après push.
 | Semaine | Push | Contenu pour ce projet | Tag |
 | --- | --- | --- | --- |
 | 1 | S1-1 à S1-6 | structure du dépôt, équipe, environnement figé, commande `incidents` minimale et son test, données et architecture, fiche de suivi 1 | `s1` |
-| 2 | S2-1 à S2-6 | modèle TF-IDF + régression logistique et fonction de prédiction, jeu d'or de 20 tickets et script d'évaluation, API FastAPI, interface Streamlit, CI (pytest, Ruff), fiche 2 | `s2` |
+| 2 | S2-1 à S2-6 | modèle TF-IDF + régression logistique et fonction de prédiction, jeu d'or de 20 tickets et script d'évaluation, API FastAPI, interface web React servie par l'API, CI (pytest, Ruff, build de l'interface), fiche 2 | `s2` |
 | 3 | S3-1 à S3-6 | cas limites (texte vide, score faible, service indisponible), évaluation finale, installation sur clone neuf et Docker, documentation finale, fiche 3, compte rendu et support, release | `v1.0.0` |
 
 Les mesures citées dans la fiche de cadrage (F1 macro 0,868, couverture 78,4 %, précision des
@@ -137,13 +137,20 @@ catégorie. Détails : [`data/README.md`](data/README.md).
 │   ├── README.md                     # le dataset Kaggle : origine, colonnes, classes
 │   └── sample/tickets_sample.csv     # 120 tickets, 15 par catégorie
 ├── docs/
+│   ├── architecture.md               # schéma d'architecture (Mermaid)
 │   ├── cadrage/rapport_conception_initiale.md
+│   ├── equipe.md                     # une ligne par membre, poussée depuis son compte
 │   ├── media/                        # vidéos de cadrage des deux membres et leurs scripts
-│   └── semaine1/                     # dossier de lancement (4 livrables) et maquettes
+│   ├── semaine1/                     # dossier de lancement (4 livrables) et maquettes
+│   └── suivi/fiche-semaine-1.md      # fiche de suivi (emplacement de la liste des push)
 ├── incidents_app/                    # le paquet : commande incidents (cli.py)
 ├── src/                              # scripts d'entraînement et d'évaluation (à partir de S2-1)
 ├── tests/test_cli.py                 # premier test : la commande se lance
+├── scripts/decrire_donnees.py        # recalcule les chiffres du jeu de données
 ├── .env.example                      # variables attendues, sans secret
+├── Dossier_de_lancement_semaine1.md  # fiches à la racine, à la demande de l'enseignant
+├── Fiche_de_suivi_semaine1.md
+├── Jalons_Push_GitHub_Projet20.md
 ├── Lamzouri-Amrani_Projet20.md       # fiche de cadrage
 ├── modele-rapport-latex.zip          # modèle LaTeX fourni par l'enseignant pour le compte rendu
 ├── pyproject.toml                    # paquet incidents-app et configuration pytest, Ruff, mypy
@@ -156,6 +163,9 @@ catégorie. Détails : [`data/README.md`](data/README.md).
 | Document | Contenu |
 | --- | --- |
 | [`Lamzouri-Amrani_Projet20.md`](Lamzouri-Amrani_Projet20.md) | fiche de cadrage : besoin, périmètre, approche, critères de réussite |
-| [`docs/semaine1/Dossier_de_lancement_semaine1.md`](docs/semaine1/Dossier_de_lancement_semaine1.md) | dossier de lancement : descriptif, dataset, maquettes, plan des tâches |
+| [`Fiche_de_suivi_semaine1.md`](Fiche_de_suivi_semaine1.md) | fiche de suivi de la semaine 1 (copies identiques : `Fiche de suivi, semaine 1 cadrage et lancement du projet.md`, `docs/suivi/fiche-semaine-1.md`) |
+| [`Jalons_Push_GitHub_Projet20.md`](Jalons_Push_GitHub_Projet20.md) | les 18 push : branche, contenu, auteur, preuve (copie : `Push GitHub attendus de chaque groupe (projet en 3 semaines).md`) |
+| [`Dossier_de_lancement_semaine1.md`](Dossier_de_lancement_semaine1.md) | dossier de lancement remis le 09/11/2026 (copie : `docs/semaine1/`) |
+| [`docs/semaine1/`](docs/semaine1/) | les 4 livrables du dossier de lancement : descriptif, dataset, maquettes, plan des tâches |
 | [`docs/cadrage/rapport_conception_initiale.md`](docs/cadrage/rapport_conception_initiale.md) | choix de l'approche et défense du RAG extractif |
 | [`docs/media/`](docs/media/) | vidéos de cadrage d'Ishak Lamzouri et d'Ismail Amrani |

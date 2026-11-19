@@ -14,7 +14,7 @@
 flowchart TD
     subgraph Client ["Interface et clients"]
         U["Utilisateur / Technicien L1"]
-        UI["Interface Web Streamlit"]
+        UI["Interface web React (servie par l API)"]
         CLI["Commande incidents"]
         U -->|Texte d incident ou fichier CSV| UI
         U -->|Ligne de commande| CLI
@@ -55,7 +55,7 @@ flowchart TD
 
 | Composant | Rôle et technologies | Fonctionnalité servie |
 | --- | --- | --- |
-| **Interface Web (Streamlit)** | Cinq onglets : nouveau ticket, traitement par lot CSV, base de connaissances, supervision des tickets à vérifier, mesures du modèle. Elle ne parle qu'à l'API. | F2, F3 |
+| **Interface web (React)** | Cinq écrans : ticket, traitement par lot CSV, procédures, supervision des tickets à vérifier, modèle et mesures. Servie par l'API sur le port 8000, elle ne parle qu'à elle. | F2, F3 |
 | **Commande `incidents`** | `predict`, `resolve`, `index`, `serve`, `ui` : usage en terminal ou dans des scripts. | F1, F3 |
 | **API FastAPI** | Routes protégées par clé d'API, validation Pydantic, journal sans texte de ticket. | F3 |
 | **Qualificateur (modèle ML)** | Pipeline scikit-learn TF-IDF + régression logistique, seuil d'abstention 0,60. | F1, F2 |
@@ -65,7 +65,7 @@ flowchart TD
 
 ---
 
-## 3.3 Maquette des écrans (Interface Streamlit)
+## 3.3 Maquette des écrans (interface web React)
 
 ### Écran 1 : Qualification et résolution d'un incident
 
@@ -142,7 +142,7 @@ flowchart TD
 ## 3.4 Parcours utilisateur
 
 1. **Scénario nominal unitaire :**
-   - Le technicien L1 ouvre l'application Streamlit.
+   - Le technicien L1 ouvre l'interface web (http://localhost:8000/) et saisit sa clé d'API.
    - Il colle la description reçue d'un utilisateur dans la zone de texte, en anglais.
    - Il clique sur *« Lancer l'équipe d'agents »*.
    - L'écran affiche la catégorie (`Access`), la confiance (88 %), la priorité (`P2`), le badge `VALIDE` et la procédure de la section « Access.md > Connexion VPN impossible », avec sa source et l'équipe d'escalade. Le journal des agents montre que le Vérificateur a fait ajouter l'escalade (2 itérations).
