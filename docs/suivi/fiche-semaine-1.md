@@ -140,7 +140,7 @@ Chaque membre remplit sa ligne lui-même. Commits relus dans l'historique de `ma
 - [x] Dépôt créé, enseignant et tous les membres ajoutés
 - [x] README avec le titre, les membres, le sujet et les commandes d'installation (S1-1)
 - [ ] Au moins un commit de chaque membre, depuis son propre compte (S1-2) : Ismail n'a qu'un commit de fusion ; sa ligne de `docs/equipe.md` reste à pousser depuis @Amaranix
-- [ ] `requirements.txt` installable sur un clone neuf, `.env.example` présent, aucun secret poussé (S1-3) : installation sur clone neuf à refaire et à consigner ici
+- [x] `requirements.txt` installable sur un clone neuf, `.env.example` présent, aucun secret poussé (S1-3) : clone neuf de `main` (`ae08a82`) le 19/11/2026, Windows 11, Python 3.13 : installation sans erreur, `incidents --version` donne `incidents-app 0.1.0`, `pytest -q` donne 4 tests réussis
 - [x] Squelette exécutable et au moins un test qui passe (S1-4) : `pytest -q` donne 4 tests réussis
 - [x] Jeu d'essai et schéma d'architecture dans le dépôt (S1-5)
 - [ ] Cette fiche poussée dans `docs/suivi/` et tag `s1` posé (S1-6) : le tag `s1` désigne `16f0369`, avant cette correction ; à déplacer sur le commit de fusion de la correction
