@@ -10,17 +10,21 @@
 | Ishak Lamzouri | [@inazuma2004](https://github.com/inazuma2004) | dépôt et intégration continue, commande `incidents`, modèle de classification, API FastAPI, cas limites, Docker |
 | Ismail Amrani | [@Amaranix](https://github.com/Amaranix) | jeu d'évaluation et mesures, interface web React, évaluation finale, documentation finale |
 
-## 📌 Accès Direct aux Livrables et Fiches Officielles
+## Documents du projet
 
-| Document | Emplacement racine | Emplacement officiel `docs/` | Description |
-| --- | --- | --- | --- |
-| 📋 **Fiche de suivi Semaine 1** | [`Fiche_de_suivi_semaine1.md`](Fiche_de_suivi_semaine1.md) | [`docs/suivi/fiche-semaine-1.md`](docs/suivi/fiche-semaine-1.md) | Cadrage, jalons, dataset et critères mesurables (Note : 5 pts) |
-| 🚀 **Dossier de lancement Semaine 1** | [`Dossier_de_lancement_semaine1.md`](Dossier_de_lancement_semaine1.md) | [`docs/semaine1/Dossier_de_lancement_semaine1.md`](docs/semaine1/Dossier_de_lancement_semaine1.md) | Document complet de lancement (descriptif, dataset, maquettes, pipeline) |
-| 🎯 **Fiche de cadrage officielle** | [`Lamzouri-Amrani_Projet20.md`](Lamzouri-Amrani_Projet20.md) | — | Cadrage initial validé du binôme (Sujet n° 20) |
-| 🗺️ **Jalons & Push GitHub (18 jalons)** | [`Jalons_Push_GitHub_Projet20.md`](Jalons_Push_GitHub_Projet20.md) | — | Feuille de route des 18 push, PRs et tags `s1`, `s2`, `v1.0.0` |
-| 🏗️ **Architecture système** | — | [`docs/architecture.md`](docs/architecture.md) | Schéma de flux Mermaid et composants logiciels |
-| 👥 **Équipe & Rôles** | — | [`docs/equipe.md`](docs/equipe.md) | Identification et répartition des responsabilités |
-| 🎥 **Vidéos de cadrage** | — | [`docs/media/`](docs/media/) | Présentations vidéo par Ishak Lamzouri et Ismail Amrani |
+Les fiches demandées par l'enseignant sont à la racine du dépôt, en un seul exemplaire chacune.
+
+| Document | Fichier | Contenu |
+| --- | --- | --- |
+| Fiche de cadrage | [`Lamzouri-Amrani_Projet20.md`](Lamzouri-Amrani_Projet20.md) | besoin, périmètre, approche, critères de réussite, questionnaire de cadrage |
+| Dossier de lancement (semaine 1) | [`Dossier_de_lancement_semaine1.md`](Dossier_de_lancement_semaine1.md) | les 4 livrables consolidés, remis le 09/11/2026 ; détail livrable par livrable dans [`docs/semaine1/`](docs/semaine1/) |
+| Fiche de suivi, semaine 1 | [`Fiche_de_suivi_semaine1.md`](Fiche_de_suivi_semaine1.md) | les 10 rubriques du gabarit de l'enseignant (5 points) |
+| Jalons et push GitHub | [`Jalons_Push_GitHub_Projet20.md`](Jalons_Push_GitHub_Projet20.md) | les 18 push : branche, contenu, auteur, preuve ; tags `s1`, `s2`, `v1.0.0` |
+| Architecture | [`docs/architecture.md`](docs/architecture.md) | schéma Mermaid et composant -> dossier -> push |
+| Équipe | [`docs/equipe.md`](docs/equipe.md) | une ligne par membre, poussée depuis son propre compte |
+| Rapport de conception | [`docs/cadrage/rapport_conception_initiale.md`](docs/cadrage/rapport_conception_initiale.md) | choix de l'approche et défense du RAG extractif |
+| Données | [`data/README.md`](data/README.md) | origine, colonnes, classes, échantillon versionné |
+| Vidéos de cadrage | [`docs/media/`](docs/media/) | présentations d'Ishak Lamzouri et d'Ismail Amrani, avec leur script |
 
 ## Ce que fait l'application
 
@@ -141,14 +145,13 @@ catégorie. Détails : [`data/README.md`](data/README.md).
 │   ├── cadrage/rapport_conception_initiale.md
 │   ├── equipe.md                     # une ligne par membre, poussée depuis son compte
 │   ├── media/                        # vidéos de cadrage des deux membres et leurs scripts
-│   ├── semaine1/                     # dossier de lancement (4 livrables) et maquettes
-│   └── suivi/fiche-semaine-1.md      # fiche de suivi (emplacement de la liste des push)
+│   └── semaine1/                     # les 4 livrables du dossier de lancement et les maquettes
 ├── incidents_app/                    # le paquet : commande incidents (cli.py)
 ├── src/                              # scripts d'entraînement et d'évaluation (à partir de S2-1)
 ├── tests/test_cli.py                 # premier test : la commande se lance
 ├── scripts/decrire_donnees.py        # recalcule les chiffres du jeu de données
 ├── .env.example                      # variables attendues, sans secret
-├── Dossier_de_lancement_semaine1.md  # fiches à la racine, à la demande de l'enseignant
+├── Dossier_de_lancement_semaine1.md  # les fiches sont à la racine, à la demande de l'enseignant
 ├── Fiche_de_suivi_semaine1.md
 ├── Jalons_Push_GitHub_Projet20.md
 ├── Lamzouri-Amrani_Projet20.md       # fiche de cadrage
@@ -157,15 +160,3 @@ catégorie. Détails : [`data/README.md`](data/README.md).
 ├── requirements.txt                  # dépendances, versions figées
 └── README.md
 ```
-
-## Documents
-
-| Document | Contenu |
-| --- | --- |
-| [`Lamzouri-Amrani_Projet20.md`](Lamzouri-Amrani_Projet20.md) | fiche de cadrage : besoin, périmètre, approche, critères de réussite |
-| [`Fiche_de_suivi_semaine1.md`](Fiche_de_suivi_semaine1.md) | fiche de suivi de la semaine 1 (copies identiques : `Fiche de suivi, semaine 1 cadrage et lancement du projet.md`, `docs/suivi/fiche-semaine-1.md`) |
-| [`Jalons_Push_GitHub_Projet20.md`](Jalons_Push_GitHub_Projet20.md) | les 18 push : branche, contenu, auteur, preuve (copie : `Push GitHub attendus de chaque groupe (projet en 3 semaines).md`) |
-| [`Dossier_de_lancement_semaine1.md`](Dossier_de_lancement_semaine1.md) | dossier de lancement remis le 09/11/2026 (copie : `docs/semaine1/`) |
-| [`docs/semaine1/`](docs/semaine1/) | les 4 livrables du dossier de lancement : descriptif, dataset, maquettes, plan des tâches |
-| [`docs/cadrage/rapport_conception_initiale.md`](docs/cadrage/rapport_conception_initiale.md) | choix de l'approche et défense du RAG extractif |
-| [`docs/media/`](docs/media/) | vidéos de cadrage d'Ishak Lamzouri et d'Ismail Amrani |

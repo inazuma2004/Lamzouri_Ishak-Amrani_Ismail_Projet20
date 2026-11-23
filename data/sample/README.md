@@ -6,11 +6,11 @@ Ce dossier contient un échantillon représentatif et léger du jeu de données 
 
 | Fichier | Format | Lignes | Taille | Description |
 |---|---|---|---|---|
-| `tickets_sample.csv` | CSV (UTF-8) | 120 lignes | ~33 Ko | Échantillon équilibré de 15 tickets par catégorie pour les 8 classes du projet. |
+| `tickets_sample.csv` | CSV (UTF-8) | 120 lignes | 32,7 Ko | Échantillon équilibré de 15 tickets par catégorie pour les 8 classes du projet. |
 
 ## 🏷️ Structure des colonnes
 
-- **`Document`** : Description textuelle libre de l'incident en anglais, rédigée par un utilisateur ou employé (anonymisée).
+- **`Document`** : description de l'incident, en anglais, écrite par un employé, déjà nettoyée par l'auteur du dataset (minuscules, sans ponctuation ni chiffres).
 - **`Topic_group`** : Catégorie cible assignée par le support IT parmi les 8 classes :
   1. `Hardware`
   2. `HR Support`
@@ -25,5 +25,5 @@ Ce dossier contient un échantillon représentatif et léger du jeu de données 
 
 - **Origine :** Sous-ensemble extrait de `all_tickets_processed_improved_v3.csv` (Kaggle IT Service Ticket Classification Dataset par Adison Goh).
 - **Licence :** CC0 : Domaine Public (usage libre, académique et commercial).
-- **Données personnelles :** Aucune. Toutes les informations identifiantes ont été supprimées ou remplacées par des libellés génériques.
+- **Données personnelles :** aucune repérée : aucun chiffre, adresse e-mail ni adresse IP dans les 47 837 tickets du jeu complet (recherche par expression régulière, 19/11/2026). Les noms propres ne se détectent pas automatiquement.
 

@@ -92,7 +92,7 @@ Conformément à la philosophie du cours (*"Le modèle est la plus petite boîte
 │        │            Alerte Humaine                │                    │
 │        │                                          ▼                    │
 │        └──> [Brique 2] Mini-RAG Local extractif (ChromaDB + runbooks)  │
-│                         (S9-S10, sans LLM génératif)                   │
+│                (semaines 9-10 du cours, sans LLM génératif)            │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 

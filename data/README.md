@@ -17,27 +17,27 @@ Ce document détaille le jeu de données officiel retenu pour l'entraînement et
 * **Nombre d'instances :** 47 837 tickets réels d'assistance informatique
 * **Format :** CSV (Comma-Separated Values), encodage UTF-8
 * **Champs du dataset :**
-  1. `Document` *(Feature X)* : Description textuelle non structurée de la panne, de la réclamation ou du besoin saisie par l'employé / utilisateur (*ex: "unable to connect to internal vpn", "monitor screen flickering and turning black"*).
+  1. `Document` *(Feature X)* : Description textuelle non structurée de la panne, de la réclamation ou du besoin saisie par l'employé / utilisateur (texte déjà nettoyé par l'auteur du dataset : minuscules, sans ponctuation ni chiffres ; ex. ligne 12 880 : *"access to tuesday july joiner hello please confluence folder please create accounts credentials thank"*).
   2. `Topic_group` *(Target y)* : Catégorie d'incident assignée par les techniciens de support IT.
 
 ### Distribution des Catégories (`Topic_group`) :
-1. **Hardware** (~13 617 tickets) : Problèmes matériels (écran, disque, chargeur, clavier...).
-2. **HR Support** (~10 915 tickets) : Demandes liées aux ressources humaines et processus internes.
-3. **Access** (~7 125 tickets) : Comptes verrouillés, mots de passe, accès VPN, habilitations.
-4. **Miscellaneous** (~7 060 tickets) : Requêtes diverses non standard.
-5. **Storage** (~2 777 tickets) : Espace disque saturé, accès aux partages réseaux.
-6. **Purchase** (~2 464 tickets) : Demandes d'achat de matériel ou de licences logicielles.
-7. **Internal Project** (~2 119 tickets) : Incidents sur les outils et serveurs de projets internes.
-8. **Administrative rights** (~1 760 tickets) : Élévation de privilèges, permissions administrateur.
+1. **Hardware** (13 617 tickets, 28,5 %) : Problèmes matériels (écran, disque, chargeur, clavier...).
+2. **HR Support** (10 915 tickets, 22,8 %) : Demandes liées aux ressources humaines et processus internes.
+3. **Access** (7 125 tickets, 14,9 %) : Comptes verrouillés, mots de passe, accès VPN, habilitations.
+4. **Miscellaneous** (7 060 tickets, 14,8 %) : Requêtes diverses non standard.
+5. **Storage** (2 777 tickets, 5,8 %) : Espace disque saturé, accès aux partages réseaux.
+6. **Purchase** (2 464 tickets, 5,2 %) : Demandes d'achat de matériel ou de licences logicielles.
+7. **Internal Project** (2 119 tickets, 4,4 %) : Incidents sur les outils et serveurs de projets internes.
+8. **Administrative rights** (1 760 tickets, 3,7 %) : Élévation de privilèges, permissions administrateur.
 
 ---
 
 ## ⚖️ Conformité avec les Règles du Cours
 
 Le choix de ce dataset répond point par point aux contraintes imposées par **M. A. Larhlimi** :
-- **100% Gratuit et Open Data :** Accessible librement sur Kaggle, aucune dépendance à des APIs payantes.
+- **Données publiques :** licence CC0 sur Kaggle, téléchargement gratuit ; aucune API payante.
 - **Entraînement local & léger :** Fichier tabulaire de 14,6 Mo. Un entraînement du pipeline retenu (`TfidfVectorizer` + `LogisticRegression`) prend **environ 30 s sur le portable de développement** (29,9 s mesurées dans la grille d'expériences).
-- **Anonymisation et Éthique :** Données débarrassées de toute information nominative sensible (PII), respectant les exigences éthiques et légales (RGPD / Loi 09-08 Maroc).
+- **Données personnelles :** aucune repérée : aucun chiffre, adresse e-mail ni adresse IP dans les 47 837 textes (recherche par expression régulière, 19/11/2026) ; les noms propres ne se détectent pas automatiquement. Les corrections saisies par les techniciens restent hors Git (RGPD, loi 09-08).
 - **Évolution naturelle vers le Mini-RAG & Agent (semaines 9-10 du cours) :** La catégorie prédite permet d'aiguiller l'Agent Autonome directement vers les runbooks techniques correspondants (ex: runbook VPN pour la classe *Access*).
 
 ---

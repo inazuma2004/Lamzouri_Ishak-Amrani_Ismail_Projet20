@@ -1,7 +1,7 @@
 # Fiche de suivi, semaine 1 : cadrage et lancement du projet
 
-> Copies identiques : `docs/suivi/fiche-semaine-1.md` (emplacement de la liste des push), `Fiche_de_suivi_semaine1.md` et
-> `Fiche de suivi, semaine 1 cadrage et lancement du projet.md` (racine du dépôt). Corrigée le 19/11/2026 : chiffres
+> Placée à la racine du dépôt, à la demande de l'enseignant (un seul exemplaire ; la liste des push
+> citait `docs/suivi/`). Corrigée le 19/11/2026 : chiffres
 > recalculés par `scripts/decrire_donnees.py`, exemples tirés du fichier réel, auteurs des commits relus dans l'historique,
 > interface Streamlit remplacée par une interface web React.
 
@@ -49,11 +49,11 @@ Membres du groupe :
 | Composant | Choix prévu | Dossier ou fichier dans le dépôt |
 | --- | --- | --- |
 | Cœur : modèle | scikit-learn : TF-IDF (mots et paires de mots) + régression logistique, `class_weight="balanced"` | `src/train.py`, `incidents_app/predict.py` (push S2-1) |
-| API | FastAPI + Pydantic v2 : `/health` public, `/v1/predict` protégé par clé, erreurs au format `{"erreur": {"code", "message"}}` | `app/` (push S2-3) |
+| API | FastAPI + Pydantic v2 : `/health` public, `/v1/predict` protégé (compte `user` ou `admin` connecté, ou clé d'API pour un script), erreurs au format `{"erreur": {"code", "message"}}` | `app/` (push S2-3) |
 | Interface | React 19 + Vite + TypeScript + Tailwind CSS ; construite en fichiers statiques que l'API sert sur `/` (un seul service, un seul port) | `web/` (push S2-4) |
 | Données et stockage | Échantillon de 120 tickets versionné ; fichier complet hors Git (DVC) ; runbooks Markdown | `data/sample/tickets_sample.csv`, `data/runbooks/` (push S2-1 à S3-1) |
 | Tests | pytest ; Ruff ; contrôle de types TypeScript au build de l'interface | `tests/`, `pyproject.toml` |
-| Services externes et clés nécessaires | Aucun service payant ni appel réseau. Une clé : `API_KEYS` (accès à l'API), dans `.env`, jamais dans Git ; modèle à remplir : `.env.example` | `.env.example` |
+| Services externes et clés nécessaires | Aucun service payant ni appel réseau. Secrets dans `.env`, jamais dans Git : `JWT_SECRET` (signature des sessions des comptes) et `API_KEYS` (scripts) ; modèle à remplir : `.env.example` | `.env.example` |
 
 Schéma d'architecture (Mermaid) : [`docs/architecture.md`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/blob/main/docs/architecture.md).
 
@@ -143,7 +143,7 @@ Chaque membre remplit sa ligne lui-même. Commits relus dans l'historique de `ma
 - [x] `requirements.txt` installable sur un clone neuf, `.env.example` présent, aucun secret poussé (S1-3) : clone neuf de `main` (`ae08a82`) le 19/11/2026, Windows 11, Python 3.13 : installation sans erreur, `incidents --version` donne `incidents-app 0.1.0`, `pytest -q` donne 4 tests réussis
 - [x] Squelette exécutable et au moins un test qui passe (S1-4) : `pytest -q` donne 4 tests réussis
 - [x] Jeu d'essai et schéma d'architecture dans le dépôt (S1-5)
-- [ ] Cette fiche poussée dans `docs/suivi/` et tag `s1` posé (S1-6) : le tag `s1` désigne `16f0369`, avant cette correction ; à déplacer sur le commit de fusion de la correction
+- [ ] Cette fiche poussée (à la racine, à la demande de l'enseignant) et tag `s1` posé (S1-6) : le tag `s1` désigne `16f0369`, avant cette correction ; à déplacer sur le commit de fusion de la correction
 
 ## 9. Risques et points de blocage
 
@@ -153,7 +153,11 @@ Chaque membre remplit sa ligne lui-même. Commits relus dans l'historique de `ma
 | Erreur sûre d'elle (au-dessus de 0,60 mais fausse), comme l'exemple de la ligne 20 737 | moyenne | Mesurer la précision des tickets traités seuls (cible ≥ 90 %) ; relever le seuil si elle passe sous la cible | Ismail Amrani |
 | Installation impossible sur le poste de l'enseignant (PyTorch volumineux, Node.js absent) | moyenne | Versions figées dans `requirements.txt` et `web/package-lock.json` ; interface construite par la CI et par l'image Docker, sans Node.js chez l'utilisateur | Ishak Lamzouri |
 
-Question à poser à l'enseignant : le tag `v1.0.0` existe déjà dans le dépôt (version du TP 4). Faut-il le supprimer pour réserver `v1.0.0` à la release finale (push S3-6), ou numéroter la release finale autrement ?
+Questions à poser à l'enseignant :
+
+1. Le tag `v1.0.0` existe déjà dans le dépôt (version du TP 4). Faut-il le supprimer pour réserver `v1.0.0` à la release finale (push S3-6), ou numéroter la release finale autrement ?
+2. La grille indique pour le compte rendu « 30 pages maximum » (p. 2) et « 6 pages maximum » (p. 9) : quelle longueur fait foi ?
+3. Changements par rapport à la fiche de cadrage, à valider : interface web React (servie par l'API) au lieu de Streamlit ; comptes `user` (technicien) et `admin` (responsable du helpdesk) avec connexion par mot de passe.
 
 ## 10. Engagements pour la semaine 2
 

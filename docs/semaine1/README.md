@@ -28,11 +28,12 @@ docs/semaine1/
 ├── 2-dataset.md                       <- Livrable 2 : Description, analyse et qualité du dataset
 ├── 3-maquette.md                      <- Livrable 3 : Architecture système et maquettes d'écrans
 ├── 4-pipeline.md                      <- Livrable 4 : Découpage WBS, jalons et Gantt
-├── img/                               <- Wireframes PNG des 3 écrans (générés par script)
-│   ├── ecran1_qualification.png
-│   ├── ecran2_incertitude.png
-│   └── ecran3_batch.png
-└── Dossier_de_lancement_semaine1.md   <- Version consolidée intégrale du dossier officiel
+└── img/                               <- Wireframes PNG des 3 écrans (générés par script)
+    ├── ecran1_qualification.png
+    ├── ecran2_incertitude.png
+    └── ecran3_batch.png
+
+Dossier_de_lancement_semaine1.md       <- à la racine du dépôt : version consolidée des 4 livrables
 data/sample/
 ├── tickets_sample.csv                 <- Échantillon représentatif réel (120 lignes, 8 classes)
 └── README.md                          <- Documentation de l'échantillon
@@ -42,11 +43,11 @@ data/sample/
 
 ## 🎯 Statut d'avancement de l'équipe
 
-- **Semaine 1 (Cadrage & Dataset) :** ✅ 100% complétée et conforme aux exigences.
-- **Dépôt Git & Hygiène :** `.gitignore`, `ruff`, `mypy`, et tests `pytest` configurés.
+- **Semaine 1 (Cadrage & Dataset) :** les 4 livrables remis le 09/11/2026 (étiquette `semaine1-remis`) ; décision de l'enseignant à reporter dans le dossier de lancement.
+- **Dépôt Git & Hygiène :** `.gitignore` (ni `.env`, ni modèle, ni CSV complet) ; configuration pytest, Ruff et mypy dans `pyproject.toml` ; 4 tests (`pytest -q`).
 - **Échantillon de données :** Présent dans `data/sample/tickets_sample.csv` (33 Ko, 120 tickets équilibrés).
 - **Maquette :** 3 wireframes PNG dans `docs/semaine1/img/` (qualification, incertitude, batch CSV).
-- **Prototypage & Suites :** Prototype fonctionnel déjà opérationnel (API FastAPI + modèle ML + interface web React + RAG extractif).
+- **Prototype :** application complète sur le poste de développement (modèle, API FastAPI, interface web React, RAG extractif) ; son code entre dans le dépôt push après push, à partir de S2-1 ([`Jalons_Push_GitHub_Projet20.md`](../../Jalons_Push_GitHub_Projet20.md)).
 - **Défense du RAG :** [`docs/cadrage/rapport_conception_initiale.md`, section 6](../cadrage/rapport_conception_initiale.md#6-défense-du-rag-extractif-semaines-9-10) : critères (b) et (c), coûts mesurés, limites.
 
 ---
@@ -58,6 +59,6 @@ data/sample/
 - [x] Échantillon de données présent dans `data/sample/tickets_sample.csv`.
 - [x] Schéma d'architecture Mermaid et parcours utilisateur visibles sur GitHub.
 - [x] Wireframes PNG des 3 écrans dans `docs/semaine1/img/`.
-- [x] Issues GitHub créées et pipeline chronologique défini.
-- [x] Dossier complet consolidé disponible dans `docs/semaine1/Dossier_de_lancement_semaine1.md`.
+- [x] Pipeline chronologique défini (`4-pipeline.md`, diagramme de Gantt).
+- [x] Dossier complet consolidé : [`Dossier_de_lancement_semaine1.md`](../../Dossier_de_lancement_semaine1.md), à la racine.
 

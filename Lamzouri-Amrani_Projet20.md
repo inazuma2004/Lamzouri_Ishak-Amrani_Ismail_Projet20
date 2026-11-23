@@ -2,7 +2,7 @@
 
 > **Version :** 1.2 — 14/11/2026  
 > **Mise à jour :** le RAG est implémenté (RAG extractif local, découpé par section) et défendu dans [`docs/cadrage/rapport_conception_initiale.md`, section 6](docs/cadrage/rapport_conception_initiale.md#6-défense-du-rag-extractif-semaines-9-10) ; l'agent est devenu une équipe de cinq agents vérifiée par une boucle bornée. Les valeurs mesurées ci-dessous sont celles de l'application 1.1.0.  
-> **Version 1.3 — 19/11/2026 :** l'interface Streamlit est remplacée par une interface web React servie par l'API ; les routes protégées sont sous `/v1` ; calendrier ramené à 3 semaines (consigne du 16/11/2026).
+> **Version 1.3 — 19/11/2026 :** l'interface Streamlit est remplacée par une interface web React servie par l'API ; les routes protégées sont sous `/v1` ; comptes `user` (technicien) et `admin` (responsable du helpdesk) avec mot de passe ; calendrier ramené à 3 semaines (consigne du 16/11/2026). Ces changements de périmètre sont soumis à la validation de l'enseignant (grille : « la fiche de cadrage fait référence »).
 
 ---
 

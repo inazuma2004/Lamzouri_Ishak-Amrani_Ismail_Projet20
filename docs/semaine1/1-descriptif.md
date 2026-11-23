@@ -68,10 +68,10 @@ Le succès du projet ne se limite pas à l'accuracy du modèle : il se mesure à
 | **Précision sur les tickets couverts** | Part des tickets couverts dont la catégorie prédite est correcte (comparaison au label réel). | **≥ 90 %** (mesuré : **94,2 %**) |
 | **Taux global de qualification correcte** | Part des tickets correctement routés, tous statuts confondus. | **≥ 80 %** (mesuré : **86,6 %**) |
 | **F1-macro (modèle)** | Moyenne harmonique précision/rappel par classe, sur le jeu de test disjoint (20 %). | **≥ 0,85** (mesuré : **0,868**) |
-| **Traçabilité RAG** | Part des réponses `VALIDE` qui citent au moins une source de runbook. | **100 %** (vérifié par `tests/test_agent.py`) |
+| **Traçabilité RAG** | Part des réponses `VALIDE` qui citent au moins une source de runbook. | **100 %** (prototype : `tests/test_agent.py`, publié avec l'équipe d'agents au push S3-1) |
 | **Pertinence du runbook** | Part des tickets du jeu d'or pour lesquels le runbook retourné est le bon. | **≥ 90 %** sur 20 tickets (mesuré : **92,3 %**) |
 | **Latence API** | Temps de réponse p95 de `/v1/predict` et `/v1/resolve`. | **< 100 ms** (mesuré : **1,5 ms** et **66 ms**) |
-| **Abstention** | Part des tickets avec score < 0,60 effectivement renvoyés en `A_VERIFIER`. | **100 %** (vérifié par les tests) |
+| **Abstention** | Part des tickets avec score < 0,60 effectivement renvoyés en `A_VERIFIER`. | **100 %** (prototype : tests de la prédiction, publiés au push S2-1) |
 
 **Règle de décision :** le projet est accepté si **tous** les seuils sont atteints. Un échec sur le F1-macro (< 0,85) ou sur la traçabilité RAG (une réponse `VALIDE` sans source) est bloquant : il déclenche une revue du modèle ou de l'index avant livraison.
 

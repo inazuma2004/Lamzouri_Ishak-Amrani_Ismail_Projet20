@@ -3,8 +3,9 @@
 ```mermaid
 flowchart TD
     U["Technicien du helpdesk"] -->|ticket ou fichier CSV| UI["Interface web React (web/), servie par l'API sur /"]
+    S["Script ou autre service"] -->|clé X-API-Key| API
     U -->|ligne de commande| CLI["Commande incidents (incidents_app/cli.py)"]
-    UI -->|HTTP, clé X-API-Key| API["API FastAPI (app/) : /v1/predict, /v1/resolve, /v1/search"]
+    UI -->|HTTP, jeton Bearer d'un compte user ou admin| API["API FastAPI (app/) : /v1/predict, /v1/resolve, /v1/search"]
     API --> Q
     CLI --> Q
     subgraph Equipe ["Équipe d'agents (incidents_app/equipe.py)"]
