@@ -20,7 +20,7 @@ Historiquement, le traitement de ces incidents souffre de plusieurs verrous maje
 2. **Délais de résolution élevés pour les pannes critiques :** Dans une file de traitement "premier arrivé, premier servi", un incident bloquant pour toute une division peut attendre plusieurs heures avant d'être seulement qualifié.
 3. **Erreurs d'aiguillage récurrentes :** L'ambiguïté des formulations textuelles rédigées par des collaborateurs non-techniciens induit des erreurs d'attribution d'équipes, multipliant les allers-retours.
 
-**Objectif du projet :** Concevoir, déployer et exploiter en production un **Agent Autonome de Résolution d'Incidents IT**, capable d'automatiser instantanément la qualification du problème, d'alerter les opérateurs humains en cas de doute, et d'interroger un index de procédures (**RAG extractif**, Semaines 9-10) pour fournir la résolution technique appropriée avec sa source.
+**Objectif du projet :** Concevoir et déployer, sur un poste de technicien et sans service payant, un **Agent Autonome de Résolution d'Incidents IT**, capable de qualifier un ticket en moins de 100 ms, d'alerter les opérateurs humains en cas de doute, et d'interroger un index de procédures (**RAG extractif**, Semaines 9-10) pour fournir la résolution technique appropriée avec sa source.
 
 ---
 
@@ -57,7 +57,7 @@ Le socle de qualification d'incidents relève d'un problème de **classification
 | :--- | :--- | :--- |
 | **(a) Données étiquetées** | **OUI (Disponible massivement)** | Le dataset Kaggle retenu (*IT Service Ticket Classification*) contient **47 837 tickets réels** déjà labellisés par les équipes d'assistance en 8 catégories techniques. |
 | **(b) Vérifiabilité de la réponse** | **OUI (Audit des n-grammes)** | Le modèle statistique permet de mesurer objectivement sa performance sur un jeu de test disjoint ($F_1$-score macro, matrice de confusion) et d'auditer l'influence des mots-clés via les coefficients des n-grammes TF-IDF. |
-| **(c) Coût par requête & Latence** | **NÉGLIGEABLE (< 5 ms)** | Un pipeline `TfidfVectorizer` + classifieur linéaire (`LogisticRegression` ou `LinearSVC`) s'exécute sur CPU standard en quelques millisecondes sans aucune dépendance à un GPU en production. Le coût d'infrastructure par requête est nul. |
+| **(c) Coût par requête & Latence** | **FAIBLE (1,5 ms par ticket, p95 mesuré)** | Un pipeline `TfidfVectorizer` + classifieur linéaire (`LogisticRegression` ou `LinearSVC`) s'exécute sur CPU standard en quelques millisecondes sans aucune dépendance à un GPU en production. Le coût d'infrastructure par requête est nul. |
 | **(d) Conséquence d'une erreur** | **FAIBLE À MODÉRÉE** | Une mauvaise prédiction de routage ne détruit aucune donnée. L'impact est sécurisé dès l'interface grâce à un **seuil d'incertitude** (ex: confiance < 60%) réorientant automatiquement le ticket douteux vers une revue humaine. |
 
 ---
@@ -65,11 +65,11 @@ Le socle de qualification d'incidents relève d'un problème de **classification
 ## 3. Le Dataset : IT Service Ticket Classification
 
 * **Source :** Kaggle — [IT Service Ticket Classification Dataset](https://www.kaggle.com/datasets/adisongoh/it-service-ticket-classification-dataset) (Adison Goh).
-* **Volumétrie :** 47 837 lignes, fichier `all_tickets_processed_improved_v3.csv` (~14.5 Mo).
+* **Volumétrie :** 47 837 lignes, fichier `all_tickets_processed_improved_v3.csv` (14,6 Mo).
 * **Variables :**
   * `Document` ($X$) : Texte de la requête saisie par l'utilisateur.
   * `Topic_group` ($y$) : Cible multiclasse (8 classes : *Hardware, HR Support, Access, Miscellaneous, Storage, Purchase, Internal Project, Administrative rights*).
-* **Conformité Syllabus :** Totalement gratuit, open source, exploitable sans GPU et exécutable en moins d'une minute sur un ordinateur portable d'étudiant ingénieur.
+* **Conformité Syllabus :** licence CC0, bibliothèques open source, sans GPU ; un entraînement du modèle retenu prend environ 30 s sur le portable de développement (29,9 s mesurées dans la grille d'expériences).
 
 ---
 
@@ -81,10 +81,10 @@ Conformément à la philosophie du cours (*"Le modèle est la plus petite boîte
 ┌────────────────────────────────────────────────────────────────────────┐
 │                        ARCHITECURE CIBLE (S11)                         │
 │                                                                        │
-│   Navigateur Utilisateur (Streamlit Web UI - S5)                       │
+│   Navigateur : interface web React, servie par l'API                   │
 │        │                                                               │
 │        ▼                                                               │
-│   API REST FastAPI (Validation Pydantic /predict & /resolve - S3)      │
+│   API REST FastAPI (Validation Pydantic /v1/predict, /v1/resolve)      │
 │        ├──> [Brique 1] Pipeline ML Supervisé (TF-IDF + Classifieur S2) │
 │        │         └── Confiance > Seuil ? ──(Oui)──┐                   │
 │        │                   │ (Non)                ▼                   │
@@ -92,16 +92,16 @@ Conformément à la philosophie du cours (*"Le modèle est la plus petite boîte
 │        │            Alerte Humaine                │                    │
 │        │                                          ▼                    │
 │        └──> [Brique 2] Mini-RAG Local extractif (ChromaDB + runbooks)  │
-│                         (S9-S10, sans LLM génératif)                   │
+│                (semaines 9-10 du cours, sans LLM génératif)            │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Jalons du Projet :
 1. **Semaine 1 (Cadrage & Dépôt) :** Validation de l'approche, vidéo de cadrage, conventions Git et structure de dossiers.
 2. **Semaine 2 (Modèle Reproductible) :** Pipeline de prétraitement, découpage stratifié (80/20) strictement avant vectorisation, génération et versionnement de `models/metrics.json`.
-3. **Semaine 3 (API REST FastAPI) :** Exposition du point de terminaison `/predict`, validation stricte des schémas JSON avec Pydantic.
+3. **Semaine 3 (API REST FastAPI) :** Exposition du point de terminaison `/predict` (aujourd'hui `/v1/predict`), validation stricte des schémas JSON avec Pydantic.
 4. **Semaine 4 (Qualité & Tests) :** Suite de tests unitaires et d'intégration avec `pytest`, typage (`mypy`) et linting (`ruff`).
-5. **Semaine 5 (Interface Streamlit & Étude de Conception) :** Interface interactive avec jauge de confiance et alerte orange *"À vérifier par un technicien"* sous le seuil d'incertitude.
+5. **Semaine 5 (Interface & Étude de Conception) :** interface interactive (prototype Streamlit au TP, remplacé le 19/11/2026 par une interface web React servie par l'API) avec jauge de confiance et alerte orange *"À vérifier par un technicien"* sous le seuil d'incertitude.
 6. **Semaine 6 à 8 (MLOps, Docker & CI/CD) :** Packaging Python, conteneurisation Docker multi-services, pipelines GitHub Actions verts.
 7. **Semaine 9 & 10 (RAG & IA Agentique) :** Indexation vectorielle des runbooks de dépannage et orchestration par l'agent autonome.
 8. **Semaine 11 (Soutenance & Audit des Limites) :** Démonstration en direct et analyse critique du système.

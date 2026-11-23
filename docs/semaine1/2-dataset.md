@@ -12,11 +12,11 @@
 | --- | --- |
 | **Nom et source (lien)** | `all_tickets_processed_improved_v3.csv` — [Kaggle IT Service Ticket Classification Dataset](https://www.kaggle.com/datasets/adisongoh/it-service-ticket-classification-dataset) |
 | **Producteur ou propriétaire** | Adison Goh (données réelles anonymisées issues d'un centre de support informatique d'entreprise) |
-| **Volume** | 47 837 lignes, 2 colonnes, environ 14.5 Mo |
+| **Volume** | 47 837 lignes, 2 colonnes, 14,6 Mo (14 568 920 octets) |
 | **Format et structure** | Fichier CSV (encodage UTF-8, séparateur virgule). Colonnes : `Document` (texte brut de l'incident), `Topic_group` (catégorie) |
 | **Langue et période couverte** | Anglais technique d'entreprise, historique d'incidents IT récents |
-| **Licence et droits d'usage** | CC0 : Domaine Public (autorisation totale d'utilisation académique et commerciale sans restriction) |
-| **Données personnelles ou sensibles** | Aucune : les données ont fait l'objet d'une anonymisation stricte préalable (noms d'utilisateurs, adresses IP et identifiants masqués) |
+| **Licence et droits d'usage** | CC0 1.0 (domaine public) : usage académique et commercial permis, sans obligation de citer l'auteur |
+| **Données personnelles ou sensibles** | Aucune repérée : aucun chiffre, adresse e-mail ni adresse IP dans les 47 837 textes (recherche par expression régulière, 19/11/2026) ; les noms propres ne se détectent pas automatiquement |
 | **Emplacement des données complètes** | `data/all_tickets_processed_improved_v3.csv`, hors Git, versionné par DVC (pointeur `.dvc` de 126 octets, empreinte md5 `a05aa13d…`) ; source d'origine : Kaggle |
 
 ## 2.2 Qualité constatée sur l'échantillon
@@ -29,7 +29,7 @@ L'échantillon `data/sample/tickets_sample.csv` compte 120 lignes, 15 par classe
   3. `Access` : 7 125 tickets (14.9 %)
   4. `Miscellaneous` : 7 060 tickets (14.8 %)
   5. `Storage` : 2 777 tickets (5.8 %)
-  6. `Purchase` : 2 464 tickets (5.1 %)
+  6. `Purchase` : 2 464 tickets (5.2 %)
   7. `Internal Project` : 2 119 tickets (4.4 %)
   8. `Administrative rights` : 1 760 tickets (3.7 %)
 - **Prise en charge du déséquilibre :** le rapport est de 1 à 8 entre la plus petite classe et la plus grande ; il est compensé dans le pipeline scikit-learn par `class_weight='balanced'`.
@@ -41,12 +41,12 @@ L'échantillon `data/sample/tickets_sample.csv` compte 120 lignes, 15 par classe
 | --- | --- | --- |
 | **F1 (Classification)** | Les colonnes `Document` et `Topic_group` sur 47 837 exemples | Le volume et la diversité du vocabulaire donnent un F1 macro de 0,868 sur un jeu de test disjoint (20 %, jamais vu à l'entraînement). |
 | **F2 (Incertitude)** | Les probabilités de sortie (`predict_proba`) calculées sur les classes | Au seuil de 0,60, le modèle traite seul 78,4 % des tickets de test, avec 94,2 % de justesse sur ceux-là ; les autres partent chez un technicien. |
-| **F3 (Lot CSV)** | La structure tabulaire standard du fichier CSV | Permet de simuler directement l'injection de fichiers de tickets en production dans l'interface Streamlit. |
+| **F3 (Lot CSV)** | La structure tabulaire standard du fichier CSV | Le même format se dépose dans l'interface web React (colonne `Document`), qui renvoie le fichier annoté. |
 
 ## 2.4 Alternative de repli
 
 En cas d'indisponibilité de la source Kaggle principale, nous disposons :
-1. De l'archive locale complète conservée dans `data/archive.zip` (100% autonome sans connexion internet).
+1. De la copie de l'archive Kaggle `data/archive.zip` (3,6 Mo) sur le poste de développement, hors Git : réentraînement possible sans réseau.
 2. Du dataset public alternatif *"IT Support Tickets"* de Suraj Kumar sur Kaggle.
 *Perte en cas de repli :* Réajustement mineur du dictionnaire des catégories (passant de 8 à 5 classes).
 

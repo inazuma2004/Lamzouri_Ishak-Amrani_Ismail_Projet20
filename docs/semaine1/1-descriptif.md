@@ -29,8 +29,8 @@ Qualifier automatiquement les incidents informatiques en temps réel avec un sco
 | --- | --- | --- | --- |
 | **F1** | Classification automatique supervisée en 8 catégories | La catégorie d'incident prédite avec son score de confiance calculé en millisecondes. | Indispensable |
 | **F2** | Gestion de l'incertitude et abstention automatique | Un badge visuel clair (`VALIDE` en vert si confiance >= 60%, `A_VERIFIER` en orange sinon). | Indispensable |
-| **F3** | Double interface d'utilisation (API REST & UI Streamlit) | Une API documentée (`/predict`, `/resolve`, `/search`...) et une interface web : saisie unitaire, traitement par lot CSV, base de connaissances, supervision. | Indispensable |
-| **F4** | Moteur Mini-RAG de recommandation de procédures | L'affichage des étapes de résolution extraites du runbook, avec la section citée (« document > section »). | Indispensable (livré S9-10) |
+| **F3** | Double interface d'utilisation (API REST et interface web React) | Une API documentée (`/v1/predict`, `/v1/resolve`, `/v1/search`...) et une interface web servie par l'API : saisie unitaire, traitement par lot CSV, base de connaissances, supervision. | Indispensable |
+| **F4** | Moteur Mini-RAG de recommandation de procédures | L'affichage des étapes de résolution extraites du runbook, avec la section citée (« document > section »). | Indispensable (prototype des semaines 9-10 du cours ; dans le dépôt aux push S2-1 à S3-1) |
 
 ## 1.5 Services et composants techniques
 
@@ -40,7 +40,7 @@ Qualifier automatiquement les incidents informatiques en temps réel avec un sco
 | **Recherche ou mémoire** | Base de connaissances (8 runbooks, 27 sections) et mémoire de l'équipe d'agents | ChromaDB locale + `sentence-transformers`, recherche hybride ; `MEMOIRE.md` | Recherche sémantique locale gratuite sans dépendance cloud payante ni quota externe. |
 | **Outils appelés par l'agent** | Compétences de l'équipe d'agents : modèle ML, règles de priorité P1 à P4, recherche RAG, vérification | Fonctions Python (`incidents_app/equipe.py`) ; commande `incidents` | Chaque agent n'a que les compétences de son rôle ; aucun agent n'exécute de commande sur un système. |
 | **API** | Exposition des prédictions et résolutions | FastAPI + Uvicorn + Pydantic v2 | Documentation Swagger automatique, validation stricte des types et asynchronisme natif. |
-| **Interface** | Tableau de bord utilisateur et lot CSV | Streamlit | Prototypage rapide, affichage interactif de graphiques et téléchargement direct des résultats. |
+| **Interface** | Saisie d'un ticket, lot CSV, supervision | React 19 + Vite + TypeScript + Tailwind CSS (dossier `web/`) | Écrans sur mesure (jauge avec seuil, relais des cinq agents, lot CSV annoté) ; fichiers statiques servis par l'API : un seul service à lancer. |
 | **Conteneur et intégration continue** | Reproductibilité et validation continue | Docker, Docker Compose, GitHub Actions | Exécution identique sur toute machine hôte et tests automatiques à chaque commit. |
 
 ## 1.6 Hors périmètre
@@ -68,10 +68,10 @@ Le succès du projet ne se limite pas à l'accuracy du modèle : il se mesure à
 | **Précision sur les tickets couverts** | Part des tickets couverts dont la catégorie prédite est correcte (comparaison au label réel). | **≥ 90 %** (mesuré : **94,2 %**) |
 | **Taux global de qualification correcte** | Part des tickets correctement routés, tous statuts confondus. | **≥ 80 %** (mesuré : **86,6 %**) |
 | **F1-macro (modèle)** | Moyenne harmonique précision/rappel par classe, sur le jeu de test disjoint (20 %). | **≥ 0,85** (mesuré : **0,868**) |
-| **Traçabilité RAG** | Part des réponses `VALIDE` qui citent au moins une source de runbook. | **100 %** (vérifié par `tests/test_agent.py`) |
+| **Traçabilité RAG** | Part des réponses `VALIDE` qui citent au moins une source de runbook. | **100 %** (prototype : `tests/test_agent.py`, publié avec l'équipe d'agents au push S3-1) |
 | **Pertinence du runbook** | Part des tickets du jeu d'or pour lesquels le runbook retourné est le bon. | **≥ 90 %** sur 20 tickets (mesuré : **92,3 %**) |
-| **Latence API** | Temps de réponse p95 de `/predict` et `/resolve`. | **< 100 ms** (mesuré : **2 ms** et **66 ms**) |
-| **Abstention** | Part des tickets avec score < 0,60 effectivement renvoyés en `A_VERIFIER`. | **100 %** (vérifié par les tests) |
+| **Latence API** | Temps de réponse p95 de `/v1/predict` et `/v1/resolve`. | **< 100 ms** (mesuré : **1,5 ms** et **66 ms**) |
+| **Abstention** | Part des tickets avec score < 0,60 effectivement renvoyés en `A_VERIFIER`. | **100 %** (prototype : tests de la prédiction, publiés au push S2-1) |
 
 **Règle de décision :** le projet est accepté si **tous** les seuils sont atteints. Un échec sur le F1-macro (< 0,85) ou sur la traçabilité RAG (une réponse `VALIDE` sans source) est bloquant : il déclenche une revue du modèle ou de l'index avant livraison.
 
