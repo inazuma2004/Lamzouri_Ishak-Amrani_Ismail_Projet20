@@ -133,13 +133,13 @@ Chaque membre remplit sa ligne lui-même. Commits relus dans l'historique de `ma
 | Membre | Ce que j'ai fait cette semaine | Lien vers mes commits | Temps passé (heures) |
 | --- | --- | --- | --- |
 | Ishak Lamzouri | S1-1 structure et README ; S1-2 ma ligne de `docs/equipe.md` ; S1-3 `requirements.txt` figé et `.env.example` ; S1-4 commande `incidents` et ses 2 tests ; S1-5 `scripts/decrire_donnees.py` et `docs/architecture.md` ; S1-6 cette fiche et les jalons ; fusion des PR #4, #6, #7 | [`e93bcc6`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/e93bcc6), [`74d1844`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/74d1844), [`53b3186`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/53b3186), [`fd3c2ce`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/fd3c2ce), [`828c968`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/828c968), [`194995b`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/194995b) | 12 |
-| Ismail Amrani | Relecture et fusion de la PR #5 (commit de fusion [`1ababd0`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/1ababd0), depuis @Amaranix). À compléter par Ismail depuis son compte, avec le commit de sa ligne de `docs/equipe.md`. | à compléter par Ismail | à compléter par Ismail |
+| Ismail Amrani | S1-2 : ma ligne dans `docs/equipe.md` ; relecture et fusion de la PR #5 (S1-2) et de la PR #8 (correction S1-6, un seul exemplaire de chaque fiche) | [`3ef3e3f`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/3ef3e3f), fusions [`1ababd0`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/1ababd0) et [`f71ef10`](https://github.com/inazuma2004/Lamzouri_Ishak-Amrani_Ismail_Projet20/commit/f71ef10) | à préciser par Ismail |
 
 État du dépôt à la remise de la fiche :
 
 - [x] Dépôt créé, enseignant et tous les membres ajoutés
 - [x] README avec le titre, les membres, le sujet et les commandes d'installation (S1-1)
-- [ ] Au moins un commit de chaque membre, depuis son propre compte (S1-2) : Ismail n'a qu'un commit de fusion ; sa ligne de `docs/equipe.md` reste à pousser depuis @Amaranix
+- [x] Au moins un commit de chaque membre, depuis son propre compte (S1-2) : Ishak `74d1844`, Ismail `3ef3e3f` (@Amaranix, poussé le 23/11/2026)
 - [x] `requirements.txt` installable sur un clone neuf, `.env.example` présent, aucun secret poussé (S1-3) : clone neuf de `main` (`ae08a82`) le 19/11/2026, Windows 11, Python 3.13 : installation sans erreur, `incidents --version` donne `incidents-app 0.1.0`, `pytest -q` donne 4 tests réussis
 - [x] Squelette exécutable et au moins un test qui passe (S1-4) : `pytest -q` donne 4 tests réussis
 - [x] Jeu d'essai et schéma d'architecture dans le dépôt (S1-5)
